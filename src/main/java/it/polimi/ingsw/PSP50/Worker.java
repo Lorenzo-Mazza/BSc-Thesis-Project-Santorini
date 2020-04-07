@@ -4,8 +4,8 @@ public class Worker {
     private Player owner;
     private Space position;
 
-    public boolean move(Space movement){
-        return true;
+    public void move(Space movement){
+
     }
 
     public void force(Space movement){
