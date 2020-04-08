@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP50;
 
 public enum Phase {
+    START,
     MOVE,
     BUILD,
-    ADDITIONALMOVE,
-    ADDITIONALBUILD
+    END
 }
