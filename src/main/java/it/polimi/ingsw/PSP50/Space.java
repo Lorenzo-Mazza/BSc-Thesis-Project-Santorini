@@ -49,8 +49,6 @@ public class Space {
         return true;
     }
 
-
-
     public ArrayList<Space> getNeighbors() {
         ArrayList<Space> neighbors = new ArrayList<>();
         int index = 0;
