@@ -1,24 +1,27 @@
 package it.polimi.ingsw.PSP50;
 
+import java.util.ArrayList;
+
 public class GameManager {
 
-    public Game startGame(Player[] players_list)  // players_list is taken from the View data
+    public Game startGame(ArrayList<Player> players_list)  // players_list is taken from the View data
     { Game new_game= new Game();
       new_game.setPlayers(players_list);
       Board game_board= new Board();
       new_game.setBoard(game_board);
-      Deck game_deck= new Deck();
-      new_game.setDeck;
-      if (players_list.length==2) { new_game.setType(GameType.TWOPLAYERS);}
-      else if (players_list.length==3) {new_game.setType(GameType.THREEPLAYER);}
+      if (players_list.size()==2) { new_game.setType(GameType.TWOPLAYERS);}
+      else if (players_list.size()==3) {new_game.setType(GameType.THREEPLAYER);}
+
+      Deck gameDeck= new Deck();
+      gameDeck.setUpDeck();
+      new_game.setDeck(gameDeck);
 
       return new_game;
     }
 
     public void dealCards()
     {
-      /* The oldest player chooses the Gods to use in the game, and every player,
-      starting from the youngest to the oldest, picks one. Otherwise randomly the system assigns a God to each player*/
+      /* randomly the system assigns a God to each player*/
 
     }
 

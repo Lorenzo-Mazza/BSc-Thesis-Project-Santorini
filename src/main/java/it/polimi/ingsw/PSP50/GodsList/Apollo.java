@@ -3,17 +3,16 @@ package it.polimi.ingsw.PSP50.GodsList;
 import it.polimi.ingsw.PSP50.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Apollo extends God {
     private final Gods name = Gods.APOLLO;
 
 
-    @Override
-    public ArrayList<Space> power(Turn turn) {
 
-            Player thisPlayer = turn.getPlayer();
-            Worker thisWorker = thisPlayer.getSelectedWorker();
+    @Override
+    public ArrayList<Space> power(Player player) {
+
+            Worker thisWorker = player.getSelectedWorker();
             ArrayList<Space> available_moves = new ArrayList<Space>(thisWorker.getPosition().getNeighbors());
 
             return (available_moves);

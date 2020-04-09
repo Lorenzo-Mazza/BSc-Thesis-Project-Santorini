@@ -8,10 +8,9 @@ public class Atlas extends God {
     private final Gods name = Gods.ATLAS;
 
     @Override
-    public ArrayList<Space> power(Turn turn) {
+    public ArrayList<Space> power(Player player) {
 
-        Player thisPlayer = turn.getPlayer();
-        Worker thisWorker = thisPlayer.getSelectedWorker();
+        Worker thisWorker = player.getSelectedWorker();
         ArrayList<Space> available_moves = new ArrayList<Space>(thisWorker.getBuildable());
         return available_moves;
     }

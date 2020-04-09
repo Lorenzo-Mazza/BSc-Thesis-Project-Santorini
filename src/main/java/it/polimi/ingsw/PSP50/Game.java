@@ -1,10 +1,15 @@
 package it.polimi.ingsw.PSP50;
 
+import java.util.ArrayList;
+
 public class Game {
-    private Player[] players;
+    private ArrayList<Player> players;
     private Board board;
     private Turn turn;
     private GameType type;
+    private Deck deck;
+
+    public void setDeck(Deck deck) { this.deck = deck; }
 
     public void setType(GameType type) {
         this.type = type;
@@ -26,17 +31,20 @@ public class Game {
         return turn;
     }
 
-    public void setPlayers(Player[] players) {
+    public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
-    public Player[] getAllPlayers() {
+    public ArrayList<Player> getAllPlayers() {
         return players;
     }
 
+    public void setPlayer(Player player, int position) { players.add(position,player);}
+
+
     public Player getPlayer(int position) {
-        return players[position];
+        return players.get(position);
     }
 
-    public void setPlayer(Player player, int position) { players[position]= player;}
+
 }

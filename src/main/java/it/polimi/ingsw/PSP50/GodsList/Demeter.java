@@ -8,12 +8,11 @@ public class Demeter extends God {
     private final Gods name = Gods.DEMETER;
 
     @Override
-    public ArrayList<Space> power(Turn turn) {
+    public ArrayList<Space> power(Player player) {
 
-        Player thisPlayer = turn.getPlayer();
-        Worker thisWorker = thisPlayer.getSelectedWorker();
+        Worker thisWorker = player.getSelectedWorker();
         ArrayList<Space> available_moves = new ArrayList<>(thisWorker.getBuildable());
-        Space last_build = thisPlayer.getLastBuild();
+        Space last_build = player.getLastBuild();
         available_moves.remove(last_build); //Demeter cannot build where He already built.
         return available_moves;
     }

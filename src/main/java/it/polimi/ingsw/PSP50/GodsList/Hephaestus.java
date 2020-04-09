@@ -8,11 +8,10 @@ public class Hephaestus extends God {
     private final Gods name = Gods.HEPHAESTUS;
 
     @Override
-    public ArrayList<Space> power(Turn turn) {
+    public ArrayList<Space> power(Player player) {
 
-        Player thisPlayer = turn.getPlayer();
-        Worker thisWorker = thisPlayer.getSelectedWorker();
-        Space last_build = thisPlayer.getLastBuild();
+        Worker thisWorker = player.getSelectedWorker();
+        Space last_build = player.getLastBuild();
         ArrayList<Space> available_moves = new ArrayList<>();
         if (last_build.getHeight()!=Block.DOME && last_build.getHeight()!=Block.LEVEL3 )
         available_moves.add(last_build); //If you cannot build a Dome, the Space is available for Hephaestus's Power.

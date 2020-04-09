@@ -9,144 +9,143 @@ public class Minotaur extends God {
     protected enum direction {North,NEast,NWest,East,West,SEast,SWest,South};
 
     @Override
-    public ArrayList<Space> power(Turn turn)
+    public ArrayList<Space> power(Player player)
     {
 
-        Player thisPlayer = turn.getPlayer();
-        Worker thisWorker = thisPlayer.getSelectedWorker();
+        Worker thisWorker = player.getSelectedWorker();
         int[] coordinates = thisWorker.getPosition().getCoordinates();
         direction dir= null;
         Space target;
 
         //creates a list of all the spaces nearby.
-        ArrayList<Space> neighbour_spaces = new ArrayList<>(thisWorker.getPosition().getNeighbors());
+        ArrayList<Space> neighbourSpaces = new ArrayList<>(thisWorker.getPosition().getNeighbors());
         //creates a list of all the reachable spaces nearby.
-        ArrayList<Space> available_moves = new ArrayList<>(thisWorker.getMovable());
+        ArrayList<Space> availableMoves = new ArrayList<>(thisWorker.getMovable());
         //creates a list of all the occupied but reachable spaces nearby.
-        ArrayList<Space> occupied_spaces = new ArrayList<>();
-        for (int index=0;index<neighbour_spaces.size();index++)
+        ArrayList<Space> occupiedSpaces = new ArrayList<>();
+        for (int index=0;index<neighbourSpaces.size();index++)
         {
-            if (neighbour_spaces.get(index).isOccupied() &&
-         (neighbour_spaces.get(index).getHeight().getValue() - thisWorker.getPosition().getHeight().getValue()) <2)
-                occupied_spaces.add(neighbour_spaces.get(index));
+            if (neighbourSpaces.get(index).isOccupied() &&
+         (neighbourSpaces.get(index).getHeight().getValue() - thisWorker.getPosition().getHeight().getValue()) <2)
+                occupiedSpaces.add(neighbourSpaces.get(index));
         }
 
 
-        // Find the next occupied space direction, check if the next_next space is free.
+        // Find the next occupied space's direction, check if the next_next space in the same direction is free.
 
-        for(int index = 0; index < occupied_spaces.size(); index++)
-        {   int x_next= occupied_spaces.get(index).getXPosition();
-            int y_next= occupied_spaces.get(index).getYPosition();
-            if (coordinates[0]==x_next &&
-                    coordinates[1] + 1 ==y_next )
+        for(int index = 0; index < occupiedSpaces.size(); index++)
+        {   int xNext= occupiedSpaces.get(index).getXPosition();
+            int yNext= occupiedSpaces.get(index).getYPosition();
+            if (coordinates[0]==xNext &&
+                    coordinates[1] + 1 ==yNext )
                 dir= direction.North;
 
-            else if (coordinates[0]==x_next &&
-                    coordinates[1] -1  ==y_next )
+            else if (coordinates[0]==xNext &&
+                    coordinates[1] -1  ==yNext )
                 dir= direction.South;
 
-            else if (coordinates[0] +1 ==x_next &&
-                    coordinates[1]  ==y_next )
+            else if (coordinates[0] +1 ==xNext &&
+                    coordinates[1]  ==yNext )
                 dir= direction.East;
 
-            else if (coordinates[0] -1 ==x_next &&
-                    coordinates[1]  ==y_next )
+            else if (coordinates[0] -1 ==xNext &&
+                    coordinates[1]  ==yNext )
                 dir= direction.West;
 
-            else if (coordinates[0] +1 ==x_next &&
-                    coordinates[1] +1 ==y_next )
+            else if (coordinates[0] +1 ==xNext &&
+                    coordinates[1] +1 ==yNext )
                 dir= direction.NEast;
 
-            else if (coordinates[0] +1 ==x_next &&
-                    coordinates[1] -1 ==y_next )
+            else if (coordinates[0] +1 ==xNext &&
+                    coordinates[1] -1 ==yNext )
                 dir= direction.SEast;
 
-            else if (coordinates[0] -1 ==x_next &&
-                    coordinates[1] -1 ==y_next )
+            else if (coordinates[0] -1 ==xNext &&
+                    coordinates[1] -1 ==yNext )
                 dir= direction.SWest;
 
-            else if (coordinates[0] -1 ==x_next &&
-                    coordinates[1] +1 ==y_next )
+            else if (coordinates[0] -1 ==xNext &&
+                    coordinates[1] +1 ==yNext )
                 dir= direction.NWest;
 
             if (dir!= null)
             {
                 switch (dir) {
                     case North: {
-                        target = Board.getSpace(x_next, y_next + 1);
+                        target = Board.getSpace(xNext, yNext + 1);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case South: {
-                        target = Board.getSpace(x_next, y_next - 1);
+                        target = Board.getSpace(xNext, yNext - 1);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case East: {
-                        target = Board.getSpace(x_next + 1, y_next);
+                        target = Board.getSpace(xNext + 1, yNext);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case West: {
-                        target = Board.getSpace(x_next - 1, y_next);
+                        target = Board.getSpace(xNext - 1, yNext);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case NEast: {
-                        target = Board.getSpace(x_next + 1, y_next + 1);
+                        target = Board.getSpace(xNext + 1, yNext + 1);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case NWest: {
-                        target = Board.getSpace(x_next - 1, y_next + 1);
+                        target = Board.getSpace(xNext - 1, yNext + 1);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case SWest: {
-                        target = Board.getSpace(x_next - 1, y_next - 1);
+                        target = Board.getSpace(xNext - 1, yNext - 1);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
                     }
 
                     case SEast: {
-                        target = Board.getSpace(x_next + 1, y_next - 1);
+                        target = Board.getSpace(xNext + 1, yNext - 1);
 
                         if (target.isOccupied()) {
-                            occupied_spaces.remove(index);
+                            occupiedSpaces.remove(index);
                         }
                         break;
 
@@ -158,8 +157,8 @@ public class Minotaur extends God {
         }
 
         //Copy the occupied spaces left into the available moves.
-        available_moves.addAll(occupied_spaces);
+        availableMoves.addAll(occupiedSpaces);
 
-        return available_moves;
+        return availableMoves;
     }
 }
