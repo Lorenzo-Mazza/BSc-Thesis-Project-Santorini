@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Model;
 
 public enum GameType {
     TWOPLAYERS(2),

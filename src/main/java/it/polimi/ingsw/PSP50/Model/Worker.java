@@ -1,4 +1,8 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Model;
+
+import it.polimi.ingsw.PSP50.Model.Block;
+import it.polimi.ingsw.PSP50.Model.Player;
+import it.polimi.ingsw.PSP50.Model.Space;
 
 import java.util.ArrayList;
 

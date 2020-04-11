@@ -1,6 +1,9 @@
-package it.polimi.ingsw.PSP50.GodsList;
+package it.polimi.ingsw.PSP50.Model.GodsList;
 
-import it.polimi.ingsw.PSP50.*;
+import it.polimi.ingsw.PSP50.Model.God;
+import it.polimi.ingsw.PSP50.Model.Gods;
+import it.polimi.ingsw.PSP50.Model.Player;
+import it.polimi.ingsw.PSP50.Model.Space;
 
 import java.util.ArrayList;
 

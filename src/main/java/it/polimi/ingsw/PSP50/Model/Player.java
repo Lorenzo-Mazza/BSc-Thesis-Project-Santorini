@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Model;
 
 public class Player {
     private String name;

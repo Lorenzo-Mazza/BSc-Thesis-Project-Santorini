@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Model;
+
+import it.polimi.ingsw.PSP50.Model.*;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,10 @@ public class Game {
     private Deck deck;
 
     public void setDeck(Deck deck) { this.deck = deck; }
+
+    public Deck getDeck() {
+        return deck;
+    }
 
     public void setType(GameType type) {
         this.type = type;

@@ -1,9 +1,8 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Model;
 
-import it.polimi.ingsw.PSP50.GodsList.*;
+import it.polimi.ingsw.PSP50.Model.GodsList.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 

@@ -1,4 +1,7 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Model;
+
+import it.polimi.ingsw.PSP50.Model.Phase;
+import it.polimi.ingsw.PSP50.Model.Player;
 
 public class Turn {
     private Player player;

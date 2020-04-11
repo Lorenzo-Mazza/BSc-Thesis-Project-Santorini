@@ -1,4 +1,6 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Controller;
+
+import it.polimi.ingsw.PSP50.Model.Player;
 
 public class PlayerManager{
 
