@@ -1,13 +1,14 @@
 package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.*;
+import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
 
 import java.util.ArrayList;
 
 public class Game {
     private ArrayList<Player> players;
     private Board board;
-    private Turn turn;
+  //  private Turn turn;
     private GameType type;
     private Deck deck;
 
@@ -29,13 +30,9 @@ public class Game {
 
     public Board getBoard() { return board; }
 
-    public void setTurn(Turn turn) {
-        this.turn = turn;
-    }
+   // public void setTurn(Turn turn) { this.turn = turn; }
 
-    public Turn getTurn() {
-        return turn;
-    }
+    // public Turn getTurn() {return turn;}
 
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;

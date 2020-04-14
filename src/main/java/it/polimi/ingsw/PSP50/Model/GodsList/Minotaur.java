@@ -5,11 +5,15 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 public class Minotaur extends God {
-    private final Gods name = Gods.MINOTAUR;
     protected enum direction {North,NEast,NWest,East,West,SEast,SWest,South};
 
+    public Minotaur(){
+        super(GodsNames.MINOTAUR);
+        availableSteps.add(Phase.MOVE);
+        availableSteps.add(Phase.BUILD);
+    }
     @Override
-    public ArrayList<Space> power(Player player)
+    public ArrayList<Space> getAvailableMove(Player player)
     {
 
         Worker thisWorker = player.getSelectedWorker();
@@ -25,7 +29,7 @@ public class Minotaur extends God {
         ArrayList<Space> occupiedSpaces = new ArrayList<>();
         for (int index=0;index<neighbourSpaces.size();index++)
         {
-            if (neighbourSpaces.get(index).isOccupied() &&
+            if (neighbourSpaces.get(index).isOccupied() && neighbourSpaces.get(index).getWorker().getOwner()!=player &&
          (neighbourSpaces.get(index).getHeight().getValue() - thisWorker.getPosition().getHeight().getValue()) <2)
                 occupiedSpaces.add(neighbourSpaces.get(index));
         }
@@ -161,4 +165,5 @@ public class Minotaur extends God {
 
         return availableMoves;
     }
+
 }

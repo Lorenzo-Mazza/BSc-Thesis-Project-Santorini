@@ -1,13 +1,13 @@
 package it.polimi.ingsw.PSP50.Model;
 
-public enum Gods {
+public enum GodsNames {
     APOLLO,
-    ARTHEMIS,
+    ARTEMIS,
     ATHENA,
     ATLAS,
     DEMETER,
     HEPHAESTUS,
     MINOTAUR,
     PAN,
-    PROMETEUS
+    PROMETHEUS
 }

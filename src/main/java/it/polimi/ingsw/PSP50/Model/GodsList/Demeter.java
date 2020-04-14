@@ -5,15 +5,20 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 public class Demeter extends God {
-    private final Gods name = Gods.DEMETER;
+
+    public Demeter(){
+        super(GodsNames.DEMETER);
+        availableSteps.add(Phase.MOVE);
+        availableSteps.add(Phase.BUILD);
+        availableSteps.add(Phase.OPTIONALBUILD);
+    }
 
     @Override
-    public ArrayList<Space> power(Player player) {
+    public ArrayList<Space> getOptionalBuild(Player player) {
 
-        Worker thisWorker = player.getSelectedWorker();
-        ArrayList<Space> available_moves = new ArrayList<>(thisWorker.getBuildable());
+        ArrayList<Space> availableBuild = super.getAvailableBuild(player);
         Space last_build = player.getLastBuild();
-        available_moves.remove(last_build); //Demeter cannot build where He already built.
-        return available_moves;
+        availableBuild.remove(last_build); //Demeter cannot build where she already built.
+        return availableBuild;
     }
 }

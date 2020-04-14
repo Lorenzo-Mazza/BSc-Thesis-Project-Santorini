@@ -2,6 +2,9 @@ package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.Phase;
 import it.polimi.ingsw.PSP50.Model.Player;
+/*
+            I don't think we need this anymore.
+
 
 public class Turn {
     private Player player;
@@ -37,3 +40,5 @@ public class Turn {
         }
     }
 }
+
+ */

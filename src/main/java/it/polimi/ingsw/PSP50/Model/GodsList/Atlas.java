@@ -5,19 +5,18 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 public class Atlas extends God {
-    private final Gods name = Gods.ATLAS;
+    public Atlas(){
+        super(GodsNames.ATLAS);
+        availableSteps.add(Phase.MOVE);
+        availableSteps.add(Phase.BUILD);
+    }
 
     @Override
-    public ArrayList<Space> power(Player player) {
-
-        Worker thisWorker = player.getSelectedWorker();
-        ArrayList<Space> available_moves = new ArrayList<Space>(thisWorker.getBuildable());
-        return available_moves;
+    public ArrayList<Block> getAvailableBlock(Player player) {
+        ArrayList<Block> list= super.getAvailableBlock(player);
+        if (!list.contains(Block.DOME))
+            {list.add(Block.DOME);}
+        return list;
     }
 
-
-    public void buildDome (Space target, Turn turn) {
-        target.setHeight(Block.DOME);
-
-    }
 }

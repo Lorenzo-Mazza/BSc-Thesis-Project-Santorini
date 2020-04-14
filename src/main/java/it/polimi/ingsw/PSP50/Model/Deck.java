@@ -13,7 +13,7 @@ public class Deck {
 
     public void setUpDeck() {
         deck.add(0, new Apollo());
-        deck.add(1, new Arthemis());
+        deck.add(1, new Artemis());
         deck.add(2, new Athena());
         deck.add(3, new Atlas());
         deck.add(4, new Demeter());
@@ -27,7 +27,7 @@ public class Deck {
         return deck.get(card);
     }
 
-    public void shuffle() {
+    private void shuffle() {
         Collections.shuffle(deck, new Random());
     }
 

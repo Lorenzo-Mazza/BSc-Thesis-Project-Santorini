@@ -5,29 +5,49 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 public class Apollo extends God {
-    private final Gods name = Gods.APOLLO;
 
+    public Apollo(){
+        super(GodsNames.APOLLO);
+        availableSteps.add(Phase.MOVE);
+        availableSteps.add(Phase.BUILD);
+    }
 
 
     @Override
-    public ArrayList<Space> power(Player player) {
+    public ArrayList<Space> getAvailableMove(Player player) {
 
-            Worker thisWorker = player.getSelectedWorker();
-            ArrayList<Space> available_moves = new ArrayList<Space>(thisWorker.getPosition().getNeighbors());
+        Worker thisWorker = player.getSelectedWorker();
+        int height= thisWorker.getPosition().getHeight().getValue();
+        ArrayList<Space> neighbors= thisWorker.getPosition().getNeighbors();
+        ArrayList<Space> reachable= new ArrayList<>();
+        for (Space space: neighbors)
+        {   int neighborHeight= space.getHeight().getValue();
+            if ((neighborHeight - height) <2)
+                reachable.add(space);
+        }
 
-            return (available_moves);
+        for (Space space: reachable) {
+            if (space.isOccupied() &&  space.getWorker().getOwner()==player) //a player cannot swap with his other worker.
+                reachable.remove(space);
+        }
 
-
-    /*        for(Space space : thisSpaces)
-            {
-                if(space.isOccupied() && (space.getWorker().getOwner() != thisPlayer))
-                {
-                    Space lastPosition = thisWorker.getPosition();
-                    thisWorker.move(space.getWorker().getPosition());
-                    space.getWorker().move(lastPosition);
-                }
-            } */
-
-    //    turn.setPhase(Phase.BUILD); non serve, si fa da Controller .
+        return reachable;   //qui è più comodo rispetto a chiamare super.
     }
+
+    @Override
+    public boolean Move(Player player, Space newSpace)
+    {   if (newSpace.isOccupied())
+            {   // Swap positions
+                Space oldSpace= player.getSelectedWorker().getPosition();
+                newSpace.getWorker().move(oldSpace);
+                player.getSelectedWorker().move(newSpace);
+                return player.getSelectedWorker().getPosition() == newSpace;
+            }
+
+        else {
+            return super.Move(player, newSpace);
+            }
+    }
+
+
 }
