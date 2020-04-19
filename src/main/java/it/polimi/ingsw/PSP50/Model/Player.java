@@ -4,14 +4,21 @@ import it.polimi.ingsw.PSP50.Model.GodsList.God;
 
 public class Player {
     private String name;
-    private Worker[] workers;
+    private Worker[] workers = new Worker[2];
     private Worker selectedWorker;
     private God god;
-    private Space lastMove;
-    private Space lastBuild;
-    private Space thisBuild;
-    private boolean hasMovedUp=false;
-    private boolean hasBuilt=false;
+    private Space lastMove = null;
+    private Space lastBuild = null;
+    private Space thisBuild = null;
+    private boolean hasMovedUp = false;
+    private boolean hasBuilt = false;
+
+    public Player(String name, God god) {
+        this.name = name;
+        this.workers[0] = new Worker(this);
+        this.workers[1] = new Worker(this);
+        this.god = god;
+    }
 
     public String getName() {
         return name;
@@ -22,7 +29,7 @@ public class Player {
     }
 
     public void selectWorker(Worker worker) {
-
+        this.selectedWorker = worker;
     }
 
     public Worker getSelectedWorker() {
@@ -32,7 +39,6 @@ public class Player {
     public God getGod() {
         return god;
     }
-
 
     public void setGod(God god)
     {

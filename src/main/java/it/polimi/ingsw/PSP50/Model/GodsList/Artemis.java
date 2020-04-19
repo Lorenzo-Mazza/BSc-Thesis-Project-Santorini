@@ -16,9 +16,9 @@ public class Artemis extends God {
     @Override
     public ArrayList<Space> getOptionalMove(Player player) {
         Space LastMove = player.getLastMove();
-        ArrayList<Space> available_moves = super.getAvailableMove(player);
-        available_moves.remove(LastMove);  //Artemis cannot move back on the place she already moved from.
-        return (available_moves);
+        ArrayList<Space> availableMoves = super.getAvailableMove(player);
+        availableMoves.remove(LastMove);  //Artemis cannot move back on the place she already moved from.
+        return (availableMoves);
     }
 }
 

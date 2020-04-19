@@ -11,4 +11,12 @@ public class Athena extends God {
         availableSteps.add(Phase.BUILD);
     }
 
+    @Override
+    public boolean Move(Player player, Space space) {
+        player.setHasMovedUp(false);
+        Block high = player.getSelectedWorker().getPosition().getHeight();
+        if (high.getValue() < space.getHeight().getValue())
+            player.setHasMovedUp(true);
+        return super.Move(player, space);
+    }
 }

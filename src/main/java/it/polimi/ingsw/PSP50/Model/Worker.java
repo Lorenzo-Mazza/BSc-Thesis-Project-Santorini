@@ -1,14 +1,15 @@
 package it.polimi.ingsw.PSP50.Model;
 
-import it.polimi.ingsw.PSP50.Model.Block;
-import it.polimi.ingsw.PSP50.Model.Player;
-import it.polimi.ingsw.PSP50.Model.Space;
-
 import java.util.ArrayList;
 
 public class Worker {
     private Player owner;
     private Space position;
+
+    public Worker(Player owner) {
+        this.owner = owner;
+        this.position = null;
+    }
 
     public Player getOwner() {
         return owner;
@@ -19,12 +20,18 @@ public class Worker {
     }
 
     public void move(Space movement){
-        this.position= movement;
+        this.position = movement;
+        this.position.setWorker(this);
     }
 
     public void force(Space movement){  // do we really need this?
 
 
+    }
+
+    public void setPosition(Space position) {
+        this.position = position;
+        this.position.setWorker(this);
     }
 
     public void build(Space movement){          // The method builds a Block without any check nor exception.
@@ -36,7 +43,6 @@ public class Worker {
            case 1:
                movement.setHeight(Block.LEVEL1);
                break;
-
            case 2:
                movement.setHeight(Block.LEVEL2);
                break;
@@ -47,8 +53,6 @@ public class Worker {
                movement.setHeight(Block.DOME);
                break;
        }
-
-
     }
 
     public Space getPosition() {
@@ -67,13 +71,12 @@ public class Worker {
             if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1)
                 || (movable.get(index).isOccupied()))
 
-                 { movable.remove(index);} //If the Space is not reachable (too high or occupied), take it out of the list.
+                 { movable.remove(index); } //If the Space is not reachable (too high or occupied), take it out of the list.
         }
-
         return movable;
     }
 
-    public ArrayList<Space> getBuildable(){
+    public ArrayList<Space> getBuildable() {
         ArrayList<Space> buildable = new ArrayList<>(this.position.getNeighbors());
 
         for(int index = 0; index < buildable.size(); index++)
@@ -83,5 +86,17 @@ public class Worker {
         }
 
         return buildable;
+    }
+
+    public ArrayList<Space> getMovableWithWorkers() {
+        ArrayList<Space> movable = new ArrayList<>(this.position.getNeighbors());
+
+        for(int index = 0; index < movable.size(); index++)
+        {
+            if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1) ||
+                    (movable.get(index).getWorker().getOwner() == this.getOwner()))
+                movable.remove(index); //If the Space is not reachable (too high or occupied), take it out of the list.
+        }
+        return movable;
     }
 }

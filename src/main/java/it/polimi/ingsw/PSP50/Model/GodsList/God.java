@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class God {
-    protected final ArrayList<Phase> availableSteps= new ArrayList<>();
+    protected final ArrayList<Phase> availableSteps = new ArrayList<>();
     private final GodsNames name;
 
     protected God(GodsNames name) {this.name= name;}
@@ -15,7 +15,7 @@ public abstract class God {
         return new ArrayList<>(availableSteps); //returns a copy of the list;
     }
 
-    public  GodsNames getName() {
+    public GodsNames getName() {
         return name;
     }
 
@@ -29,13 +29,13 @@ public abstract class God {
         return (new ArrayList<>(thisWorker.getBuildable()));
     }
 
-    public ArrayList<Space> getOptionalMove(Player player) {return new ArrayList<>();} //default: empty list.
+    public ArrayList<Space> getOptionalMove(Player player) { return new ArrayList<>(); } //default: empty list.
 
-    public ArrayList<Space> getOptionalBuild(Player player) {return new ArrayList<>();}  //default: empty list.
+    public ArrayList<Space> getOptionalBuild(Player player) { return new ArrayList<>(); }  //default: empty list.
 
-    public  ArrayList<Block> getAvailableBlock(Player player) {
-        Space space= player.getThisBuild();
-        ArrayList<Block> list= new ArrayList<>();
+    public ArrayList<Block> getAvailableBlock(Player player) {
+        Space space = player.getThisBuild();
+        ArrayList<Block> list = new ArrayList<>();
         switch (space.getHeight().getValue()) {
             case 0: list.add(Block.LEVEL1);
                     return list;
@@ -47,13 +47,12 @@ public abstract class God {
                     return list;
             default: return null;
         }
-
-    };
+    }
 
     public boolean Move(Player player, Space space)
     {
         player.getSelectedWorker().move(space);
-        if (player.getSelectedWorker().getPosition()== space)
+        if (player.getSelectedWorker().getPosition() == space)
             return true;
         else return false;
     }
@@ -61,13 +60,10 @@ public abstract class God {
     public boolean Build(Player player, Space space, Block piece)
     {
         player.getSelectedWorker().build(space);
-        if (space.getHeight()==piece)
+        if (space.getHeight() == piece)
             return true;
-        else return false;
+        else
+            return false;
     }
-
-
-
-
 
 }

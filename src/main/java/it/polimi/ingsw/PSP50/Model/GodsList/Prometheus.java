@@ -26,6 +26,7 @@ public class Prometheus extends God {
                 if (level >= neighbors.get(index).getHeight().getValue())
                     available.add(neighbors.get(index));  // if the neighbor space is not higher than level , it's available.
             }
+            player.setHasBuilt(false);
             return available;
         }
         else {
@@ -33,4 +34,10 @@ public class Prometheus extends God {
         }
     }
 
+    @Override
+    public ArrayList<Space> getOptionalBuild(Player player) {
+        ArrayList<Space> availableBuild = super.getAvailableBuild(player);
+        player.setHasBuilt(true);
+        return availableBuild;
+    }
 }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP50.Model;
 
 public enum GameType {
     TWOPLAYERS(2),
-    THREEPLAYER(3);
+    THREEPLAYERS(3);
 
     private final int size;
 

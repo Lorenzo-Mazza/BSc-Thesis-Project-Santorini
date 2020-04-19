@@ -11,7 +11,7 @@ public class Deck {
 
     private ArrayList<God> chosenCards;
 
-    public void setUpDeck() {
+    public Deck() {
         deck.add(0, new Apollo());
         deck.add(1, new Artemis());
         deck.add(2, new Athena());

@@ -13,7 +13,7 @@ public class Atlas extends God {
 
     @Override
     public ArrayList<Block> getAvailableBlock(Player player) {
-        ArrayList<Block> list= super.getAvailableBlock(player);
+        ArrayList<Block> list = super.getAvailableBlock(player);
         if (!list.contains(Block.DOME))
             {list.add(Block.DOME);}
         return list;
