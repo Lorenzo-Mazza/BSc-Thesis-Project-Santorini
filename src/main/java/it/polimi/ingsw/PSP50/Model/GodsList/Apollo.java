@@ -22,15 +22,21 @@ public class Apollo extends God {
     public boolean Move(Player player, Space newSpace)
     {
         if (newSpace.isOccupied())
-            {   // Swap positions
+            {   // Swap positions (there is a reason why I don't call super.move to swap, ask me if you notice).
                 Space oldSpace = player.getSelectedWorker().getPosition();
-                newSpace.getWorker().move(oldSpace);
-                player.getSelectedWorker().move(newSpace);
-                return player.getSelectedWorker().getPosition() == newSpace;
+                Worker opponentWorker= newSpace.getWorker();
+                opponentWorker.move(oldSpace);
+                oldSpace.setWorker(opponentWorker);  //set old space
+                Worker playerWorker= player.getSelectedWorker();
+                playerWorker.move(newSpace);
+                newSpace.setWorker(playerWorker);  // set new space
+
+                return playerWorker.getPosition()==newSpace;
             }
 
-        else
+        else {
             return super.Move(player, newSpace);
+        }
     }
 
 

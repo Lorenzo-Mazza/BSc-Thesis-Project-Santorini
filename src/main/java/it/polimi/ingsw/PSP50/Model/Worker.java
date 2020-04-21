@@ -21,7 +21,6 @@ public class Worker {
 
     public void move(Space movement){
         this.position = movement;
-        this.position.setWorker(this);
     }
 
     public void force(Space movement){  // do we really need this?

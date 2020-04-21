@@ -15,7 +15,7 @@ public class GameManager {
       Board game_board= new Board();
       new_game.setBoard(game_board);
       if (players_list.size()==2) { new_game.setType(GameType.TWOPLAYERS);}
-      else if (players_list.size()==3) {new_game.setType(GameType.THREEPLAYER);}
+      else if (players_list.size()==3) {new_game.setType(GameType.THREEPLAYERS);}
 
       Deck gameDeck= new Deck();
       gameDeck.setUpDeck();

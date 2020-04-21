@@ -63,6 +63,9 @@ public abstract class TurnManager {
             steps.remove(0);
         }
 
+        player.setHasBuilt(false);
+
+
         //check Win Condition at the end of the turn
         // set all the player/worker parameters correctly
 

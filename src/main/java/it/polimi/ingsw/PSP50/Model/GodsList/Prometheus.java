@@ -29,15 +29,13 @@ public class Prometheus extends God {
             player.setHasBuilt(false);
             return available;
         }
-        else {
-            return (super.getAvailableMove(player)); // else, normal move mechanism.
-        }
+        else return (super.getAvailableMove(player)); // else, normal move mechanism.
     }
 
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {
         ArrayList<Space> availableBuild = super.getAvailableBuild(player);
-        player.setHasBuilt(true);
+     //   player.setHasBuilt(true);  // in god.build, here it's still optional
         return availableBuild;
     }
 }

@@ -31,14 +31,18 @@ public class Minotaur extends God {
 
     @Override
     public boolean Move(Player player, Space space) {
-        Worker opponentWorker = space.getWorker();
-        Worker thisWorker = player.getSelectedWorker();
-        int[] movement = thisWorker.getPosition().getCoordinatesFromSpaces(space);
-        /*
-        opponentWorker.force(space.getNext(movement[0], movement[1]));
-        or
-        opponentWorker.move(space.getNext(movement[0], movement[1]));
-         */
+
+
+        if (space.isOccupied()) {
+            Worker thisWorker = player.getSelectedWorker();
+            int[] movement = thisWorker.getPosition().getCoordinatesFromSpaces(space);
+            Worker opponentWorker = space.getWorker();
+            space.setWorker(null);  //free space
+            opponentWorker.move(space.getNext(movement[0], movement[1]));
+            space.getNext(movement[0], movement[1]).setWorker(opponentWorker);  //occupy new space for the opponent
+
+        }
+
         return super.Move(player, space);
     }
 }

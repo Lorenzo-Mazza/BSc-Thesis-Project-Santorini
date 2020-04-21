@@ -50,10 +50,15 @@ public abstract class God {
     }
 
     public boolean Move(Player player, Space space)
-    {
+    {   Space oldSpace=  player.getSelectedWorker().getPosition();
+        oldSpace.setWorker(null); //free the old space
+        player.setLastMove(oldSpace); //set last position
         player.getSelectedWorker().move(space);
         if (player.getSelectedWorker().getPosition() == space)
+        {
+            space.setWorker(player.getSelectedWorker()); // occupy the new place
             return true;
+        }
         else return false;
     }
 
@@ -61,7 +66,10 @@ public abstract class God {
     {
         player.getSelectedWorker().build(space);
         if (space.getHeight() == piece)
+        {   player.setHasBuilt(true);
+            player.setLastBuild(space);
             return true;
+        }
         else
             return false;
     }

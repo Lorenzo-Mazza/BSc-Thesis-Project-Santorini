@@ -1,17 +1,16 @@
 package it.polimi.ingsw.PSP50.Controller;
 
+import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.Model.Player;
 
 public class PlayerManager{
 
-    Player createPlayer (String id)
+    Player createPlayer (String id, God god)
     {
-        Player new_player = new Player();
-        new_player.setName(id);
-        return new_player;
+        return new Player(id,god);
     }
 
-    void makeMove()
+  /*  void makeMove()
     {
         //moves one of the player's workers
     }
@@ -25,4 +24,6 @@ public class PlayerManager{
     {
         //moves a player's worker when an opponent forces it to do so
     }
+
+   */
 }

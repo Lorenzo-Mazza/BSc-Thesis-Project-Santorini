@@ -81,12 +81,12 @@ public class Space {
             column_sup = this.getYPosition() + 1;
         }
 
-        for (; row_inf < row_sup; row_inf++)
+        for (; row_inf <= row_sup; row_inf++)
         {
-            for (; column_inf < column_sup; column_inf++)
+            for (int index= column_inf; index <= column_sup; index++)
             {
-                if (row_inf != this.getXPosition() || column_inf != this.getYPosition())
-                    neighbors.add(board.getSpace(row_inf, column_inf));
+                if (row_inf != this.getXPosition() || index != this.getYPosition())
+                    neighbors.add(board.getSpace(row_inf, index));
             }
         }
         return neighbors;
@@ -94,7 +94,8 @@ public class Space {
 
     public boolean thereIsNext(int movementOnX, int movementOnY) {
         int[] coordinates = {this.xPosition + movementOnX, this.yPosition + movementOnY};
-        if ((coordinates[0] < 0 || coordinates[0] > 4) || (coordinates[1] < 0 || coordinates[1] > 4))
+        if ((coordinates[0] < 0 || coordinates[0] > 4) || (coordinates[1] < 0 || coordinates[1] > 4) ||
+                (board.getSpace(coordinates[0],coordinates[1]).getHeight()==Block.DOME))
             return false;
         return true;
     }
