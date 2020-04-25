@@ -23,11 +23,6 @@ public class Worker {
         this.position = movement;
     }
 
-    public void force(Space movement){  // do we really need this?
-
-
-    }
-
     public void setPosition(Space position) {
         this.position = position;
         this.position.setWorker(this);
@@ -55,10 +50,6 @@ public class Worker {
     }
 
     public Space getPosition() {
-        return position;
-    }
-
-    public Space getNeighbors(){  //DO WE REALLY NEED IT?
         return position;
     }
 

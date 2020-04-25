@@ -7,17 +7,22 @@ public class Player {
     private Worker[] workers = new Worker[2];
     private Worker selectedWorker;
     private God god;
-    private Space lastMove = null;
-    private Space lastBuild = null;
-    private Space thisBuild = null;
-    private boolean hasMovedUp = false;
-    private boolean hasBuilt = false;
+    private Space lastMove;
+    private Space lastBuild;
+    private Space thisBuild;
+    private boolean hasMovedUp;
+    private boolean hasBuilt;
 
     public Player(String name, God god) {
         this.name = name;
         this.workers[0] = new Worker(this);
         this.workers[1] = new Worker(this);
         this.god = god;
+        this.lastMove = null;
+        this.lastBuild = null;
+        this.thisBuild = null;
+        this.hasMovedUp = false;
+        this.hasBuilt = false;
     }
 
     public String getName() {
