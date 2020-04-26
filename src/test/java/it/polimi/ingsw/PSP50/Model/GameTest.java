@@ -1,17 +1,33 @@
 package it.polimi.ingsw.PSP50.Model;
 
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
+import it.polimi.ingsw.PSP50.Model.GodsList.Artemis;
+import it.polimi.ingsw.PSP50.Model.GodsList.Athena;
+import it.polimi.ingsw.PSP50.Model.GodsList.God;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameTest {
+public class GameTest {
+    private Game game = null;
 
-    private Game game = new Game();
+
+    @Before
+    public void setUp() {
+        game= new Game();
+
+    }
+    @After
+    public void tearDown(){
+        game=null;
+    }
 
     @Test
-    void getSetDeck() {
+    public void getSetDeck() {
         assertNull(game.getDeck());
         Deck deck= new Deck();
         game.setDeck(deck);
@@ -19,34 +35,27 @@ class GameTest {
     }
 
     @Test
-    void getSetType() {
+    public void getSetType() {
         assertNull(game.getType());
         game.setType(GameType.TWOPLAYERS);
         assertEquals(game.getType(),GameType.TWOPLAYERS);
 
-        game.setType(GameType.THREEPLAYER);
-        assertEquals(game.getType(),GameType.THREEPLAYER);
+        game.setType(GameType.THREEPLAYERS);
+        assertEquals(game.getType(),GameType.THREEPLAYERS);
 
     }
 
     @Test
-    void getSetBoard() {
+    public void getSetBoard() {
         assertNull(game.getBoard());
         Board board = new Board();
         game.setBoard(board);
         assertEquals(board, game.getBoard());
     }
 
-    @Test
-    void getSetTurn() {
-        assertNull(game.getTurn());
-        Turn turn= new Turn();
-        game.setTurn(turn);
-        assertEquals(turn,game.getTurn());
-    }
 
     @Test
-    void getSetPlayers() {
+    public void getSetPlayers() {
         assertNull(game.getAllPlayers());
         ArrayList<Player> players= new ArrayList<>();
         game.setPlayers(players);
@@ -54,13 +63,16 @@ class GameTest {
     }
 
     @Test
-    void getSetPlayer() {
+    public void getSetPlayer() {
+        String player1Name= "player1";
+        String player2Name= "player2";
+        String player3Name= "player3";
         assertNull(game.getAllPlayers());
         ArrayList<Player> players= new ArrayList<>();
         game.setPlayers(players);
-        Player player1= new Player();
-        Player player2= new Player();
-        Player player3= new Player();
+        Player player1= new Player(player1Name);
+        Player player2= new Player(player2Name);
+        Player player3= new Player(player3Name);
         game.setPlayer(player1,0);
         game.setPlayer(player2,1);
         game.setPlayer(player3,2);

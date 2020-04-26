@@ -3,30 +3,29 @@ package it.polimi.ingsw.PSP50.Model;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 
 public class Player {
-    private String name;
-    private Worker[] workers = new Worker[2];
-    private Worker selectedWorker;
+    final private String name;
+    final private Worker[] workers = new Worker[2];
     private God god;
+    private Worker selectedWorker;
     private Space lastMove = null;
     private Space lastBuild = null;
     private Space thisBuild = null;
     private boolean hasMovedUp = false;
     private boolean hasBuilt = false;
 
-    public Player(String name, God god) {
+    public Player(String name) {
         this.name = name;
         this.workers[0] = new Worker(this);
         this.workers[1] = new Worker(this);
-        this.god = god;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public Worker[] getWorkers() { return workers; }
+
+    // public void setName(String name) {this.name = name;} Constructor + final
 
     public void selectWorker(Worker worker) {
         this.selectedWorker = worker;
@@ -40,18 +39,13 @@ public class Player {
         return god;
     }
 
-    public void setGod(God god)
-    {
-        this.god = god;
-    }
+    public void setGod(God god){this.god = god;}
 
     public Space getLastMove() {
         return lastMove;
     }
 
-    public void setLastMove(Space lastMove) {
-        this.lastMove = lastMove;
-    }
+    public void setLastMove(Space lastMove) { this.lastMove = lastMove; }
 
     public Space getLastBuild() {
         return lastBuild;

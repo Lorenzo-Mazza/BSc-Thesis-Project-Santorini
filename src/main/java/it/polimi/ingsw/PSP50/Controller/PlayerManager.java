@@ -5,9 +5,9 @@ import it.polimi.ingsw.PSP50.Model.Player;
 
 public class PlayerManager{
 
-    Player createPlayer (String id, God god)
+    Player createPlayer (String id)
     {
-        return new Player(id,god);
+        return new Player(id);
     }
 
   /*  void makeMove()

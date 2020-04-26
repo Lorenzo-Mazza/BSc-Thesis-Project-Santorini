@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Deck {
-    private ArrayList<God> deck;
+    private ArrayList<God> deck= new ArrayList<>();
 
-    private ArrayList<God> chosenCards;
+    private ArrayList<God> chosenCards= new ArrayList<>();
 
     public Deck() {
         deck.add(0, new Apollo());
