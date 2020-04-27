@@ -1,12 +1,8 @@
 package it.polimi.ingsw.PSP50.Model;
 
-import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
-import it.polimi.ingsw.PSP50.Model.GodsList.Artemis;
-import it.polimi.ingsw.PSP50.Model.GodsList.Athena;
-import it.polimi.ingsw.PSP50.Model.GodsList.God;
-import org.junit.Test;
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 

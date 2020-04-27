@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"it.polimi.ingsw.PSP50"},{"l":"it.polimi.ingsw.PSP50.Controller"},{"l":"it.polimi.ingsw.PSP50.Model"},{"l":"it.polimi.ingsw.PSP50.Model.GodsList"}]

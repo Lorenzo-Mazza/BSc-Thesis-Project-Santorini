@@ -4,14 +4,26 @@ import it.polimi.ingsw.PSP50.Model.*;
 
 import java.util.ArrayList;
 
+/**
+ * *Description of class*
+ */
 public class Minotaur extends God {
 
+    /**
+     * *Constructor*
+     */
     public Minotaur() {
         super(GodsNames.MINOTAUR);
         availableSteps.add(Phase.MOVE);
         availableSteps.add(Phase.BUILD);
     }
 
+    /**
+     * *Description of method*
+     * @param player a Player variable that is playing during this turn
+     * @return an ArrayList of Space which contains the allowed spaces where worker can move also there
+     * is an opponent's worker
+     */
     @Override
     public ArrayList<Space> getAvailableMove(Player player) {
         Worker thisWorker = player.getSelectedWorker();
@@ -29,6 +41,12 @@ public class Minotaur extends God {
         return reachable;
     }
 
+    /**
+     * *Description of method*
+     * @param player a Player variable that is playing during this turn
+     * @param space a Space variable that indicate where to move
+     * @return a boolean variable just for confirmation
+     */
     @Override
     public boolean Move(Player player, Space space) {
 

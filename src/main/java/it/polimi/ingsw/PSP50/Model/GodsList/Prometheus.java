@@ -4,7 +4,14 @@ import it.polimi.ingsw.PSP50.Model.*;
 
 import java.util.ArrayList;
 
+/**
+ * *Description of class*
+ */
 public class Prometheus extends God {
+
+    /**
+     * *Constructor*
+     */
     public Prometheus(){
         super(GodsNames.PROMETHEUS);
         availableSteps.add(Phase.OPTIONALBUILD);
@@ -12,8 +19,11 @@ public class Prometheus extends God {
         availableSteps.add(Phase.BUILD);
     }
 
-    // if the player has already built in the turn, it makes available only the spaces that
-    // don't let the player move up.
+    /**
+     * *Description of method*
+     * @param player a Player variable that is playing during this turn
+     * @return an ArrayList of Space that indicate where player's worker can move with some limitations
+     */
     @Override
     public ArrayList<Space> getAvailableMove(Player player) {
         if (player.getHasBuilt()) { //if the player has already built
@@ -32,6 +42,11 @@ public class Prometheus extends God {
         else return (super.getAvailableMove(player)); // else, normal move mechanism.
     }
 
+    /**
+     * *Description of method*
+     * @param player a Player variable that is playing during this turn
+     * @return an ArrayList of Space which contains the allowed spaces where worker can build
+     */
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {
         ArrayList<Space> availableBuild = super.getAvailableBuild(player);
