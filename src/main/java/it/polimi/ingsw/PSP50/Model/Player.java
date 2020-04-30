@@ -3,22 +3,52 @@ package it.polimi.ingsw.PSP50.Model;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 
 /**
- * *Description of class*
+ * Player contains all of the player's data.
  */
 public class Player {
+
+    /**
+     * A String that contains player's name
+     */
     final private String name;
+    /**
+     * The 2 workers owned by the player
+     */
     final private Worker[] workers = new Worker[2];
+    /**
+     * Worker that's been selected by the player
+     */
     private Worker selectedWorker;
+    /**
+     * God card that's been assigned to the player
+     */
     private God god;
+    /**
+     * The very last space where the player moved from in the previous turn
+     */
     private Space lastMove;
+    /**
+     * The very last space where the player built
+     */
     private Space lastBuild;
+    /**
+     * Space where the player is currently building
+     */
     private Space thisBuild;
+    /**
+     * Boolean that checks if the player moved up in the current turn
+     * Used to manage Athena's power
+     */
     private boolean hasMovedUp;
+    /**
+     * Boolean that checks if the player has already built in the current turn
+     * Used to manage Prometheus's power
+     */
     private boolean hasBuilt;
 
     /**
-     * *Constructor*
-     * @param name a String variable that contains player's name
+     * Player Constructor
+     * @param name Player's name
      */
     public Player(String name) {
         this.name = name;
@@ -33,114 +63,114 @@ public class Player {
     }
 
     /**
-     * *Description of method*
-     * @return player's name in a String
+     *
+     * @return player's name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * *Description of method*
-     * @return an Array of Worker
+     *
+     * @return an Array that contains the two workers owned by the player
      */
     public Worker[] getWorkers() { return workers; }
 
     // public void setName(String name) {this.name = name;} Constructor + final
 
     /**
-     * *Description of method*
-     * @param worker variable
+     * Selects a worker
+     * @param worker The worker that will be selected
      */
     public void selectWorker(Worker worker) {
         this.selectedWorker = worker;
     }
 
     /**
-     * *Description of method*
-     * @return a Worker variable
+     *
+     * @return the selected worker
      */
     public Worker getSelectedWorker() {
         return selectedWorker;
     }
 
     /**
-     * *Description of method*
-     * @return a God variable
+     *
+     * @return player's God
      */
     public God getGod() {
         return god;
     }
 
     /**
-     * *Description of method*
-     * @param god variable
+     * assigns a God card to the player
+     * @param god The God that's been assigned to the player
      */
     public void setGod(God god){this.god = god;}
 
     /**
-     * *Description of method*
-     * @return a Space variable
+     *
+     * @return the very last space from where the player moved in the previous turn
      */
     public Space getLastMove() {
         return lastMove;
     }
 
     /**
-     * *Description of method*
-     * @param lastMove a Space variable
+     * updates correctly the last move
+     * @param lastMove The very last space from where the player moved in the previous turn
      */
     public void setLastMove(Space lastMove) { this.lastMove = lastMove; }
 
     /**
-     * *Description of method*
-     * @return a Space variable
+     *
+     * @return the very last space in which the player built
      */
     public Space getLastBuild() {
         return lastBuild;
     }
 
     /**
-     * *Description of method*
-     * @param lastBuild a Space variable
+     * updates correctly the Last Build
+     * @param lastBuild The very last space in which the player built
      */
     public void setLastBuild(Space lastBuild) {
         this.lastBuild = lastBuild;
     }
 
     /**
-     * *Description of method*
-     * @return a Space variable
+     *
+     * @return the space where the player is currently building
      */
     public Space getThisBuild() { return thisBuild; }
 
     /**
-     * *Description of method*
-     * @param thisBuild a Space Variable
+     *
+     * @param thisBuild The space where the player is currently building
      */
     public void setThisBuild(Space thisBuild) { this.thisBuild = thisBuild; }
 
     /**
-     * *Description of method*
-     * @return a boolean variable
+     *
+     * @return a boolean: true if the player moved up in the current turn, false otherwise
      */
     public boolean getHasMovedUp() { return hasMovedUp; }
 
     /**
-     * *Description of method*
-     * @param hasMovedUp a Space variable
+     *
+     * @param hasMovedUp Indicates whether the player has moved up in the current turn
      */
     public void setHasMovedUp(boolean hasMovedUp) { this.hasMovedUp = hasMovedUp; }
 
     /**
-     * *Description of method*
-     * @return a boolean variable
+     *
+     * @return a boolean: true if the player has already built in the current turn, false otherwise
      */
     public boolean getHasBuilt() { return hasBuilt; }
 
     /**
-     * *Description of method*
-     * @param hasBuilt a boolean variable
+     *
+     * @param hasBuilt Indicates whether the player has already built in the current turn
      */
     public void setHasBuilt(boolean hasBuilt) { this.hasBuilt = hasBuilt; }
 }

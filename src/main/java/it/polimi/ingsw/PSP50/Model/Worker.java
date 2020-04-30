@@ -3,15 +3,21 @@ package it.polimi.ingsw.PSP50.Model;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ *  Worker contains all of the worker parameters
  */
 public class Worker {
-    private Player owner;
+    /**
+     *  Reference to his owner
+     */
+    final private Player owner;
+    /**
+     *  Reference to the position where the worker is on the board
+     */
     private Space position;
 
     /**
-     * *Constructor*
-     * @param owner a Player variable that indicate worker's owner
+     * Constructor
+     * @param owner Player owning this worker
      */
     public Worker(Player owner) {
         this.owner = owner;
@@ -19,32 +25,32 @@ public class Worker {
     }
 
     /**
-     * *Description of method*
-     * @return owner a Player variable
+     *
+     * @return worker owner
      */
     public Player getOwner() {
         return owner;
     }
 
     /**
-     * *Description of method*
-     * @param owner is Player variable
+     *  We don't need it
+     * @param owner Player owning the worker
      */
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
+   // public void setOwner(Player owner) {
+   //     this.owner = owner;
+   // }
 
     /**
-     * *Description of method*
-     * @param movement a Space variable
+     * Moves worker to a new space
+     * @param movement The space the worker moves to
      */
     public void move(Space movement){
         this.position = movement;
     }
 
     /**
-     * *Description of method*
-     * @param position a Space variable
+     * Occupies the position where the worker has moved
+     * @param position Space where the worker has moved
      */
     public void setPosition(Space position) {
         this.position = position;
@@ -52,13 +58,15 @@ public class Worker {
     }
 
     /**
-     * *Description of method*
-     * @param movement a Space variable that indicate where worker have to build
+     * Builds a block following the game logic
+     * @param movement Space where the worker builds the block
      */
-    public void build(Space movement){          // The method builds a Block without any check nor exception.
-                                                // Exceptions should be thrown by the Controller when a Block is not available.
+    public void build(Space movement){
+        // The method builds a Block without any check nor exception.
+        // Exceptions should be thrown by the Controller when a Block is not available.
 
-       int height_number= movement.getHeight().getValue() +1; //get current level of the Space and add 1.
+        //get current level of the Space and add 1.
+       int height_number= movement.getHeight().getValue() +1;
        switch (height_number)
        {
            case 1:
@@ -77,16 +85,16 @@ public class Worker {
     }
 
     /**
-     * *Description of method*
-     * @return position a Space variable
+     *
+     * @return position where the worker is
      */
     public Space getPosition() {
         return position;
     }
 
     /**
-     * *Description of method*
-     * @return an ArrayList of Space that contains where Worker can normally move
+     * Gets all the spaces where a normal worker can perform a move action from its position
+     * @return an ArrayList of the spaces
      */
     public ArrayList<Space> getMovable() {
         ArrayList<Space> movable = new ArrayList<>(this.position.getNeighbors());
@@ -102,8 +110,8 @@ public class Worker {
     }
 
     /**
-     * *Description of method*
-     * @return an ArrayList of Space that contains where Worker can build
+     * Gets all the spaces where a normal worker can perform a build action from its position
+     * @return an ArrayList of the spaces
      */
     public ArrayList<Space> getBuildable() {
         ArrayList<Space> buildable = new ArrayList<>(this.position.getNeighbors());
@@ -118,8 +126,9 @@ public class Worker {
     }
 
     /**
-     * *Description of method*
-     * @return an ArrayList of Space that contains where Worker can move even there is an opponent worker
+     * Used only to manage some Gods powers
+     * Gets all the spaces where a worker can perform a move action, even in the case they're already occupied by an opponent
+     * @return an ArrayList of the spaces
      */
     public ArrayList<Space> getMovableWithWorkers() {
         ArrayList<Space> movable = new ArrayList<>(this.position.getNeighbors());

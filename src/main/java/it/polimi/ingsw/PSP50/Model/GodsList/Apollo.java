@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Apollo card
  */
 public class Apollo extends God {
 
@@ -19,9 +19,9 @@ public class Apollo extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space given by getMovableWithWorkers()
+     * Overrides the default getAvailableMove method to implement Apollo's power.
+     * @param player The owner of the God card
+     * @return an ArrayList of the available spaces where to perform a "Move" action
      */
     @Override
     public ArrayList<Space> getAvailableMove(Player player) {
@@ -30,10 +30,10 @@ public class Apollo extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
+     * Overrides the default Move method to implement Apollo's power.
+     * @param player The owner of the God card
      * @param space a Space variable that indicate where to move
-     * @return a boolean variable just for confirmation
+     * @return a boolean variable to report the outcome of the action
      */
     @Override
     public boolean Move(Player player, Space space)

@@ -6,72 +6,97 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * *Description of class*
+ * God is an abstract class that will be inherited by every God card
  */
 public abstract class God {
+
+    /**
+     * A list of the different steps which compose the turn of play. The turn is different for every God so
+     * the list will be empty by default, and changed in every constructor.
+     */
     protected final ArrayList<Phase> availableSteps = new ArrayList<>();
+
+    /**
+     * The name of the God
+     */
     private final GodsNames name;
 
     /**
      * *Constructor*
-     * @param name a GodsNames constant Enum
+     * @param name The name of the God
      */
     protected God(GodsNames name) {this.name= name;}
 
     /**
-     * *Description of method*
-     * @return an ArrayList of Phase
+     * Gives a list of the different steps which compose the turn of play.
+     * Steps can be: Move, Build, Optional Move, Optional Build
+     * @return an ArrayList of Phase objects, that are the available steps
      */
     public ArrayList<Phase> getAvailableSteps(){
         return new ArrayList<>(availableSteps); //returns a copy of the list;
     }
 
     /**
-     * *Description of method*
-     * @return a GodsNames variable
+     *
+     * @return the name of the God
      */
     public GodsNames getName() {
         return name;
     }
 
+
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can move
+     * Gets the available spaces where the player can perform a "Move" action through this God card.
+     * Basic implementation is provided, Gods that have a different logic will override this method.
+     * @param player The owner of the God card
+     * @return an ArrayList of the allowed spaces where his worker can move
      */
     public ArrayList<Space> getAvailableMove(Player player) {
         Worker thisWorker = player.getSelectedWorker();
         return (new ArrayList<>(thisWorker.getMovable()));
     }
 
+
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can build
+     * Gets the available spaces where the player can perform a "Build" action through this God card.
+     * Basic implementation is provided, Gods that have a different logic will override this method.
+     * @param player The owner of the God card
+     * @return an ArrayList of the allowed spaces where his worker can build
      */
     public ArrayList<Space> getAvailableBuild(Player player) {
         Worker thisWorker = player.getSelectedWorker();
         return (new ArrayList<>(thisWorker.getBuildable()));
     }
 
+
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can move (by default is empty)
+     * Gets the available spaces where the player can perform an "Optional Move" action through this God card.
+     * Basic implementation returns an empty list because not every God card has an Optional Move action, so
+     * it makes no sense to declare it abstract and implement it in every God.
+     * Gods that have a different logic will override this method.
+     * @param player The owner of the God card
+     * @return an ArrayList of the allowed spaces where his worker can move
      */
     public ArrayList<Space> getOptionalMove(Player player) { return new ArrayList<>(); } //default: empty list.
 
+
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can build (by default is empty)
+     * Gets the available spaces where the player can perform an "Optional Build" action through this God card.
+     * Basic implementation returns an empty list because not every God card has an Optional Build action, so
+     * it makes no sense to declare it abstract and implement it in every God.
+     * Gods that have a different logic will override this method.
+     * @param player The owner of the God card
+     * @return an ArrayList of the allowed spaces where his worker can build
      */
     public ArrayList<Space> getOptionalBuild(Player player) { return new ArrayList<>(); }  //default: empty list.
 
+
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Block which contains the allowed Blocks that can be build
+     * Gets the available blocks that the player can choose during a "Build/Optional Build" action.
+     * Default implementation returns a one-element list.
+     * Gods that have a different logic will override this method.
+     * @param player The owner of the God card
+     * @return an ArrayList of the allowed blocks that can be chosen to build
      */
     public ArrayList<Block> getAvailableBlock(Player player) {
         Space space = player.getThisBuild();
@@ -90,39 +115,46 @@ public abstract class God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @param space a Space variable that indicate where to move
-     * @return a boolean variable just for confirmation
+     * Moves the selected worker of the player and makes sure every parameter is set correctly.
+     * @param player The owner of the God card
+     * @param space a Space variable that indicates where to move
+     * @return a boolean variable to report the outcome of the action
      */
     public boolean Move(Player player, Space space)
     {   Space oldSpace=  player.getSelectedWorker().getPosition();
         oldSpace.setWorker(null); //free the old space
         player.setLastMove(oldSpace); //set last position
         player.getSelectedWorker().move(space);
+
+        // if the outcome is correct
         if (player.getSelectedWorker().getPosition() == space)
         {
             space.setWorker(player.getSelectedWorker()); // occupy the new place
             return true;
         }
+
+        // if the outcome is wrong
         else return false;
     }
 
+
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @param space a Space variable that indicate where to build
-     * @param piece a Block variable
-     * @return a boolean variable just for confirmation
+     * Build the correct block with the selected worker of the player and makes sure every parameter is set correctly.
+     * @param player The owner of the God card
+     * @param space a Space variable that indicates where to build
+     * @param piece The selected block to build
+     * @return a boolean variable to report the outcome of the action
      */
     public boolean Build(Player player, Space space, Block piece)
     {
         player.getSelectedWorker().build(space);
+        // if the outcome is correct
         if (space.getHeight() == piece)
         {   player.setHasBuilt(true);
             player.setLastBuild(space);
             return true;
         }
+        // if the outcome is wrong
         else
             return false;
     }

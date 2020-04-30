@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Artemis card
  */
 public class Artemis extends God {
 
@@ -20,15 +20,16 @@ public class Artemis extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space that indicate where player's worker can move
+     * Overrides the default getOptionalMove method to implement Artemis'power.
+     * @param player The owner of the God card
+     * @return an ArrayList of the available spaces where to perform an "Optional Move" action
      */
     @Override
     public ArrayList<Space> getOptionalMove(Player player) {
         Space LastMove = player.getLastMove();
         ArrayList<Space> availableMoves = super.getAvailableMove(player);
-        availableMoves.remove(LastMove);  //Artemis cannot move back on the place she already moved from.
+        //Artemis cannot move back on the place she already moved from.
+        availableMoves.remove(LastMove);
         return (availableMoves);
     }
 }

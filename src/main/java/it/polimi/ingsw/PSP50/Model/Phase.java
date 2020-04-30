@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP50.Model;
 
 /**
- * Constant Enumeration that contains the phases of the game
+ * Constant Enumeration that contains the phases of the game turn
  */
 public enum Phase {
     /**

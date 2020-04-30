@@ -6,40 +6,56 @@ import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Game contains all of the parameters needed to play a game
  */
 public class Game {
+
+    /**
+     * List of players in the game
+     */
     private ArrayList<Player> players;
+
+    /**
+     * Reference to the game board
+     */
     private Board board;
   //  private Turn turn;
+
+    /**
+     * Type of game played (2 or 3 players)
+     */
     private GameType type;
+
+    /**
+     * Deck used for the game
+     */
     private Deck deck;
 
     /**
-     * *Description of method*
-     * @param deck of cards(God)
+     * assigns a deck to the game
+     * @param deck Deck of God cards
      */
     public void setDeck(Deck deck) { this.deck = deck; }
 
     /**
-     * *Description of method*
-     * @return a Deck variable
+     *
+     * @return the game deck
      */
     public Deck getDeck() {
         return deck;
     }
 
     /**
-     * *Description of method*
-     * @param type a GameType variable that indicate how many players are playing
+     * Sets the game type
+     * @param type a GameType variable that indicates how many players are playing
      */
     public void setType(GameType type) {
         this.type = type;
     }
 
     /**
-     * *Description of method*
-     * @return a GameType variable
+     *
+     * @return the game type
      */
     public GameType getType() { return type; }
 
@@ -52,8 +68,8 @@ public class Game {
     }
 
     /**
-     * *Description of method*
-     * @return a Board variable
+     *
+     * @return the game board
      */
     public Board getBoard() { return board; }
 
@@ -62,32 +78,31 @@ public class Game {
     // public Turn getTurn() {return turn;}
 
     /**
-     * *Description of method*
-     * @param players an ArrayList of players
+     * Assigns a list of players to the game
+     * @param players ArrayList of the Players in the game
      */
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
     /**
-     * *Description of method*
-     * @return an ArrayList of players
+     *
+     * @return the ArrayList of players
      */
     public ArrayList<Player> getAllPlayers() {
         return players;
     }
 
     /**
-     * *Description of method (secondo me non serve position)*
-     * @param player a Player variable
-     * @param position an integer variable that is used like an index
+     * Add a player to the ArrayList of the players
+     * @param player Player that is being added
      */
-    public void setPlayer(Player player, int position) { players.add(position,player);}
+    public void setPlayer(Player player) { players.add(player);}
 
     /**
-     * *Description of method*
-     * @param position an integer value used to find the right player
-     * @return a Player variable indicated by position from ArrayList of players
+     * Get a player from the ArrayList of the players
+     * @param position an index used to identify the player
+     * @return a Player from the ArrayList of players
      */
     public Player getPlayer(int position) {
         return players.get(position);

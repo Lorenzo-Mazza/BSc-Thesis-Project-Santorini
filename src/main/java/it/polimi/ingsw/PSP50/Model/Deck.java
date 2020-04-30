@@ -7,11 +7,16 @@ import java.util.Collections;
 import java.util.Random;
 
 /**
- * *Description of class*
+ * Deck contains all the God cards
  */
 public class Deck {
+    /**
+     *  Deck is an ArrayList containing every God card
+     */
     private ArrayList<God> deck= new ArrayList<>();
-
+    /**
+     *  chosenCards is an ArrayList containing the Gods that wil be used in the game
+     */
     private ArrayList<God> chosenCards= new ArrayList<>();
 
     /**
@@ -30,22 +35,26 @@ public class Deck {
     }
 
     /**
-     * *Description of method*
-     * @param card an integer that select one card from deck
-     * @return the selected God picked from the deck of cards
+     *
+     * @param card an index that selects one card from deck
+     * @return the selected God picked from the deck
      */
     public God getChosenCard(int card){
         return deck.get(card);
     }
 
+
+    /**
+     * Shuffles the deck cards randomly
+     */
     private void shuffle() {
         Collections.shuffle(deck, new Random());
     }
 
     /**
-     * *Description of method*
-     * @param type an GameType that indicate how many players are playing
-     * @return an ArrayList of God with size indicated by type
+     * Gets a number of cards equal to the number of players in the game
+     * @param type a GameType that indicate how many players are playing
+     * @return an ArrayList of God cards
      */
     public ArrayList<God> getChosenCards(GameType type) {
         shuffle();

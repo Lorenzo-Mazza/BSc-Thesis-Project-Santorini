@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Minotaur card
  */
 public class Minotaur extends God {
 
@@ -19,10 +19,9 @@ public class Minotaur extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can move also there
-     * is an opponent's worker
+     * Overrides the default getAvailableMove method to implement Minotaur's power.
+     * @param player The owner of the God card
+     * @return an ArrayList of the available spaces where to perform a "Move" action
      */
     @Override
     public ArrayList<Space> getAvailableMove(Player player) {
@@ -42,10 +41,10 @@ public class Minotaur extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
+     * Overrides the default Move method to implement Minotaur's power.
+     * @param player The owner of the God card
      * @param space a Space variable that indicate where to move
-     * @return a boolean variable just for confirmation
+     * @return a boolean variable to report the outcome of the action
      */
     @Override
     public boolean Move(Player player, Space space) {
@@ -55,9 +54,11 @@ public class Minotaur extends God {
             Worker thisWorker = player.getSelectedWorker();
             int[] movement = thisWorker.getPosition().getCoordinatesFromSpaces(space);
             Worker opponentWorker = space.getWorker();
-            space.setWorker(null);  //free space
+            //free the old space
+            space.setWorker(null);
             opponentWorker.move(space.getNext(movement[0], movement[1]));
-            space.getNext(movement[0], movement[1]).setWorker(opponentWorker);  //occupy new space for the opponent
+            //occupy the new opponent's space
+            space.getNext(movement[0], movement[1]).setWorker(opponentWorker);
 
         }
 

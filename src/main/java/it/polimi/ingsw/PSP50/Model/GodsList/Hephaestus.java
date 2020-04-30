@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Hephaestus card
  */
 public class Hephaestus extends God {
 
@@ -20,16 +20,17 @@ public class Hephaestus extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can build
+     * Overrides the default getOptionalBuild method to implement Hephaestus'power.
+     * @param player The owner of the God card
+     * @return an ArrayList of the available spaces where to perform an "Optional Build" action
      */
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {
         ArrayList <Space> optionalBuild= super.getOptionalBuild(player); // it should be an empty list, check if it's empty in Tests
         Space lastBuild = player.getLastBuild();
+        //If you cannot build a Dome, the Space is available for Hephaestus's Power.
         if ((lastBuild.getHeight() != Block.DOME) && (lastBuild.getHeight() != Block.LEVEL3))
-        optionalBuild.add(lastBuild); //If you cannot build a Dome, the Space is available for Hephaestus's Power.
+        optionalBuild.add(lastBuild);
         return optionalBuild; //Check if it's empty or not in the Controller!
     }
 }

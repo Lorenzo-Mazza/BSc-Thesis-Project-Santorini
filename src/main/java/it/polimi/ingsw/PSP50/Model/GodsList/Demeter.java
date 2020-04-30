@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Demeter card
  */
 public class Demeter extends God {
 
@@ -20,9 +20,9 @@ public class Demeter extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed Spaces where worker can build
+     * Overrides the default getOptionalBuild method to implement Demeter's power.
+     * @param player The owner of the God card
+     * @return an ArrayList of the available spaces where to perform an "Optional Build" action
      */
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {

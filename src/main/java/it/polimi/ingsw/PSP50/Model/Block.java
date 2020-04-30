@@ -1,11 +1,11 @@
 package it.polimi.ingsw.PSP50.Model;
 
 /**
- * *Description of class*
+ * Block is an Enum class that contains all the types of blocks that can be built in a space
  */
 public enum Block {
     /**
-     * no build - value: 0
+     * ground floor - value: 0
      */
     EMPTY(0),
     /**
@@ -21,7 +21,7 @@ public enum Block {
      */
     LEVEL3(3),
     /**
-     * doom - value: 10
+     * dome - value: 10 (the space is unavailable)
      */
     DOME(10);
 
@@ -29,15 +29,15 @@ public enum Block {
 
     /**
      * *Constructor*
-     * @param value an integer that indicate constant enum's value
+     * @param value an integer that indicate the enum constant value
      */
     private Block(int value) {
         this.value = value;
     }
 
     /**
-     * *Descriprion of method*
-     * @return an integer that represents enum's value
+     *
+     * @return an integer that represents the enum constant value
      */
     public int getValue() {
         return value;

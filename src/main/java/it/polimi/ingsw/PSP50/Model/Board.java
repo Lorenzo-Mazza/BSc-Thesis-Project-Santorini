@@ -1,13 +1,13 @@
 package it.polimi.ingsw.PSP50.Model;
 
 /**
- * *Description of class*
+ * Board represents the game board, made by an array of 5*5 spaces
  */
 public class Board {
     private Space[][] spaces = new Space[5][5];
 
     /**
-     * *Constructor*
+     * Constructor
      */
     public Board() {
         for (int row = 0; row < 5; row++){
@@ -17,10 +17,10 @@ public class Board {
     }
 
     /**
-     * *description of method*
-     * @param xPosition an integer that indicate x-position
-     * @param yPosition an integer that indicate y-position
-     * @return the Space in board indicated by coordinates
+     *
+     * @param xPosition an integer that indicates the X-coordinate on the board
+     * @param yPosition an integer that indicates the Y-coordinate on the board
+     * @return the board space identified by the coordinates
      */
     public Space getSpace(int xPosition, int yPosition) {
         return spaces[xPosition][yPosition];

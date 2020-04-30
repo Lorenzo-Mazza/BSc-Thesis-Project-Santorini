@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Atlas Card
  */
 public class Atlas extends God {
 
@@ -19,9 +19,9 @@ public class Atlas extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Block which contains the allowed Blocks that can be build
+     * Overrides the default getAvailableBlock method to implement Atlas'power.
+     * @param player The owner of the God card
+     * @return an ArrayList that contains the default available block plus a Dome
      */
     @Override
     public ArrayList<Block> getAvailableBlock(Player player) {

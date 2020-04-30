@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Athena card
  */
 public class Athena extends God {
 
@@ -19,10 +19,10 @@ public class Athena extends God {
     }
 
     /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
+     * Overrides the default Move method to implement Athena's power.
+     * @param player The owner of the God card
      * @param space a Space variable that indicate where to move
-     * @return a boolean variable just for confirmation
+     * @return a boolean variable to report the outcome of the action
      */
     @Override
     public boolean Move(Player player, Space space) {

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP50.Model;
 
 /**
- * *Description of class*
+ * GameType determines the number of players in the game
  */
 public enum GameType {
     /**
@@ -16,16 +16,16 @@ public enum GameType {
     private final int size;
 
     /**
-     * *Constructor*
-     * @param size an integer to determinate size of enum
+     * Constructor
+     * @param size an integer to determine the number of players in the game
      */
     private GameType(int size){
         this.size = size;
     }
 
     /**
-     *
-     * @return an integer of enum
+     * Gets the number of players in the game
+     * @return the size of the enum constant
      */
     public int getSize(){
         return this.size;

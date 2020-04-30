@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP50.Model;
 
 /**
- * Constant Enumeration that contains all name of Gods
+ * Constant Enumeration that contains all the Gods names
  */
 public enum GodsNames {
     /**

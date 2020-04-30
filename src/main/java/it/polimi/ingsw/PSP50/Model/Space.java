@@ -3,22 +3,41 @@ package it.polimi.ingsw.PSP50.Model;
 import java.util.ArrayList;
 
 /**
- * *Description of class*
+ * Space contains all the space data and a reference to the board it belongs to
  */
 public class Space {
-    private final int xPosition;
-    private final int yPosition;
-    private Worker occupied;
-    private Block height;
-    private Board board;
 
     /**
-     * *Constructor*
-     * @param xPosition an integer variable that indicate x-coordinate
-     * @param yPosition an integer variable that indicate y-coordinate
-     * @param board a Board variable so every space are in the same Board
+     * X-coordinate on the board
      */
-    public Space(int xPosition, int yPosition, Board board) { //Constructor that sets immediately the position of the space on the board.
+    private final int xPosition;
+    /**
+     * Y-coordinate on the board
+     */
+    private final int yPosition;
+    /**
+     * Worker that's currently occupying this space
+     */
+    private Worker occupied;
+    /**
+     * Space height in terms of Blocks that have been build on it
+     */
+    private Block height;
+    /**
+     * Reference to the space board
+     */
+    private Board board;
+
+
+    /**
+     * Constructor
+     * @param xPosition  X-coordinate on the board
+     * @param yPosition  Y-coordinate on the board
+     * @param board The board that the space belongs to
+     */
+    public Space(int xPosition, int yPosition, Board board) {
+
+        //the Constructor sets immediately the position of the space on the board.
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         height =  Block.EMPTY;
@@ -26,25 +45,26 @@ public class Space {
         this.board = board;
     }
 
+
     /**
-     * *Description of method*
-     * @return an integer variable of x-coordinate
+     *
+     * @return the space X-coordinate on the board
      */
     public int getXPosition() {
         return this.xPosition;
     }
 
     /**
-     * *Description of method*
-     * @return an integer variable of y-coordinate
+     *
+     * @return the space Y-coordinate on the board
      */
     public int getYPosition() {
         return this.yPosition;
     }
 
     /**
-     * *Description of method*
-     * @return an Array that contains x-coordinate and y-coordinate
+     *
+     * @return an Array that contains both the space coordinates
      */
     public int[] getCoordinates() {
         int[] coordinates = new int[2];
@@ -54,36 +74,41 @@ public class Space {
     }
 
     /**
-     * *Description of method*
-     * @return an enum constant that indicate what type of block
+     *
+     * @return space height. Possible values are:
+     * - LEVEL 0
+     * - LEVEL 1
+     * - LEVEL 2
+     * - LEVEL 3
+     * - DOME
      */
     public Block getHeight() {
         return height;
     }
 
     /**
-     * *Description of method*
-     * @param height to set an enum constant on this space
+     *
+     * @param height Refers to the space height
      */
     public void setHeight(Block height) { this.height = height; }
 
     /**
-     * *Description of method*
-     * @return a Worker variable
+     *
+     * @return the worker that currently occupies the space
      */
     public Worker getWorker() {
         return occupied;
     }
 
     /**
-     * *Description of method*
-     * @param worker a Worker variable
+     *
+     * @param worker Indicates that the space is now occupied by this worker
      */
     public void setWorker(Worker worker) { this.occupied = worker; }
 
     /**
-     * *Description of method*
-     * @return a boolean variable
+     *
+     * @return a boolean: true if the space is occupied, false otherwise
      */
     public boolean isOccupied() {
         if(this.occupied == null)
@@ -92,8 +117,8 @@ public class Space {
     }
 
     /**
-     * *Description of method*
-     * @return an ArrayList of Space that contains all neighbors of this space
+     *  Used to get all the neighboring spaces
+     * @return an ArrayList of the neighboring spaces
      */
     public ArrayList<Space> getNeighbors() {
         ArrayList<Space> neighbors = new ArrayList<>();
@@ -138,10 +163,11 @@ public class Space {
     }
 
     /**
-     * *Description of method*
-     * @param movementOnX an integer variable to add at x-coordinate
-     * @param movementOnY an integer variable to add at y-coordinate
-     * @return a boolean variable
+     * Checks if there's a neighboring space in the direction (X,Y) from the actual space.
+     * Direction (1,0) is East, (1,1) North-East, (0,1) North, (-1,1) North-West, (-1,0) West, (0,-1) South, (-1,-1) South-West
+     * @param movementOnX X-coordinate of the movement
+     * @param movementOnY Y-coordinate of the movement
+     * @return a boolean: true if a space exists and it's not blocked permanently by a DOME, false otherwise
      */
     public boolean thereIsNext(int movementOnX, int movementOnY) {
         int[] coordinates = {this.xPosition + movementOnX, this.yPosition + movementOnY};
@@ -152,10 +178,10 @@ public class Space {
     }
 
     /**
-     * *Description of method*
-     * @param movementOnX an integer variable to add at x-coordinate
-     * @param movementOnY an integer variable to add at y-coordinate
-     * @return a Space variable
+     *
+     * @param movementOnX X-coordinate of the movement
+     * @param movementOnY Y-coordinate of the movement
+     * @return the neighboring space in the direction (X,Y) from the actual space
      */
     public Space getNext(int movementOnX, int movementOnY) {
         if (!thereIsNext(this.xPosition + movementOnX, this.yPosition + movementOnY))
@@ -165,9 +191,9 @@ public class Space {
     }
 
     /**
-     * *Description of method*
-     * @param nextSpace a Space variable
-     * @return an array of integer that contains the difference of coordinates between the spaces
+     * gets the (X,Y) direction needed to reach nextSpace from this space
+     * @param nextSpace Space where to move
+     * @return the difference of coordinates between nextSpace and this space
      */
     public int[] getCoordinatesFromSpaces(Space nextSpace) {
         int[] movement = new int[2];
