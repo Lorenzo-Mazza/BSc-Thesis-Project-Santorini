@@ -2,6 +2,8 @@ package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 
+import java.util.ArrayList;
+
 /**
  * Player contains all of the player's data.
  */
@@ -47,6 +49,17 @@ public class Player {
     private boolean hasBuilt;
 
     /**
+     * Boolean that checks if the player has lost in the current turn
+     */
+    private boolean hasLost;
+
+    private boolean playerBlocked;
+
+    private ArrayList<Player> opponents;
+
+
+
+    /**
      * Player Constructor
      * @param name Player's name
      */
@@ -60,6 +73,9 @@ public class Player {
         this.thisBuild = null;
         this.hasMovedUp = false;
         this.hasBuilt = false;
+        this.hasLost=false;
+        this.playerBlocked=false;
+        this.opponents=null;
     }
 
     /**
@@ -173,4 +189,38 @@ public class Player {
      * @param hasBuilt Indicates whether the player has already built in the current turn
      */
     public void setHasBuilt(boolean hasBuilt) { this.hasBuilt = hasBuilt; }
+
+    /**
+     *
+     * @return a boolean: true if the player has lost in the current turn, false otherwise
+     */
+    public boolean getHasLost() {
+        return hasLost;
+    }
+
+    /**
+     *
+     * @param hasLost Indicates whether the player has lost in the current turn
+     */
+    public void setHasLost(boolean hasLost) {
+        this.hasLost = hasLost;
+    }
+
+
+    public boolean isPlayerBlocked() {
+        return playerBlocked;
+    }
+
+    public void setPlayerBlocked(boolean playerBlocked) {
+        this.playerBlocked = playerBlocked;
+    }
+
+    public ArrayList<Player> getOpponents() {
+        return opponents;
+    }
+
+    public void addOpponent(Player opponent) {
+        opponents.add(opponent);
+    }
+
 }

@@ -16,6 +16,11 @@ public class Game {
     private ArrayList<Player> players;
 
     /**
+     * Player that won the game
+     */
+    private Player winner=null;
+
+    /**
      * Reference to the game board
      */
     private Board board;
@@ -30,6 +35,23 @@ public class Game {
      * Deck used for the game
      */
     private Deck deck;
+
+
+    /**
+     * gets the winner of the game
+     * @return the Player that won the game
+     */
+    public Player getWinner() {
+        return winner;
+    }
+
+    /**
+     * assigns a winner to the game
+     * @param winner Player that won the game
+     */
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
 
     /**
      * assigns a deck to the game
@@ -106,5 +128,22 @@ public class Game {
      */
     public Player getPlayer(int position) {
         return players.get(position);
+    }
+
+    public void setOpponents(){
+        ArrayList <Player> playersList= this.getAllPlayers();
+        int index=0;
+        for (this.getPlayer(index);index<playersList.size();index++)
+        {
+            Player thisPlayer= this.getPlayer(index);
+            for (int secondIndex=0;secondIndex<playersList.size();secondIndex++)
+            {
+                Player opponent= this.getPlayer(secondIndex);
+                if (thisPlayer!= opponent)
+                {
+                    thisPlayer.addOpponent(opponent);
+                }
+            }
+        }
     }
 }

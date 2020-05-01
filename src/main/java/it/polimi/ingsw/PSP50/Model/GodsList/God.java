@@ -120,7 +120,7 @@ public abstract class God {
      * @param space a Space variable that indicates where to move
      * @return a boolean variable to report the outcome of the action
      */
-    public boolean Move(Player player, Space space)
+    public boolean move(Player player, Space space)
     {   Space oldSpace=  player.getSelectedWorker().getPosition();
         oldSpace.setWorker(null); //free the old space
         player.setLastMove(oldSpace); //set last position
@@ -145,7 +145,7 @@ public abstract class God {
      * @param piece The selected block to build
      * @return a boolean variable to report the outcome of the action
      */
-    public boolean Build(Player player, Space space, Block piece)
+    public boolean build(Player player, Space space, Block piece)
     {
         player.getSelectedWorker().build(space);
         // if the outcome is correct
@@ -158,5 +158,17 @@ public abstract class God {
         else
             return false;
     }
+
+    public boolean getWinCondition(Player player){
+        Block lastHeight= player.getLastMove().getHeight();
+        Block thisHeight= player.getSelectedWorker().getPosition().getHeight();
+        if (lastHeight==Block.LEVEL2 && thisHeight==Block.LEVEL3)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    //call from worker  public void block();
 
 }

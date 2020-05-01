@@ -2,8 +2,6 @@ package it.polimi.ingsw.PSP50.Model.GodsList;
 
 import it.polimi.ingsw.PSP50.Model.*;
 
-import java.util.ArrayList;
-
 /**
  * Athena card
  */
@@ -25,11 +23,18 @@ public class Athena extends God {
      * @return a boolean variable to report the outcome of the action
      */
     @Override
-    public boolean Move(Player player, Space space) {
+    public boolean move(Player player, Space space) {
         player.setHasMovedUp(false);
-        Block high = player.getSelectedWorker().getPosition().getHeight();
-        if (high.getValue() < space.getHeight().getValue())
+        Block currentPosition = player.getSelectedWorker().getPosition().getHeight();
+        if (currentPosition.getValue() < space.getHeight().getValue())
+        {
             player.setHasMovedUp(true);
-        return super.Move(player, space);
+            for (Player opponent : player.getOpponents())
+            {
+                opponent.setPlayerBlocked(true);
+            }
+        }
+
+        return super.move(player, space);
     }
 }

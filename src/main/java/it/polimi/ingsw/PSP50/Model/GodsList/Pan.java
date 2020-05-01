@@ -17,4 +17,16 @@ public class Pan extends God {
         availableSteps.add(Phase.MOVE);
         availableSteps.add(Phase.BUILD);
     }
+
+
+    @Override
+    public boolean getWinCondition(Player player){
+        Block lastHeight= player.getLastMove().getHeight();
+        Block thisHeight= player.getSelectedWorker().getPosition().getHeight();
+        if (lastHeight.getValue()-thisHeight.getValue()>1)
+        {
+            return true;
+        }
+        else return (super.getWinCondition(player));
+    }
 }

@@ -36,7 +36,7 @@ public class Apollo extends God {
      * @return a boolean variable to report the outcome of the action
      */
     @Override
-    public boolean Move(Player player, Space space)
+    public boolean move(Player player, Space space)
     {
         if (space.isOccupied())
             {   // Swap positions (there is a reason why I don't call super.move to swap, ask me if you notice).
@@ -52,7 +52,7 @@ public class Apollo extends God {
             }
 
         else {
-            return super.Move(player, space);
+            return super.move(player, space);
         }
     }
 

@@ -47,7 +47,7 @@ public class Minotaur extends God {
      * @return a boolean variable to report the outcome of the action
      */
     @Override
-    public boolean Move(Player player, Space space) {
+    public boolean move(Player player, Space space) {
 
 
         if (space.isOccupied()) {
@@ -62,6 +62,6 @@ public class Minotaur extends God {
 
         }
 
-        return super.Move(player, space);
+        return super.move(player, space);
     }
 }

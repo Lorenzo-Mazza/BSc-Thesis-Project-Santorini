@@ -105,6 +105,16 @@ public class Worker {
                 || (movable.get(index).isOccupied()))
 
                  { movable.remove(index); } //If the Space is not reachable (too high or occupied), take it out of the list.
+
+            // if the player is blocked, he cannot move up
+            if (this.getOwner().isPlayerBlocked())
+            {
+                if((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 0)
+
+                    movable.remove(index);
+
+            }
+
         }
         return movable;
     }
@@ -138,6 +148,16 @@ public class Worker {
             if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1) ||
                     (movable.get(index).getWorker().getOwner() == this.getOwner()))
                 movable.remove(index); //If the Space is not reachable (too high or occupied), take it out of the list.
+
+
+            // if the player is blocked, he cannot move up
+            if (this.getOwner().isPlayerBlocked())
+            {
+                if((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 0)
+
+                    movable.remove(index);
+
+            }
         }
         return movable;
     }
