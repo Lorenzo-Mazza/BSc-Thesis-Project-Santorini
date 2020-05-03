@@ -5,9 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+/**
+ * Thread ran by the client to listen for notifications from the server
+ */
 public class ThreadRead implements Runnable {
+    /**
+     * TCP connection with server
+     */
     private Socket socket;
 
+    /**
+     * Constructor
+     * @param socket TCP connection with server
+     */
     public ThreadRead(Socket socket) {
         this.socket = socket;
     }

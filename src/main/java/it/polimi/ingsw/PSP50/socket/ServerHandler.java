@@ -6,9 +6,19 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Thread ran by the server to handle each connected client
+ */
 public class ServerHandler implements Runnable {
+    /**
+     * TCP connection with client
+     */
     private Socket socket;
 
+    /**
+     * Constructor
+     * @param socket TCP connection with client
+     */
     public ServerHandler(Socket socket) {
         this.socket = socket;
     }

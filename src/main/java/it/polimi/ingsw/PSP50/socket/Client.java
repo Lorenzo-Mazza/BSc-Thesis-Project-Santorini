@@ -10,6 +10,11 @@ public class Client {
         connect(addr, port);
     }
 
+    /**
+     * Connects to server
+     * @param addr server address
+     * @param port server port
+     */
     public static void connect(String addr, int port) {
         try {
             Socket server = new Socket(addr, port);

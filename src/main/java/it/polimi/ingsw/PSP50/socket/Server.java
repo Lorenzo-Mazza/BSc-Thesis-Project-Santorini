@@ -10,6 +10,10 @@ public class Server {
         open(port);
     }
 
+    /**
+     * Opens a TCP server socket
+     * @param port server port number - suggested range from 49152 to 65535 (ephemeral ports)
+     */
     public static void open(int port) {
         try (ServerSocket socket = new ServerSocket(port)) {
             System.out.println("Server listening on port " + port);

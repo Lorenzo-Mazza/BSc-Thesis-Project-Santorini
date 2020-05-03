@@ -6,6 +6,10 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class View implements Runnable {
+    /**
+     * @param space
+     * @return space height with escape sequences for the color of the worker occupying the space
+     */
     private static String printSpace(Space space) {
         int height = space.getHeight().getValue();
         String heightString;
@@ -22,6 +26,10 @@ public class View implements Runnable {
         return colorStart + heightString + colorEnd;
     }
 
+    /**
+     * Prints the game board to terminal
+     * @param board
+     */
     private static void printBoard(Board board){
         for (int i = 0; i < 5; i++) {
             System.out.println("+---+---+---+---+---+");
