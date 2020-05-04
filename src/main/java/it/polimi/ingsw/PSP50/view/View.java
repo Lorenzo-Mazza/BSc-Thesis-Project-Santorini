@@ -2,13 +2,15 @@ package it.polimi.ingsw.PSP50.view;
 
 import it.polimi.ingsw.PSP50.Model.Board;
 import it.polimi.ingsw.PSP50.Model.Space;
+import it.polimi.ingsw.PSP50.Model.Worker;
+
 import java.io.PrintStream;
 import java.util.Scanner;
 
 public class View implements Runnable {
     /**
      * @param space
-     * @return space height with escape sequences for the color of the worker occupying the space
+     * @return space height highlighted the color of the worker occupying it
      */
     private static String printSpace(Space space) {
         int height = space.getHeight().getValue();
@@ -19,9 +21,12 @@ public class View implements Runnable {
             heightString = String.valueOf(height);
         }
 
-        //Color color = space.getWorker().getOwner().getColor();
         String colorStart = ""; // escape sequences for player workers color
-        String colorEnd = "";
+        String colorEnd = "\u001b[0m"; // reset color of following characters
+        Worker occupied = space.getWorker();
+        if (occupied != null) {
+            colorStart = occupied.getOwner().getColor().getSequence();
+        }
 
         return colorStart + heightString + colorEnd;
     }

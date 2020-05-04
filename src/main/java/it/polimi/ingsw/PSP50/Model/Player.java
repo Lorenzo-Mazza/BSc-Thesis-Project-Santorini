@@ -57,6 +57,11 @@ public class Player {
 
     private ArrayList<Player> opponents;
 
+    /**
+     * Color of the player workers on the board
+     */
+    private Color color;
+
 
 
     /**
@@ -221,6 +226,20 @@ public class Player {
 
     public void addOpponent(Player opponent) {
         opponents.add(opponent);
+    }
+
+    /**
+     * @param color Color of the player workers on the board
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    /**
+     * @return Color of the player workers on the board
+     */
+    public Color getColor() {
+        return color;
     }
 
 }
