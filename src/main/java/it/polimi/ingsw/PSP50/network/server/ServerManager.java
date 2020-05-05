@@ -17,6 +17,11 @@ public class ServerManager {
     }
 
 
+    public static Server getServer(){
+        return socketServer;
+    }
+
+
 
 
 

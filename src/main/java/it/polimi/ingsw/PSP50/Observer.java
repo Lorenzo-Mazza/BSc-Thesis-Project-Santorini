@@ -1,11 +1,13 @@
 package it.polimi.ingsw.PSP50;
 
+import it.polimi.ingsw.PSP50.network.messages.Message;
+
 public interface Observer {
 
         //method to update the observer, used by subject
-        public void update();
+         void update( Message message);
 
         //attach with subject to observe
-        public void setObservable(Observable observable);
+         void setObservable(Observable observable);
 
 }

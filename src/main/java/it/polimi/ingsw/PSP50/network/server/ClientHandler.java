@@ -70,4 +70,10 @@ public class ClientHandler implements Runnable
   }
 
 
+  public ObjectOutputStream getOutput() {
+    return out;
+  }
+  public ObjectInputStream getInput() {
+    return in;
+  }
 }

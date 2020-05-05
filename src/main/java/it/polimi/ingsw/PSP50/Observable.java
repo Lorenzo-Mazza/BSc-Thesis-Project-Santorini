@@ -1,15 +1,33 @@
 package it.polimi.ingsw.PSP50;
 
-public interface Observable {
+import it.polimi.ingsw.PSP50.network.messages.Message;
+
+import java.util.ArrayList;
+
+//Class inherited by every class that is observable
+
+public abstract class Observable {
+    private ArrayList<Observer> observers;
+
     //methods to register and unregister observers
-     void register(Observer obj);
-     void unregister(Observer obj);
+    public void register(Observer obj){
+         observers.add(obj);
+         obj.setObservable(this);
+     }
+     public void unregister(Observer obj){
+         observers.remove(obj);
+         obj.setObservable(null);
+     }
 
-    //method to notify observers of change
-     void notifyObservers();
+    //method to notify all the observers that arg changed
+     public void notifyObservers(Message msg){
+         for (Observer obj:observers
+              ) {
+             obj.update(msg);
+         }
+     }
 
-    //method to get updates from subject
-     Observer getUpdate(Observer obj);
+    public abstract Observer getUpdate(Observer obj);
 
 }
 

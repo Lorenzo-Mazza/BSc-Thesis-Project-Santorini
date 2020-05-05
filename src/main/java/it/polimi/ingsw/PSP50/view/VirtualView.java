@@ -3,18 +3,17 @@ package it.polimi.ingsw.PSP50.View;
 import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
-import it.polimi.ingsw.PSP50.network.client.Client;
+import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 
 /*
 **  Server-side View
  */
-public class VirtualView implements Observer,Observable {
-
+public class VirtualView extends Observable implements Observer {
 
     private GameManager gameController;
-
     private String playerName;
 
 
@@ -35,8 +34,9 @@ public class VirtualView implements Observer,Observable {
 
     /* Virtual View is an observer of the Model*/
     @Override
-    public void update(){
-      //update view
+    public void update(Message message){
+        //update view
+         sendToClient((ClientMessage) message);
     }
 
 
@@ -57,13 +57,22 @@ public class VirtualView implements Observer,Observable {
     public void unregister(Observer observer){
     }
 
-
-    @Override
-    public void notifyObservers(){
-    }
+   /* public void notifyObservers(Object arg, Message msg){
+    } */
 
     @Override
     public Observer getUpdate(Observer obj){
         return obj;
+    }
+
+
+
+    /**
+     * Method sends messages from Virtual View to the related client
+     * @param msg Message for the client that owns the Virtual View
+     */
+    public void sendToClient(ClientMessage msg) {
+        if (ServerManager.getServer().isConnected(playerName))
+            ServerManager.getServer().messageClient(msg, playerName);
     }
 }

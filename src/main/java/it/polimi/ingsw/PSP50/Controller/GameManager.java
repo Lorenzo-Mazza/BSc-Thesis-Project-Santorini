@@ -1,9 +1,9 @@
 package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
-import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
 
 import java.util.*;
 
@@ -166,7 +166,17 @@ public class GameManager implements Runnable{
     }
 
 
-
+    /**
+     * Notify every player
+     *
+     * @param msg Message sent
+     */
+    void notifyAll(ClientMessage msg) {
+        for (String user : virtualViews.keySet()) {
+            VirtualView view =virtualViews.get(user);
+            view.sendToClient(msg);
+        }
+    }
 
 
 

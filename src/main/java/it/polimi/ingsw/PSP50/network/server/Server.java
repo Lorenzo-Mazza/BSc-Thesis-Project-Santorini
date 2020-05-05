@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP50.network.server;
 
 import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class Server extends Thread{
   private static ServerSocket serverSocket;
   private static Map<String, VirtualView> views;
 
-  public Server() {
+   Server() {
     connections = new HashMap();
     views = new HashMap<>();
   }
@@ -32,6 +34,10 @@ public class Server extends Thread{
   public Map<String, VirtualView> getViews() {
     return views;
   }
+
+    public boolean isConnected(String user) {
+        return connections.containsKey(user);
+    }
 
 
 
@@ -79,5 +85,20 @@ public class Server extends Thread{
   public VirtualView getVirtualView(String user) {
     return views.get(user);
   }
+
+
+  public void messageClient(ClientMessage msg, String user) {
+      try {
+          ClientHandler client=connections.get(user);
+          ObjectOutputStream outStream = client.getOutput();
+          outStream.writeObject(msg);
+          outStream.flush();
+          outStream.reset();
+      } catch (IOException e){
+          System.out.println("invalid stream from server");
+      }
+  }
+
+
 
 }
