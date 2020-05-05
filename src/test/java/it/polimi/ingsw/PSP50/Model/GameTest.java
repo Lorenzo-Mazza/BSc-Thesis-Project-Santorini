@@ -69,9 +69,9 @@ public class GameTest {
         Player player1= new Player(player1Name);
         Player player2= new Player(player2Name);
         Player player3= new Player(player3Name);
-        game.setPlayer(player1,0);
-        game.setPlayer(player2,1);
-        game.setPlayer(player3,2);
+        game.setPlayer(player1);
+        game.setPlayer(player2);
+        game.setPlayer(player3);
 
         assertEquals(player1,game.getPlayer(0));
         assertEquals(player2,game.getPlayer(1));

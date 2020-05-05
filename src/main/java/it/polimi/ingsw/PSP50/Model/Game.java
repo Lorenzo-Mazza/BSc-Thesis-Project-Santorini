@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
+import it.polimi.ingsw.PSP50.View.VirtualView;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,8 @@ import java.util.ArrayList;
  * Game contains all of the parameters needed to play a game
  */
 public class Game {
+
+    private ArrayList<VirtualView> views= new ArrayList<>();
 
     /**
      * List of players in the game
@@ -145,5 +148,13 @@ public class Game {
                 }
             }
         }
+    }
+
+    public ArrayList<VirtualView> getViews() {
+        return views;
+    }
+
+    public void setViews(ArrayList<VirtualView> views) {
+        this.views = views;
     }
 }

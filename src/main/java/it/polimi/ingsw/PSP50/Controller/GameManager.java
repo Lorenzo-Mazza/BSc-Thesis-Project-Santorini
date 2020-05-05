@@ -3,38 +3,62 @@ package it.polimi.ingsw.PSP50.Controller;
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
+import it.polimi.ingsw.PSP50.View.VirtualView;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
-public class GameManager {
+public class GameManager implements Runnable{
+
+    private final Game game;
+    private  Map<String,VirtualView> virtualViews = new LinkedHashMap<>();
+    private final List<Player> players;
+
+
+
+
+    public GameManager(Map<String, VirtualView> lobby){
+
+        virtualViews=lobby;
+        game= new Game();
+        ArrayList <VirtualView> list= new ArrayList<>(lobby.values());
+        game.setViews(list);
+        List<String> nicknames = new ArrayList<>(lobby.keySet());
+        for (int i = 0; i < nicknames.size(); i++) {
+            String nickname = nicknames.get(i);
+            Player player = new Player(nickname);
+            game.setPlayer(player);
+        }
+        players = game.getAllPlayers();
+    }
+
+    @Override
+    public void run(){
+        startGame();
+        setUpGame();
+        runGame();
+        endGame();
+    }
+
 
     /**
      * Start a new game
-     * @param playersList is taken from the View.
-     * @return game The game that's being started
      */
-    public Game startGame(ArrayList<Player> playersList)  //
-    { Game newGame= new Game();
-      newGame.setPlayers(playersList);
-      newGame.setOpponents();
+    public void startGame()  //
+    { game.setOpponents();
       Board gameBoard= new Board();
-      newGame.setBoard(gameBoard);
-      if (playersList.size()==2) { newGame.setType(GameType.TWOPLAYERS);}
-      else if (playersList.size()==3) {newGame.setType(GameType.THREEPLAYERS);}
+      game.setBoard(gameBoard);
+      if (players.size()==2) { game.setType(GameType.TWOPLAYERS);}
+      else if (players.size()==3) {game.setType(GameType.THREEPLAYERS);}
 
       Deck gameDeck= new Deck();
-      newGame.setDeck(gameDeck);
-      this.dealCards(newGame);
-
-      return newGame;
+      game.setDeck(gameDeck);
+      this.dealCards();
     }
 
     /**
      * Each player picks a God card, the order is random.
-     * @param game The game that's being played
      */
-    private void dealCards(Game game)
+    private void dealCards()
     {
         Deck deck= game.getDeck();
         ArrayList<God> cardsLeft= deck.getChosenCards(game.getType());
@@ -54,9 +78,8 @@ public class GameManager {
     /**
      * Complete set-up of the game.
      * Players choose the initial position of their Workers and an order of Play is established.
-     * @param game The game that's being played
      */
-    public void setUpGame(Game game)
+    public void setUpGame()
     {
         ArrayList <Player> playersLeft= game.getAllPlayers();
         ArrayList <Player> orderOfPlay= new ArrayList<>();
@@ -75,9 +98,8 @@ public class GameManager {
 
     /**
      * Run a full game
-     * @param game The game that's being played
      */
-    public void runGame(Game game)
+    public void runGame()
     {
         ArrayList<TurnManager> turnList= new ArrayList<>();
         //Play first turn and create Turn Managers
