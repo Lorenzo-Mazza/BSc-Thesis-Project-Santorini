@@ -85,7 +85,7 @@ public class ClientSocket implements Runnable, Observer {
     }
 
     //do nothing
-    @Override
+  //  @Override
     public void setObservable(Observable view){
     }
 

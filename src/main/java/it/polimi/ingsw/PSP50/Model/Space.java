@@ -86,6 +86,20 @@ public class Space {
         return height;
     }
 
+    public Block getNextHeight() {
+        int height = this.getHeight().getValue();
+        switch (height) {
+            case 0:
+                return Block.LEVEL1;
+            case 1:
+                return Block.LEVEL2;
+            case 2:
+                return Block.LEVEL3;
+            default:
+                return Block.DOME;
+        }
+    }
+
     /**
      *
      * @param height Refers to the space height

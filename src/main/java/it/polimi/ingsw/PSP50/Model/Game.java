@@ -2,14 +2,22 @@ package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
+import it.polimi.ingsw.PSP50.Observable;
+import it.polimi.ingsw.PSP50.Observer;
+import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.Message;
+import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Game contains all of the parameters needed to play a game
  */
-public class Game {
+public class Game extends Observable implements Serializable{
 
     private ArrayList<VirtualView> views= new ArrayList<>();
 
@@ -150,6 +158,17 @@ public class Game {
         }
     }
 
+    public VirtualView getView(Player player){
+        VirtualView vv = null;
+        boolean found=false;
+        for (int i = 0; i<views.size() && !found; i++){
+            vv= views.get(i);
+            if (vv.getPlayerName().equals(player.getName()))
+                found=true;
+        }
+        return vv;
+    }
+
     public ArrayList<VirtualView> getViews() {
         return views;
     }
@@ -157,4 +176,16 @@ public class Game {
     public void setViews(ArrayList<VirtualView> views) {
         this.views = views;
     }
+
+
+    public void notifyChange(){
+        ModelMessage clientModel= createClientModel();
+        notifyObservers(clientModel);
+    }
+
+    public ModelMessage createClientModel(){
+        ModelMessage clientModel= new ModelMessage(this);
+        return clientModel;
+    }
+
 }

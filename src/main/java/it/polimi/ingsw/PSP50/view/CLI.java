@@ -1,17 +1,20 @@
 package it.polimi.ingsw.PSP50.View;
 
-import it.polimi.ingsw.PSP50.Model.Board;
-import it.polimi.ingsw.PSP50.Model.Space;
-import it.polimi.ingsw.PSP50.Model.Worker;
+import it.polimi.ingsw.PSP50.Model.*;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class CLI extends ClientView{
+public class CLI extends ClientView {
 
     private String name;
 
-    private ArrayList<ArrayList<String>> boardInfo = new ArrayList<>();
+    private Board gameBoard ;
+
+    private Game gameCopy;
+
+    private ArrayList<Player> players;
 
     private ArrayList<ArrayList<String>> playersInfo;
 
@@ -23,6 +26,17 @@ public class CLI extends ClientView{
         this.printBuffer();
         this.name = this.readLine();
     }
+
+    /*
+    ** Updates the CLI whenever the Model changes
+     */
+    @Override
+    public void update(Object gameCopy){
+        this.gameCopy= (Game) gameCopy;
+        this.gameBoard= this.gameCopy.getBoard();
+        this.players= this.gameCopy.getAllPlayers();
+    }
+
 
     private void printBuffer() {
         System.out.print(this.buffer.toString());
@@ -109,6 +123,9 @@ public class CLI extends ClientView{
     }
 
 
+
+
+
     /**
      * @param space
      * @return space height highlighted the color of the worker occupying it
@@ -134,9 +151,10 @@ public class CLI extends ClientView{
 
     /**
      * Prints the game board to terminal
+     *
      * @param board
      */
-    private static void printBoard(Board board){
+    private static void printBoard(Board board) {
         for (int i = 0; i < 5; i++) {
             System.out.println("+---+---+---+---+---+");
             String line = "| ";
@@ -148,3 +166,4 @@ public class CLI extends ClientView{
         System.out.println("+---+---+---+---+---+");
     }
 }
+

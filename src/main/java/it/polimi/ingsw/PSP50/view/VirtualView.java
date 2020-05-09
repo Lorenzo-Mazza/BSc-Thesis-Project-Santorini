@@ -35,13 +35,12 @@ public class VirtualView extends Observable implements Observer {
     /* Virtual View is an observer of the Model*/
     @Override
     public void update(Message message){
-        //update view
+        //update client view
          sendToClient((ClientMessage) message);
     }
 
 
-    //attach with subject to observe
-    @Override
+    //attach with subject to observer
     public void setObservable(Observable observable){
         //set observable of the model
     }
@@ -60,10 +59,10 @@ public class VirtualView extends Observable implements Observer {
    /* public void notifyObservers(Object arg, Message msg){
     } */
 
-    @Override
+    /* @Override
     public Observer getUpdate(Observer obj){
         return obj;
-    }
+    }*/
 
 
 

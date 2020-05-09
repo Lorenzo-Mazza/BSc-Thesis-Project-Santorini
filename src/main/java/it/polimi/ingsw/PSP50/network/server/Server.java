@@ -35,7 +35,7 @@ public class Server extends Thread{
     return views;
   }
 
-    public boolean isConnected(String user) {
+  public boolean isConnected(String user) {
         return connections.containsKey(user);
     }
 
@@ -61,9 +61,7 @@ public class Server extends Thread{
           output.flush();
           ObjectInputStream input = new ObjectInputStream(client.getInputStream());
           String user = (String) input.readObject();
-          VirtualView virtualView;
-          virtualView = new VirtualView(user);
-
+          VirtualView virtualView = new VirtualView(user);
 
           ClientHandler clientHandler = new ClientHandler(client,this,output,input,virtualView);
           Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());

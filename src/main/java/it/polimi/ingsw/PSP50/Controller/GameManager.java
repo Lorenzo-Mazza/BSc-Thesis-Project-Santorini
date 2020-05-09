@@ -2,12 +2,16 @@ package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
+import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.Message;
+import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.*;
 
-public class GameManager implements Runnable{
+public class GameManager implements Runnable {
 
     private final Game game;
     private  Map<String,VirtualView> virtualViews = new LinkedHashMap<>();
@@ -31,6 +35,11 @@ public class GameManager implements Runnable{
         players = game.getAllPlayers();
     }
 
+
+    public Game getGame() {
+        return game;
+    }
+
     @Override
     public void run(){
         startGame();
@@ -44,15 +53,16 @@ public class GameManager implements Runnable{
      * Start a new game
      */
     public void startGame()  //
-    { game.setOpponents();
-      Board gameBoard= new Board();
-      game.setBoard(gameBoard);
-      if (players.size()==2) { game.setType(GameType.TWOPLAYERS);}
-      else if (players.size()==3) {game.setType(GameType.THREEPLAYERS);}
+    {
+        game.setOpponents();
+        Board gameBoard= new Board();
+        game.setBoard(gameBoard);
+        if (players.size()==2) { game.setType(GameType.TWOPLAYERS);}
+        else if (players.size()==3) {game.setType(GameType.THREEPLAYERS);}
 
-      Deck gameDeck= new Deck();
-      game.setDeck(gameDeck);
-      this.dealCards();
+        Deck gameDeck= new Deck();
+        game.setDeck(gameDeck);
+        this.dealCards();
     }
 
     /**
@@ -106,7 +116,7 @@ public class GameManager implements Runnable{
         for (int currentPlayer=0; currentPlayer<game.getType().getSize();currentPlayer++)
         {
             Player player= game.getPlayer(currentPlayer);
-            TurnManager turn= new TurnManager(player);
+            TurnManager turn= new TurnManager(player,game.getView(player));
             turnList.add(turn);
             turn.playTurn();
         }
@@ -178,7 +188,10 @@ public class GameManager implements Runnable{
         }
     }
 
-
+    public Game copyModel() {
+        Game copy= SerializationUtils.clone(game);
+        return copy;
+    }
 
 
 }

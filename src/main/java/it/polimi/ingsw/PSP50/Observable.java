@@ -19,7 +19,7 @@ public abstract class Observable {
          obj.setObservable(null);
      }
 
-    //method to notify all the observers that arg changed
+    //method to notify all the observers
      public void notifyObservers(Message msg){
          for (Observer obj:observers
               ) {
@@ -27,7 +27,7 @@ public abstract class Observable {
          }
      }
 
-    public abstract Observer getUpdate(Observer obj);
+  //  public abstract Observer getUpdate(Observer obj);
 
 }
 
