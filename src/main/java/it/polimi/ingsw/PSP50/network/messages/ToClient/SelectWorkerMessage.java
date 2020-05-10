@@ -1,9 +1,9 @@
 package it.polimi.ingsw.PSP50.network.messages.ToClient;
 
 import it.polimi.ingsw.PSP50.View.ClientView;
-import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 
-public class SelectWorkerMessage extends ClientMessage {
+public class SelectWorkerMessage extends ToClientMessage {
 
     public SelectWorkerMessage(Object data) {
         super(data);

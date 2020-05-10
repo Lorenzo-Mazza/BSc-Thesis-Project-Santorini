@@ -1,13 +1,14 @@
 package it.polimi.ingsw.PSP50.network.messages;
 
+
 /*
  ** Message sent to the server
  */
-public abstract class ServerMessage extends Message {
+public abstract class ToServerMessage extends Message {
 
     private String sender;
 
-    public ServerMessage(Object data) {
+    public ToServerMessage(Object data) {
         super(data);
     }
 
@@ -19,5 +20,6 @@ public abstract class ServerMessage extends Message {
         this.sender = sender;
     }
 
-    public abstract void doAction();
+    //casts Data correctly
+    public abstract Object castChoice();
 }

@@ -1,15 +1,9 @@
 package it.polimi.ingsw.PSP50.Model;
 
-import it.polimi.ingsw.PSP50.Model.*;
-import it.polimi.ingsw.PSP50.Model.GodsList.Apollo;
 import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.Observer;
-import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.View.VirtualView;
-import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
-import it.polimi.ingsw.PSP50.network.messages.Message;
-import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -106,9 +100,6 @@ public class Game extends Observable implements Serializable{
      */
     public Board getBoard() { return board; }
 
-   // public void setTurn(Turn turn) { this.turn = turn; }
-
-    // public Turn getTurn() {return turn;}
 
     /**
      * Assigns a list of players to the game
@@ -177,15 +168,20 @@ public class Game extends Observable implements Serializable{
         this.views = views;
     }
 
-
+    /*
+     ** Method sends to every virtual view an updated copy of the model. It implements the Observer/Observable pattern
+     */
     public void notifyChange(){
-        ModelMessage clientModel= createClientModel();
-        notifyObservers(clientModel);
+        Game modelCopy= copyModel();
+        notifyObservers(new ModelMessage(modelCopy));
     }
 
-    public ModelMessage createClientModel(){
-        ModelMessage clientModel= new ModelMessage(this);
-        return clientModel;
+    /*
+    ** Method creates a deep copy of the model using the commons.lang library
+     */
+    public Game copyModel() {
+        Game copy= SerializationUtils.clone(this);
+        return copy;
     }
 
 }

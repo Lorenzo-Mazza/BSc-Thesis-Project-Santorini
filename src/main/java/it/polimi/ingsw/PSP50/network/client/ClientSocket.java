@@ -3,9 +3,9 @@ package it.polimi.ingsw.PSP50.network.client;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.View.ClientView;
-import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.Message;
-import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -44,18 +44,18 @@ public class ClientSocket implements Runnable, Observer {
     }
 
 
-    private synchronized void receiveFromServer() throws IOException, ClassNotFoundException {
+    private void receiveFromServer() throws IOException, ClassNotFoundException {
 
         // always listening
         while (true) {
-            ClientMessage msg;
-            msg = (ClientMessage) fromServer.readObject();
+            ToClientMessage msg;
+            msg = (ToClientMessage) fromServer.readObject();
             if (msg != null)
                 interpretMessage(msg);
             }
     }
 
-    public void interpretMessage(ClientMessage msg) {
+    public void interpretMessage(ToClientMessage msg) {
         msg.doAction(userInterface);
     }
 
@@ -64,7 +64,7 @@ public class ClientSocket implements Runnable, Observer {
      * Sends the updates to the User's Virtual View
      * @param msg Message to be sent to the Server
      */
-    private synchronized void sendToServer(ServerMessage msg) {
+    private synchronized void sendToServer(ToServerMessage msg) {
         try {
             toServer.writeObject(msg);
             toServer.flush();
@@ -75,18 +75,22 @@ public class ClientSocket implements Runnable, Observer {
     }
 
 
+
     /**
-     * It receives the updates from the User Interface
-     * @param arg GUI/CLI message
+     * Method implements the observer/observable pattern. Whenever the UI calls a notify, this method is called.
+     * @param arg Message to be sent to the Server
      */
     @Override
     public void update(Message arg) {
-        sendToServer((ServerMessage) arg);
+        sendToServer((ToServerMessage) arg);
     }
 
-    //do nothing
-  //  @Override
+    /**
+     * Method makes the client an Observer of the UI. It implements the observer/observable pattern.
+     */
+    @Override
     public void setObservable(Observable view){
+        this.userInterface.register(this);
     }
 
 

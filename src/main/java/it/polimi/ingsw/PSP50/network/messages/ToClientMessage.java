@@ -5,11 +5,11 @@ import it.polimi.ingsw.PSP50.View.ClientView;
 /*
 ** Message sent to the client
  */
-public abstract class ClientMessage extends Message {
+public abstract class ToClientMessage extends Message {
 
     private String receiver;
 
-    public ClientMessage(Object data) {
+    public ToClientMessage(Object data) {
         super(data);
     }
 

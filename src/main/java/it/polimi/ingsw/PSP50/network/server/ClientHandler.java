@@ -1,13 +1,10 @@
 package it.polimi.ingsw.PSP50.network.server;
 
 import it.polimi.ingsw.PSP50.View.VirtualView;
-import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 
 public class ClientHandler implements Runnable
@@ -53,8 +50,8 @@ public class ClientHandler implements Runnable
 
     try {
       while (!client.isClosed()) {
-        ServerMessage msg;
-        msg = (ServerMessage) in.readObject();
+        ToServerMessage msg;
+        msg = (ToServerMessage) in.readObject();
 
         if (msg != null)
           server.interpretMessage(msg);

@@ -2,28 +2,33 @@ package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
+import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
-import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.Message;
-import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.SelectBlockMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.SelectBuildMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.SelectMoveMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.SelectWorkerMessage;
 
 import java.util.ArrayList;
+import java.util.Random;
 
-public class TurnManager {
+public class TurnManager implements Observer,Runnable{
 
     private final VirtualView virtualView;
-    private Player player;
-    private God god;
+    private final Game game;
+    private final Player player;
+    private final God god;
     private Board board; //testing
     private ArrayList<Phase> steps;
     private ArrayList <Worker> blockedWorkers;
+    private Object receiver=null;
 
 
-    TurnManager(Player player, VirtualView virtualView){
+    TurnManager(Game game,Player player, VirtualView virtualView){
+        this.game = game;
         this.player = player;
         this.virtualView= virtualView;
         this.god = player.getGod();
@@ -35,7 +40,10 @@ public class TurnManager {
         return player;
     }
 
-
+    @Override
+    public void run(){
+        playTurn();
+    }
 
     public boolean playTurn () {
         ArrayList <Space> spaceChoice;
@@ -86,9 +94,18 @@ public class TurnManager {
 
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice));
-                    // get the space that the user has selected and use it to call god.move(player,space)
-                    playerSpace= new Space(0,0,board);
+                    //create timeout(30 sec)
+                    // get the space that the user has selected
+                    if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space) receiver;
+                    }
+                    // otherwise get a random spaces between those available
+                    else {
+                        receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
+                        playerSpace= (Space)receiver;
+                    }
                     god.move(player,playerSpace);
+                    game.notifyChange();
 
                     if (god.getWinCondition(player)) return true;
 
@@ -103,13 +120,35 @@ public class TurnManager {
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice));
 
-                    //get the space that the user has selected and use it to call god.getAvailableBlock(player,space)
-                    playerSpace= new Space(1,1,board);
+                    //create timeout(30 sec)
+                    if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space)receiver;
+                    }
+                    // otherwise get a random spaces between those available
+                    else {
+                        receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
+                        playerSpace= (Space)receiver;
+                    }
 
-                    //if Atlas, get the Block selected by the user and use it to call god.build(player,space,block)
-                    // else, do nothing
-                    playerBlock= playerSpace.getNextHeight();
+                    //if Atlas, get the Block selected by the user
+                    if (god.getName()==GodsNames.ATLAS) {
+                        virtualView.sendToClient(new SelectBlockMessage(spaceChoice));
+                        //create timeout(30 sec)
+                        // get the block that the user has selected
+                        if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                            playerBlock= (Block) receiver;
+                        }
+                        // otherwise get the default block
+                        else {
+                            playerBlock= playerSpace.getNextHeight();
+                        }
+                    }
+                    else {
+                        playerBlock= playerSpace.getNextHeight();
+                    }
+
                     god.build(player,playerSpace,playerBlock);
+                    game.notifyChange();
 
                 case OPTIONALMOVE:
                     spaceChoice = god.getOptionalMove(player);
@@ -121,9 +160,18 @@ public class TurnManager {
                         //give the space choices to the view
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice));
 
-                    // get the space that the user has selected and use it to call god.Move(player,space)
-                    playerSpace= new Space(0,0,board);
+                    //create timeout(30 sec)
+                    // get the space that the user has selected
+                    if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space) receiver;
+                    }
+                    // otherwise get a random spaces between those available
+                    else {
+                        receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
+                        playerSpace= (Space)receiver;
+                    }
                     god.move(player,playerSpace);
+                    game.notifyChange();
 
 
                     if (god.getWinCondition(player)) return true;
@@ -137,12 +185,19 @@ public class TurnManager {
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice));
 
-                    // get the space that the user has selected and use it to call god.getAvailableBlock(player,space)
-                    playerSpace= new Space(1,1,board);
-                    //get the Block selected by the user and use it to call god.build(player,space,block)
+                    //create timeout(30 sec)
+                    if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space)receiver;
+                    }
+                    // otherwise get a random spaces between those available
+                    else {
+                        receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
+                        playerSpace= (Space)receiver;
+                    }
+
                     playerBlock= playerSpace.getNextHeight();
                     god.build(player,playerSpace,playerBlock);
-
+                    game.notifyChange();
 
             }
 
@@ -170,5 +225,13 @@ public class TurnManager {
     }
 
 
+    @Override
+    public void update(Message message) {
+        receiver= ((ToServerMessage)message).castChoice();
+    }
 
+    @Override
+    public void setObservable(Observable observable) {
+        this.virtualView.register(this);
+    }
 }

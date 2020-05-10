@@ -2,25 +2,21 @@ package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
-import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
-import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
-import it.polimi.ingsw.PSP50.network.messages.Message;
-import it.polimi.ingsw.PSP50.network.messages.ServerMessage;
-import org.apache.commons.lang3.SerializationUtils;
+import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 
 import java.util.*;
 
 public class GameManager implements Runnable {
 
     private final Game game;
-    private  Map<String,VirtualView> virtualViews = new LinkedHashMap<>();
+    private  HashMap<String,VirtualView> virtualViews;
     private final List<Player> players;
 
 
 
 
-    public GameManager(Map<String, VirtualView> lobby){
+    public GameManager(HashMap<String, VirtualView> lobby){
 
         virtualViews=lobby;
         game= new Game();
@@ -112,20 +108,20 @@ public class GameManager implements Runnable {
     public void runGame()
     {
         ArrayList<TurnManager> turnList= new ArrayList<>();
-        //Play first turn and create Turn Managers
+        //create Turn Managers
         for (int currentPlayer=0; currentPlayer<game.getType().getSize();currentPlayer++)
         {
             Player player= game.getPlayer(currentPlayer);
-            TurnManager turn= new TurnManager(player,game.getView(player));
+            TurnManager turn= new TurnManager(game,player,game.getView(player));
             turnList.add(turn);
-            turn.playTurn();
         }
 
-        // Play all the other turns
+        // Play all the turns
         int currentPlayer=0;
         while ( game.getWinner()==null)
         {
             Player player =turnList.get(currentPlayer).getPlayer();
+            turnList.get(currentPlayer).run();
             boolean result=turnList.get(currentPlayer).playTurn();
             // if a player won in his turn
             if (result)
@@ -177,21 +173,17 @@ public class GameManager implements Runnable {
 
 
     /**
-     * Notify every player
-     *
+     * Notify every player (method used in pre-game phases, ex lobby)
      * @param msg Message sent
      */
-    void notifyAll(ClientMessage msg) {
+    void notifyAll(ToClientMessage msg) {
         for (String user : virtualViews.keySet()) {
             VirtualView view =virtualViews.get(user);
             view.sendToClient(msg);
         }
     }
 
-    public Game copyModel() {
-        Game copy= SerializationUtils.clone(game);
-        return copy;
-    }
+
 
 
 }

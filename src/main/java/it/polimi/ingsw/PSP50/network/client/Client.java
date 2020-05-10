@@ -41,8 +41,8 @@ public class Client implements Runnable {
       return;
     }
     System.out.println("Connected");
-
-    genUi(scanner);
+    this.userView=genUi(scanner);
+    String name= ((CLI) userView).getName();
 
     /* Create the client socket that will allow communication with the server */
     ClientSocket socket = new ClientSocket(userView, server);

@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP50.View;
 import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
-import it.polimi.ingsw.PSP50.network.messages.ClientMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
@@ -28,6 +28,10 @@ public class VirtualView extends Observable implements Observer {
         return this.playerName;
     }
 
+    public GameManager getGameManager() {
+        return gameController;
+    }
+
     public void setGameManager(GameManager gameController){
         this.gameController= gameController;
     }
@@ -36,33 +40,21 @@ public class VirtualView extends Observable implements Observer {
     @Override
     public void update(Message message){
         //update client view
-         sendToClient((ClientMessage) message);
+         sendToClient((ToClientMessage) message);
     }
 
 
-    //attach with subject to observer
+    // the virtual view is added to the observers list of Game
+    @Override
     public void setObservable(Observable observable){
-        //set observable of the model
+        gameController.getGame().register(this);
     }
 
 
-    /* Virtual View is observable for the controller*/
+    /* Virtual View is observable for the Turn Manager*/
 
-    @Override
-    public void register(Observer observer){
-    }
 
-    @Override
-    public void unregister(Observer observer){
-    }
 
-   /* public void notifyObservers(Object arg, Message msg){
-    } */
-
-    /* @Override
-    public Observer getUpdate(Observer obj){
-        return obj;
-    }*/
 
 
 
@@ -70,7 +62,7 @@ public class VirtualView extends Observable implements Observer {
      * Method sends messages from Virtual View to the related client
      * @param msg Message for the client that owns the Virtual View
      */
-    public void sendToClient(ClientMessage msg) {
+    public void sendToClient(ToClientMessage msg) {
         if (ServerManager.getServer().isConnected(playerName))
             ServerManager.getServer().messageClient(msg, playerName);
     }

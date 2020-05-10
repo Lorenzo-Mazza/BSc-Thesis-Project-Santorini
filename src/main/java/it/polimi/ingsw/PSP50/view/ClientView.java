@@ -14,7 +14,7 @@ import java.util.Scanner;
 /*
 ** ClientView is an abstract class that will be implemented by GUI and CLI
  */
-public abstract class ClientView {
+public abstract class ClientView extends Observable {
 
 
     public abstract void update(Object gameCopy);
