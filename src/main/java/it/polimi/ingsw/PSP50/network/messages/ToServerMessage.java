@@ -6,18 +6,18 @@ package it.polimi.ingsw.PSP50.network.messages;
  */
 public abstract class ToServerMessage extends Message {
 
-    private String sender;
+    private int playerId;
 
     public ToServerMessage(Object data) {
         super(data);
     }
 
-    public String getSender() {
-        return sender;
+    public int getPlayerId() {
+        return playerId;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 
     //casts Data correctly

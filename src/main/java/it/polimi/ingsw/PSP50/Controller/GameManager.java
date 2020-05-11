@@ -6,17 +6,18 @@ import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameManager implements Runnable {
 
     private final Game game;
-    private  HashMap<String,VirtualView> virtualViews;
+    private  ConcurrentHashMap<String,VirtualView> virtualViews;
     private final List<Player> players;
 
 
 
 
-    public GameManager(HashMap<String, VirtualView> lobby){
+    public GameManager(ConcurrentHashMap<String, VirtualView> lobby){
 
         virtualViews=lobby;
         game= new Game();

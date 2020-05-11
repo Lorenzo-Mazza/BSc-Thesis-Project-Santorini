@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP50.network.client;
 
+import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.View.ClientView;
@@ -14,15 +15,17 @@ import java.net.Socket;
 
 public class ClientSocket implements Runnable, Observer {
 
+    private final GameType gameType;
     private ClientView userInterface;
     private Socket serverSocket;
     private ObjectOutputStream toServer;
     private ObjectInputStream fromServer;
 
 
-    ClientSocket(ClientView userInterface, Socket serverSocket) {
+    ClientSocket(ClientView userInterface, GameType gameType,Socket serverSocket) {
         this.userInterface = userInterface;
         this.serverSocket = serverSocket;
+        this.gameType= gameType;
     }
 
 
@@ -31,7 +34,9 @@ public class ClientSocket implements Runnable, Observer {
         try {
             toServer = new ObjectOutputStream(serverSocket.getOutputStream());
             fromServer = new ObjectInputStream(serverSocket.getInputStream());
+            toServer.writeObject(userInterface.getName());
             toServer.flush();
+            toServer.writeObject(gameType);
             receiveFromServer();
 
         } catch (IOException e) {

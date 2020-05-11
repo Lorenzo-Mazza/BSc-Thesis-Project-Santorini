@@ -1,9 +1,11 @@
 package it.polimi.ingsw.PSP50.Model;
 
+import java.io.Serializable;
+
 /**
  * GameType determines the number of players in the game
  */
-public enum GameType {
+public enum GameType implements Serializable {
     /**
      * 2 players
      */
