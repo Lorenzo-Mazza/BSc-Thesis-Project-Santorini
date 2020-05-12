@@ -2,6 +2,8 @@ package it.polimi.ingsw.PSP50.view;
 
 import it.polimi.ingsw.PSP50.Observable;
 
+import java.util.ArrayList;
+
 /*
 ** ClientView is an abstract class that will be implemented by GUI and CLI
  */
@@ -26,4 +28,6 @@ public abstract class ClientView extends Observable {
     public abstract void update(Object gameCopy);
 
     public abstract void drawSection(String line);
+
+    public abstract void chooseSpace(ArrayList<int[]> possibleChoices);
 }

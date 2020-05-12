@@ -75,6 +75,7 @@ public class CLI extends ClientView {
         }
     }
 
+    @Override
     public void chooseSpace(ArrayList<int[]> possibleChoices) {
         Scanner scanner = new Scanner(System.in);
         int choice;
