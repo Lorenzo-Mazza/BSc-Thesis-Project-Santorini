@@ -12,8 +12,9 @@ public class SpaceChoice extends ToServerMessage {
     //Method casts the coordinates given by the CLI to a concrete Space of the Model
     @Override
     public Object castChoice() {
-        int[] coordinates= (int[])this.data;
-        Space choice= ServerManager.getServer().getVirtualView(getPlayerId()).getGameManager().getGame().getBoard().getSpace(coordinates[0],coordinates[1]);
+        int[] coordinates = (int[]) this.data;
+        Space choice = ServerManager.getServer().getVirtualView(getPlayerId()).getGameManager()
+                .getGame().getBoard().getSpace(coordinates[0],coordinates[1]);
         return choice;
     }
 }

@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.TurnTimer;
-import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.view.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.*;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;

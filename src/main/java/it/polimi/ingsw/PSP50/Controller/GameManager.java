@@ -2,14 +2,13 @@ package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
-import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.view.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
-import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GameManager implements Runnable {
+public class GameManager implements Runnable, Cloneable {
 
     private final Game game;
     private  ConcurrentHashMap<String,VirtualView> virtualViews;
@@ -19,10 +18,9 @@ public class GameManager implements Runnable {
 
 
     public GameManager(ConcurrentHashMap<String, VirtualView> lobby){
-
-        virtualViews=lobby;
-        game= new Game();
-        ArrayList <VirtualView> list= new ArrayList<>(lobby.values());
+        virtualViews = lobby;
+        game = new Game();
+        ArrayList <VirtualView> list = new ArrayList<>(lobby.values());
         game.setViews(list);
         List<String> nicknames = new ArrayList<>(lobby.keySet());
         for (int i = 0; i < nicknames.size(); i++) {
@@ -42,7 +40,6 @@ public class GameManager implements Runnable {
     public void run(){
         startGame();
         setUpGame();
-        ServerManager.getServer().print("Starting game");
         runGame();
         endGame();
     }
@@ -54,29 +51,29 @@ public class GameManager implements Runnable {
     public void startGame()  //
     {
         game.setOpponents();
-        Board gameBoard= new Board();
+        Board gameBoard = new Board();
         game.setBoard(gameBoard);
-        ServerManager.getServer().print(String.valueOf(players.size())); // DEBUG
-        if (players.size()==2) { game.setType(GameType.TWOPLAYERS);}
-        else if (players.size()==3) {game.setType(GameType.THREEPLAYERS);}
+        if (players.size() == 2) { game.setType(GameType.TWOPLAYERS);}
+        else if (players.size() == 3) {game.setType(GameType.THREEPLAYERS);}
 
-        Deck gameDeck= new Deck();
+        Deck gameDeck = new Deck();
         game.setDeck(gameDeck);
         dealCards();
     }
 
     /**
      * Each player picks a God card, the order is random.
+     * @author ALBI MIRAKA
      */
     private void dealCards()
     {
-        Deck deck= game.getDeck();
-        ArrayList<God> cardsLeft= deck.getChosenCards(game.getType());
-        ArrayList <Player> playersCopy= game.getAllPlayers();
+        Deck deck = game.getDeck();
+        ArrayList<God> cardsLeft = deck.getChosenCards(game.getType());
+        ArrayList<Player> playersCopy = new ArrayList<>(game.getAllPlayers());
         while (cardsLeft.size()>0)
         {
-            int randomIndex= (new Random().nextInt(playersCopy.size())) ;
-            Player player= playersCopy.get(randomIndex);
+            int randomIndex = (new Random().nextInt(playersCopy.size())) ;
+            Player player = playersCopy.get(randomIndex);
             // send cardsLeft to the player view and get a choice back (an int)
             int choice= 0;// random assignment just for testing
             player.setGod(cardsLeft.get(choice));
@@ -91,8 +88,8 @@ public class GameManager implements Runnable {
      */
     public void setUpGame()
     {
-        ArrayList <Player> playersLeft= game.getAllPlayers();
-        ArrayList <Player> orderOfPlay= new ArrayList<>();
+        ArrayList<Player> playersLeft = new ArrayList<Player>(game.getAllPlayers());
+        ArrayList<Player> orderOfPlay = new ArrayList<>();
         while (playersLeft.size()>0)
         {
             int randomIndex = (new Random().nextInt(playersLeft.size()));
@@ -103,8 +100,6 @@ public class GameManager implements Runnable {
             playersLeft.remove(randomIndex);
         }
         // set the correct order of play in the players array of game
-        if (orderOfPlay==null)
-        {ServerManager.getServer().print("\nSomething wrong with order of play");}
         game.setPlayers(orderOfPlay);
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Player contains all of the player's data.
  */
-public class Player {
+public class Player implements Cloneable {
 
     /**
      * A String that contains player's name

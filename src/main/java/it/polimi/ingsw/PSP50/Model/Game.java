@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.view.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
 import org.apache.commons.lang3.SerializationUtils;
 

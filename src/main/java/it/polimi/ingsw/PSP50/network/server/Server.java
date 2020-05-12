@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP50.network.server;
 
 import it.polimi.ingsw.PSP50.Lobby;
 import it.polimi.ingsw.PSP50.Model.GameType;
-import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.view.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
@@ -47,23 +47,24 @@ public class Server extends Thread{
     public static ConcurrentHashMap<Integer, Lobby> getLobbies() {
         return lobbies;
     }
-    /*
-    ** WARNING: Method called in the context of the Client Handler class. The last added client starts the game.
-     **  Starts the lobby and the game main engine.
+
+    /**
+     * WARNING: Method called in the context of the Client Handler class. The last added client starts the game.
+     * Starts the lobby and the game main engine.
      */
     public synchronized void startLobby(Lobby lobby){
         lobby.startGame();
     }
 
-    /*
-    **  Return the first available Lobby for a specific type of game.
+    /**
+     *  Return the first available Lobby for a specific type of game.
      */
     public Lobby getFirstAvailableLobby(GameType type){
         Lobby firstAvailableLobby=null;
         int index=0;
         while ((index < this.numberOfLobbies) && (lobbies.get(index) != null)) {
             if ((!lobbies.get(index).isFull()) && (lobbies.get(index).getType()==type)) {
-                firstAvailableLobby=lobbies.get(index);
+                firstAvailableLobby = lobbies.get(index);
             }
             index++;
         }
@@ -82,12 +83,9 @@ public class Server extends Thread{
         numberOfLobbies++;
     }
 
-
     public boolean isConnected(Integer playerId) {
         return connections.containsKey(playerId);
     }
-
-
 
     @Override
     public void run()
@@ -147,7 +145,4 @@ public class Server extends Thread{
             System.out.println("invalid stream from server");
         }
     }
-
-
-
 }

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP50.network.client;
 
 import it.polimi.ingsw.PSP50.Model.GameType;
-import it.polimi.ingsw.PSP50.View.CLI;
-import it.polimi.ingsw.PSP50.View.ClientView;
+import it.polimi.ingsw.PSP50.view.CLI;
+import it.polimi.ingsw.PSP50.view.ClientView;
 import it.polimi.ingsw.PSP50.network.server.Server;
 
 import java.io.IOException;
@@ -20,8 +20,6 @@ public class Client implements Runnable {
         Client client = new Client();
         client.run();
     }
-
-
 
     @Override
     public void run() {
@@ -51,7 +49,6 @@ public class Client implements Runnable {
         Thread socketThread = new Thread(socket);
         socketThread.start();
     }
-
 
     private ClientView genUi(Scanner scanner)  {
         ClientView generatedUi;

@@ -1,24 +1,16 @@
-package it.polimi.ingsw.PSP50.View;
+package it.polimi.ingsw.PSP50.view;
 
 import it.polimi.ingsw.PSP50.Model.*;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToServer.SpaceChoice;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends ClientView {
 
-
-    private Board gameBoard ;
-
+    private String name;
     private Game gameCopy;
-
-    private ArrayList<Player> players;
-
-    private ArrayList<ArrayList<String>> playersInfo;
-
     private StringBuilder buffer = new StringBuilder();
-
 
     public CLI() {
         this.writeLine("Insert Username");
@@ -32,9 +24,7 @@ public class CLI extends ClientView {
      */
     @Override
     public void update(Object gameCopy){
-        this.gameCopy= (Game) gameCopy;
-        this.gameBoard= this.gameCopy.getBoard();
-        this.players= this.gameCopy.getAllPlayers();
+        this.gameCopy = (Game) gameCopy;
     }
 
 
@@ -46,8 +36,8 @@ public class CLI extends ClientView {
         System.out.flush();
     }
 
-
-    void drawSection(String line) {
+    @Override
+    public void drawSection(String line) {
         for (int i = 0; i < (line.length()); i++) {
             this.buffer.append("_");
         }
@@ -73,10 +63,7 @@ public class CLI extends ClientView {
         Scanner scanner = new Scanner(System.in);
         return (scanner.nextLine());
     }
-
-
-
-
+    
     public void displayEmptyMap() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 5; i++) {
@@ -85,47 +72,36 @@ public class CLI extends ClientView {
             stringBuilder.append("|  |  |  |  |  |");
             stringBuilder.append("\n");
             stringBuilder.append(" __ __ __ __ __");
-
         }
     }
 
-
-
-
-    public int[] chooseSpace() {
+    public void chooseSpace(ArrayList<int[]> possibleChoices) {
         Scanner scanner = new Scanner(System.in);
-        int[] result = new int[2];
-        drawSection("Choose a space");
-        drawSection("choose a valid X-coordinate");
-        printBuffer();
-        boolean done = false;
-        while (!done) {
-            result[0] = scanner.nextInt();
-            if (result[0] < 5) {
-                done = true;
+        int choice;
+
+        do{
+            printChoices(possibleChoices);
+            choice = scanner.nextInt();
+            if((choice < 0) || (choice > possibleChoices.size())) {
+                this.buffer.append("Wrong choice, you have to pick an integer between 0 - "+
+                        (possibleChoices.size() - 1));
+                printBuffer();
             }
-        }
-        drawSection("choose a valid Y-coordinate");
-        printBuffer();
-        done = false;
-        while (!done) {
-            result[1] = scanner.nextInt();
-            if (result[1] < 5) {
-                done = true;
-            }
-        }
-        return result;
+        }while ((choice < 0) || (choice > possibleChoices.size()));
+
+        SpaceChoice messageChoice = new SpaceChoice(possibleChoices.get(choice));
+        notifyAll(messageChoice);
     }
 
-
-
-
+    private void notifyAll(SpaceChoice messageChoice) {
+        update(messageChoice);
+    }
 
     /**
      * @param space
      * @return space height highlighted the color of the worker occupying it
      */
-    private static String printSpace(Space space) {
+    private String printSpace(Space space) {
         int height = space.getHeight().getValue();
         String heightString;
         if (height == 10) {
@@ -146,19 +122,29 @@ public class CLI extends ClientView {
 
     /**
      * Prints the game board to terminal
-     *
-     * @param board
      */
-    private static void printBoard(Board board) {
+    private void printBoard() {
+        this.buffer.delete(0, this.buffer.length());
         for (int i = 0; i < 5; i++) {
-            System.out.println("+---+---+---+---+---+");
+            buffer.append("+---+---+---+---+---+");
             String line = "| ";
             for (int j = 0; j < 5; j++) {
-                line += printSpace(board.getSpace(j, i)) + " | ";
+                line += printSpace(gameCopy.getBoard().getSpace(j, i)) + " | ";
             }
-            System.out.println(line);
+            buffer.append(line);
         }
-        System.out.println("+---+---+---+---+---+");
+        buffer.append("+---+---+---+---+---+");
+        printBuffer();
+    }
+
+    private void printChoices(ArrayList<int[]> coordinates) {
+        drawSection("Select one of this pairs");
+
+        for(int index = 0; index < coordinates.size(); index++) {
+            this.buffer.append(" --> Select "+ index +" to choose: ");
+            this.buffer.append("("+ coordinates.get(index)[0] +","+ coordinates.get(index)[1]);
+        }
+
+        printBuffer();
     }
 }
-

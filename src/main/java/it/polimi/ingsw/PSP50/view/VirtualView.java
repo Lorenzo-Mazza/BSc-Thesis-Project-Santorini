@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP50.View;
+package it.polimi.ingsw.PSP50.view;
 
 import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Observable;
@@ -6,10 +6,8 @@ import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
-
-
-/*
-**  Server-side View
+/**
+ *  Server-side View
  */
 public class VirtualView extends Observable implements Observer {
 
@@ -23,11 +21,10 @@ public class VirtualView extends Observable implements Observer {
         this.playerName= playerName;
     }
 
-
-
     public int getPlayerId(){
         return this.playerId;
     }
+
     public String getPlayerName() {
         return this.playerName;
     }
@@ -54,13 +51,7 @@ public class VirtualView extends Observable implements Observer {
         gameController.getGame().register(this);
     }
 
-
     /* Virtual View is observable for the Turn Manager*/
-
-
-
-
-
 
     /**
      * Method sends messages from Virtual View to the related client
