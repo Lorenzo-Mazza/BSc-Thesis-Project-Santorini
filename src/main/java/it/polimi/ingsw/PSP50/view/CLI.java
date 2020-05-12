@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class CLI extends ClientView {
 
-    private String name;
 
     private Board gameBoard ;
 
@@ -26,6 +25,7 @@ public class CLI extends ClientView {
         this.printBuffer();
         this.name = this.readLine();
     }
+
 
     /*
     ** Updates the CLI whenever the Model changes
@@ -74,9 +74,8 @@ public class CLI extends ClientView {
         return (scanner.nextLine());
     }
 
-    public String getName() {
-        return this.name;
-    }
+
+
 
     public void displayEmptyMap() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -91,11 +90,7 @@ public class CLI extends ClientView {
     }
 
 
-    public void insertName() {
-        drawSection("What is your name?");
-        printBuffer();
-        name = readLine();
-    }
+
 
     public int[] chooseSpace() {
         Scanner scanner = new Scanner(System.in);

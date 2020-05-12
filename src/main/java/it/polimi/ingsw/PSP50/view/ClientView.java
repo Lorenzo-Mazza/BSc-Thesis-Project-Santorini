@@ -16,6 +16,22 @@ import java.util.Scanner;
  */
 public abstract class ClientView extends Observable {
 
+    protected String name;
+
+    private int playerId;
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
 
     public abstract void update(Object gameCopy);
 

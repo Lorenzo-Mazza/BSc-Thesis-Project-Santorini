@@ -55,7 +55,7 @@ public class Player {
 
     private boolean playerBlocked;
 
-    private ArrayList<Player> opponents;
+    private ArrayList<Player> opponents ;
 
     /**
      * Color of the player workers on the board
@@ -80,7 +80,7 @@ public class Player {
         this.hasBuilt = false;
         this.hasLost=false;
         this.playerBlocked=false;
-        this.opponents=null;
+        this.opponents= new ArrayList<>();
     }
 
     /**

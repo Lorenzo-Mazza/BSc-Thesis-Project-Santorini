@@ -15,15 +15,19 @@ public class VirtualView extends Observable implements Observer {
 
     private GameManager gameController;
     private String playerName;
+    private int playerId;
 
 
-    public VirtualView(String playerName){
+    public VirtualView(int playerId,String playerName){
+        this.playerId=playerId;
         this.playerName= playerName;
     }
 
 
 
-
+    public int getPlayerId(){
+        return this.playerId;
+    }
     public String getPlayerName() {
         return this.playerName;
     }
@@ -63,7 +67,7 @@ public class VirtualView extends Observable implements Observer {
      * @param msg Message for the client that owns the Virtual View
      */
     public void sendToClient(ToClientMessage msg) {
-        if (ServerManager.getServer().isConnected(playerName))
-            ServerManager.getServer().messageClient(msg, playerName);
+        if (ServerManager.getServer().isConnected(playerId))
+            ServerManager.getServer().messageClient(msg, playerId);
     }
 }

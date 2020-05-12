@@ -18,7 +18,7 @@ public class Game extends Observable implements Serializable{
     /**
      * List of players in the game
      */
-    private ArrayList<Player> players;
+    private ArrayList<Player> players= new ArrayList<>();
 
     /**
      * Player that won the game

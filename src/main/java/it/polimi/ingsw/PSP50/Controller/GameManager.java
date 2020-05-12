@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
+import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,6 +42,7 @@ public class GameManager implements Runnable {
     public void run(){
         startGame();
         setUpGame();
+        ServerManager.getServer().print("Starting game");
         runGame();
         endGame();
     }
@@ -54,12 +56,13 @@ public class GameManager implements Runnable {
         game.setOpponents();
         Board gameBoard= new Board();
         game.setBoard(gameBoard);
+        ServerManager.getServer().print(String.valueOf(players.size())); // DEBUG
         if (players.size()==2) { game.setType(GameType.TWOPLAYERS);}
         else if (players.size()==3) {game.setType(GameType.THREEPLAYERS);}
 
         Deck gameDeck= new Deck();
         game.setDeck(gameDeck);
-        this.dealCards();
+        dealCards();
     }
 
     /**
@@ -69,16 +72,16 @@ public class GameManager implements Runnable {
     {
         Deck deck= game.getDeck();
         ArrayList<God> cardsLeft= deck.getChosenCards(game.getType());
-        ArrayList <Player> players= game.getAllPlayers();
+        ArrayList <Player> playersCopy= game.getAllPlayers();
         while (cardsLeft.size()>0)
         {
-            int randomIndex= (new Random().nextInt(players.size()))-1 ; // array index= array size - 1
-            Player player= players.get(randomIndex);
+            int randomIndex= (new Random().nextInt(playersCopy.size())) ;
+            Player player= playersCopy.get(randomIndex);
             // send cardsLeft to the player view and get a choice back (an int)
             int choice= 0;// random assignment just for testing
             player.setGod(cardsLeft.get(choice));
             cardsLeft.remove(choice);
-            players.remove(randomIndex);
+            playersCopy.remove(randomIndex);
         }
     }
 
@@ -92,7 +95,7 @@ public class GameManager implements Runnable {
         ArrayList <Player> orderOfPlay= new ArrayList<>();
         while (playersLeft.size()>0)
         {
-            int randomIndex = (new Random().nextInt(playersLeft.size())) - 1;
+            int randomIndex = (new Random().nextInt(playersLeft.size()));
             Player player = playersLeft.get(randomIndex);
             orderOfPlay.add(player);
 
@@ -100,6 +103,8 @@ public class GameManager implements Runnable {
             playersLeft.remove(randomIndex);
         }
         // set the correct order of play in the players array of game
+        if (orderOfPlay==null)
+        {ServerManager.getServer().print("\nSomething wrong with order of play");}
         game.setPlayers(orderOfPlay);
     }
 
