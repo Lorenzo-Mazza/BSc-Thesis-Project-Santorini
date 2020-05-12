@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP50.network.client;
 
 import it.polimi.ingsw.PSP50.Model.GameType;
-import it.polimi.ingsw.PSP50.view.CLI;
-import it.polimi.ingsw.PSP50.view.ClientView;
+import it.polimi.ingsw.PSP50.View.CLI;
+import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.network.server.Server;
 
 import java.io.IOException;
@@ -46,6 +46,7 @@ public class Client implements Runnable {
 
         /* Create the client socket that will allow communication with the server */
         ClientSocket socket = new ClientSocket(userView, gameType, server);
+        this.userView.setSocket(socket);
         Thread socketThread = new Thread(socket);
         socketThread.start();
     }

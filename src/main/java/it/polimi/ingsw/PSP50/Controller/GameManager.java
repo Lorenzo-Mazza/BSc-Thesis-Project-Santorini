@@ -2,13 +2,14 @@ package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
-import it.polimi.ingsw.PSP50.view.VirtualView;
+import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
+import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GameManager implements Runnable, Cloneable {
+public class GameManager implements Runnable {
 
     private final Game game;
     private  ConcurrentHashMap<String,VirtualView> virtualViews;
@@ -40,6 +41,7 @@ public class GameManager implements Runnable, Cloneable {
     public void run(){
         startGame();
         setUpGame();
+        ServerManager.getServer().print("Starting game");
         runGame();
         endGame();
     }
@@ -63,7 +65,6 @@ public class GameManager implements Runnable, Cloneable {
 
     /**
      * Each player picks a God card, the order is random.
-     * @author ALBI MIRAKA
      */
     private void dealCards()
     {

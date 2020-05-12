@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP50;
 
 import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Model.GameType;
-import it.polimi.ingsw.PSP50.view.VirtualView;
+import it.polimi.ingsw.PSP50.View.VirtualView;
 
 
 import java.util.concurrent.ConcurrentHashMap;

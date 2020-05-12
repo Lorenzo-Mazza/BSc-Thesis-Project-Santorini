@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP50.network.server;
 
 import it.polimi.ingsw.PSP50.Lobby;
 import it.polimi.ingsw.PSP50.Model.GameType;
-import it.polimi.ingsw.PSP50.view.VirtualView;
+import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.PlayerIdMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;

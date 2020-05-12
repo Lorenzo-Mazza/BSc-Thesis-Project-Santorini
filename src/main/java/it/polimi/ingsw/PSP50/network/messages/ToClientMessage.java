@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP50.network.messages;
 
 import it.polimi.ingsw.PSP50.Model.Space;
-import it.polimi.ingsw.PSP50.view.ClientView;
+import it.polimi.ingsw.PSP50.View.ClientView;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,8 @@
-package it.polimi.ingsw.PSP50.view;
+package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Model.*;
+import it.polimi.ingsw.PSP50.network.messages.Message;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.SpaceChoice;
 
 import java.util.ArrayList;
@@ -18,14 +20,14 @@ public class CLI extends ClientView {
         this.name = this.readLine();
     }
 
-
-    /*
-    ** Updates the CLI whenever the Model changes
+    /**
+     * Updates the CLI whenever the Model changes
      */
     @Override
     public void update(Object gameCopy){
         this.gameCopy = (Game) gameCopy;
     }
+
 
 
     private void printBuffer() {
@@ -91,11 +93,11 @@ public class CLI extends ClientView {
         }while ((choice < 0) || (choice > possibleChoices.size()));
 
         SpaceChoice messageChoice = new SpaceChoice(possibleChoices.get(choice));
-        notifyAll(messageChoice);
+        notifySocket(messageChoice);
     }
 
-    private void notifyAll(SpaceChoice messageChoice) {
-        update(messageChoice);
+    private void notifySocket(SpaceChoice messageChoice) {
+        this.getSocket().update(messageChoice);
     }
 
     /**

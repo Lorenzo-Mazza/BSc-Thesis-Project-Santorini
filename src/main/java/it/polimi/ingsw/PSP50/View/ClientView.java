@@ -1,6 +1,8 @@
-package it.polimi.ingsw.PSP50.view;
+package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Observable;
+import it.polimi.ingsw.PSP50.network.client.ClientSocket;
+import it.polimi.ingsw.PSP50.network.messages.Message;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 public abstract class ClientView extends Observable {
 
     protected String name;
+
+    private ClientSocket socket;
 
     private int playerId;
 
@@ -25,7 +29,15 @@ public abstract class ClientView extends Observable {
         return this.name;
     }
 
-    public abstract void update(Object gameCopy);
+    public ClientSocket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(ClientSocket socket) {
+        this.socket = socket;
+    }
+
+    public abstract void update(Object modelCopy);
 
     public abstract void drawSection(String line);
 

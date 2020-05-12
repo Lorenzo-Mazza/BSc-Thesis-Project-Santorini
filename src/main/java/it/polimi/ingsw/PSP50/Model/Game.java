@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.view.VirtualView;
+import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -168,7 +168,7 @@ public class Game extends Observable implements Serializable{
         this.views = views;
     }
 
-    /*
+    /**
      ** Method sends to every virtual view an updated copy of the model. It implements the Observer/Observable pattern
      */
     public void notifyChange(){
@@ -176,8 +176,8 @@ public class Game extends Observable implements Serializable{
         notifyObservers(new ModelMessage(modelCopy));
     }
 
-    /*
-    ** Method creates a deep copy of the model using the commons.lang library
+    /**
+     * Method creates a deep copy of the model using the commons.lang library
      */
     public Game copyModel() {
         Game copy= SerializationUtils.clone(this);

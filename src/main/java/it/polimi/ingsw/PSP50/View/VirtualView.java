@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP50.view;
+package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Observable;
