@@ -80,7 +80,11 @@ public class CLI extends ClientView {
     }
 
     @Override
-    public void chooseSpace(ArrayList<int[]> possibleChoices) {
+    public void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional) {
+        if (optional) {
+            writeLine("The action is optional. To exit write <0>.");
+            printBuffer();
+        }
         Scanner scanner = new Scanner(System.in);
         int choice;
         do{
@@ -92,8 +96,7 @@ public class CLI extends ClientView {
                         possibleChoices.size() +"\n");
                 printBuffer();
             }
-        }while ((choice < 0) || (choice > possibleChoices.size()));
-
+        }while ((choice < 0) || (choice > possibleChoices.size()) && !optional);
         SpaceChoice messageChoice = new SpaceChoice(possibleChoices.get(choice));
         notifySocket(messageChoice);
     }

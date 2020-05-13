@@ -19,7 +19,7 @@ public class SelectWorkerMessage extends ToClientMessage {
         for(Worker worker: ((ArrayList<Worker>) data))
             workersPositions.add(worker.getPosition());
         ui.drawSection("Choose the worker to use");
-        ui.chooseSpace(getPossibleCoordinates(workersPositions));
+        ui.chooseSpace(getPossibleCoordinates(workersPositions),false);
     }
 
 }

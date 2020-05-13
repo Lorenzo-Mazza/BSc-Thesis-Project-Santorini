@@ -89,7 +89,7 @@ public class TurnManager implements Observer,Runnable{
                     }
 
                     //give the space choices to the view
-                    virtualView.sendToClient(new SelectMoveMessage(spaceChoice));
+                    virtualView.sendToClient(new SelectMoveMessage(spaceChoice,false));
                     //create timer(30 sec)
                     timer= new TurnTimer(secondsLeft);
                     virtualView.sendToClient(new TimerStarted(timer));
@@ -121,7 +121,7 @@ public class TurnManager implements Observer,Runnable{
                     }
 
                     //give the space choices to the view
-                    virtualView.sendToClient(new SelectBuildMessage(spaceChoice));
+                    virtualView.sendToClient(new SelectBuildMessage(spaceChoice,false));
 
                     //create timeout(30 sec)
                     timer= new TurnTimer(secondsLeft);
@@ -178,7 +178,7 @@ public class TurnManager implements Observer,Runnable{
                     }
 
                     //give the space choices to the view
-                    virtualView.sendToClient(new SelectMoveMessage(spaceChoice));
+                    virtualView.sendToClient(new SelectMoveMessage(spaceChoice,true));
 
                     //create timer(30 sec)
                     timer= new TurnTimer(secondsLeft);
@@ -210,7 +210,7 @@ public class TurnManager implements Observer,Runnable{
                         break;
                     }
                     //give the space choices to the view
-                    virtualView.sendToClient(new SelectBuildMessage(spaceChoice));
+                    virtualView.sendToClient(new SelectBuildMessage(spaceChoice,true));
 
                     //create timer(30 sec)
                     timer= new TurnTimer(secondsLeft);
