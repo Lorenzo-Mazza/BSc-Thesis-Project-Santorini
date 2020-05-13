@@ -8,18 +8,16 @@ import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
  */
 
 public class ModelMessage extends ToClientMessage {
-
-
-/*
- ** The constructor assigns to data a deep copy of the model
- */
+    /**
+     * The constructor assigns to data a deep copy of the model
+     */
     public ModelMessage(Game game) {
         super(game);
     }
 
-/*
-** Update the UI every time the Model changes
-*/
+    /**
+     * Update the UI every time the Model changes
+     */
     @Override
     public  void doAction(ClientView ui){
         ui.update(this.getData());

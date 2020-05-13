@@ -134,6 +134,7 @@ public class TurnManager implements Observer,Runnable{
                             timer.endTimer();
                         }
                     }
+
                     // if timer expired and there's no answer, get a random spaces between those available
                     if (playerSpace==null)
                     {
@@ -142,8 +143,8 @@ public class TurnManager implements Observer,Runnable{
                     }
 
                     //if Atlas, get the Block selected by the user
-                    if (god.getName()==GodsNames.ATLAS) {
-                        virtualView.sendToClient(new SelectBlockMessage(spaceChoice));
+                    if ((god.getName() == GodsNames.ATLAS) && (playerSpace.getNextHeight() != Block.DOME)) {
+                        virtualView.sendToClient(new SelectBlockMessage(playerSpace));
                         //create timeout(30 sec)
                         timer= new TurnTimer(secondsLeft);
                         virtualView.sendToClient(new TimerStarted(timer));
@@ -163,7 +164,7 @@ public class TurnManager implements Observer,Runnable{
                     }
                     // otherwise get the default block
                     else {
-                        playerBlock= playerSpace.getNextHeight();
+                        playerBlock = playerSpace.getNextHeight();
                     }
 
                     god.build(player,playerSpace,playerBlock);

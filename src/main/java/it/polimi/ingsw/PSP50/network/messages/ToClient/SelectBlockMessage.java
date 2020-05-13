@@ -15,6 +15,6 @@ public class SelectBlockMessage extends ToClientMessage {
     @Override
     public void doAction(ClientView ui){
         ui.drawSection("Choose which block you want to build");
-        ui.chooseSpace(getPossibleCoordinates((ArrayList<Space>) data));
+        ui.chooseBlock(((Space) data).getNextHeight());
     }
 }

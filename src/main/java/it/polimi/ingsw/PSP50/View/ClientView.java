@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP50.View;
 
+import it.polimi.ingsw.PSP50.Model.Block;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.network.client.ClientSocket;
 import it.polimi.ingsw.PSP50.network.messages.Message;
@@ -44,4 +45,6 @@ public abstract class ClientView extends Observable {
     public abstract void chooseSpace(ArrayList<int[]> possibleChoices);
 
     public abstract void chooseGod(ArrayList<String> possibleChoices);
+
+    public abstract void chooseBlock(Block possibleBlock);
 }

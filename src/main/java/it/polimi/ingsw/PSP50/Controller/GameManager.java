@@ -231,8 +231,8 @@ public class GameManager implements Runnable, Observer {
         while (!timer.isInterrupted())
         {
             // get the God that the user has selected
-            if (((int) receiver>0 ) && (cardsLeft.get((int)receiver)!=null)) {
-                choice=(int) receiver-1;
+            if (((int) receiver >= 0 ) && (cardsLeft.get((int)receiver)!=null)) {
+                choice=(int) receiver;
                 timer.endTimer();
             }
         }

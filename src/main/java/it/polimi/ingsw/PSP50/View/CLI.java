@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP50.View;
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToServer.BlockChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.GodChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.SpaceChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
@@ -16,7 +17,7 @@ public class CLI extends ClientView {
     private StringBuilder buffer = new StringBuilder();
 
     public CLI() {
-        this.writeLine("Insert Username");
+        this.buffer.append("Insert Username");
         this.printBuffer();
         this.name = this.readLine();
     }
@@ -27,9 +28,9 @@ public class CLI extends ClientView {
     @Override
     public void update(Object gameCopy){
         this.gameCopy = (Game) gameCopy;
+
+        printBoard();
     }
-
-
 
     private void printBuffer() {
         System.out.print(this.buffer.toString());
@@ -82,13 +83,13 @@ public class CLI extends ClientView {
     public void chooseSpace(ArrayList<int[]> possibleChoices) {
         Scanner scanner = new Scanner(System.in);
         int choice;
-
         do{
             printChoices(possibleChoices);
             choice = scanner.nextInt();
+            choice--;
             if((choice < 0) || (choice > possibleChoices.size())) {
-                this.buffer.append("Wrong choice, you have to pick an integer between 0 - "+
-                        (possibleChoices.size() - 1));
+                writeLine("Wrong choice, you have to pick an integer between 1 - "+
+                        possibleChoices.size() +"\n");
                 printBuffer();
             }
         }while ((choice < 0) || (choice > possibleChoices.size()));
@@ -101,21 +102,47 @@ public class CLI extends ClientView {
     public void chooseGod(ArrayList<String> possibleChoices) {
         drawSection("Choose the God you want to use (Write an integer between 1 - "+ (possibleChoices.size()));
         writeLine("You can choose the god from this list:\n ");
-        for (String str : possibleChoices){
-            drawSection(str);
+        for (int index = 0; index < possibleChoices.size(); index++) {
+            writeLine(" --> Select "+ (index + 1) +" to choose: ");
+            writeLine(possibleChoices.get(index) +"\n");
         }
         printBuffer();
+
         Scanner scanner = new Scanner(System.in);
         int choice;
         do{
             choice = scanner.nextInt();
+            choice--;
             if (!possibleChoices.contains(choice)) {
                 writeLine("Wrong choice, you have to pick an integer between 1 - "+
                         (possibleChoices.size()));;
                 printBuffer();
             }
-        }while ((choice < 0) || (choice > possibleChoices.size()));
-        notifySocket(new GodChoice(choice));
+        }while ((choice < 0) || (choice > (possibleChoices.size() - 1)));
+
+        GodChoice messageChoice = new GodChoice(choice);
+        notifySocket(messageChoice);
+    }
+
+    @Override
+    public void chooseBlock(Block possibleBlock) {
+        printBoard();
+        writeLine(" --> Select "+ possibleBlock.getValue() +" to choose: "+ possibleBlock.toString() +"\n");
+        writeLine(" --> Select 4 to choose: DOME");
+        printBuffer();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do{
+            choice = scanner.nextInt();
+            if((choice != possibleBlock.getValue()) && (choice != 4))
+                writeLine("Wrong choice, you have to pick "+ possibleBlock.getValue() +" or 4\n");
+        }while((choice != possibleBlock.getValue()) && (choice != 4));
+
+        if(choice == 4)
+            choice = 10;
+
+        BlockChoice messageChoice = new BlockChoice(choice);
+        notifySocket(messageChoice);
     }
 
     private void notifySocket(ToServerMessage messageChoice) {
@@ -149,25 +176,26 @@ public class CLI extends ClientView {
      * Prints the game board to terminal
      */
     private void printBoard() {
-        this.buffer.delete(0, this.buffer.length());
         for (int i = 0; i < 5; i++) {
-            buffer.append("+---+---+---+---+---+");
+            writeLine("+---+---+---+---+---+");
             String line = "| ";
             for (int j = 0; j < 5; j++) {
                 line += printSpace(gameCopy.getBoard().getSpace(j, i)) + " | ";
             }
-            buffer.append(line);
+            writeLine(line);
         }
-        buffer.append("+---+---+---+---+---+");
+        writeLine("+---+---+---+---+---+");
         printBuffer();
     }
 
     private void printChoices(ArrayList<int[]> coordinates) {
+        drawSection("This is the board:");
+        printBoard();
         drawSection("Select one of this pairs");
 
         for(int index = 0; index < coordinates.size(); index++) {
-            this.buffer.append(" --> Select "+ index +" to choose: ");
-            this.buffer.append("("+ coordinates.get(index)[0] +","+ coordinates.get(index)[1]);
+            writeLine(" --> Select "+ (index + 1) +" to choose: ");
+            writeLine("("+ coordinates.get(index)[0] +","+ coordinates.get(index)[1] +")\n");
         }
 
         printBuffer();
