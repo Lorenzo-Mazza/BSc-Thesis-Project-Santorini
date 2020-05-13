@@ -3,14 +3,15 @@ package it.polimi.ingsw.PSP50.View;
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToServer.GodChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.SpaceChoice;
+import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends ClientView {
 
-    private String name;
     private Game gameCopy;
     private StringBuilder buffer = new StringBuilder();
 
@@ -96,7 +97,28 @@ public class CLI extends ClientView {
         notifySocket(messageChoice);
     }
 
-    private void notifySocket(SpaceChoice messageChoice) {
+    @Override
+    public void chooseGod(ArrayList<String> possibleChoices) {
+        drawSection("Choose the God you want to use (Write an integer between 1 - "+ (possibleChoices.size()));
+        writeLine("You can choose the god from this list:\n ");
+        for (String str : possibleChoices){
+            drawSection(str);
+        }
+        printBuffer();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do{
+            choice = scanner.nextInt();
+            if (!possibleChoices.contains(choice)) {
+                writeLine("Wrong choice, you have to pick an integer between 1 - "+
+                        (possibleChoices.size()));;
+                printBuffer();
+            }
+        }while ((choice < 0) || (choice > possibleChoices.size()));
+        notifySocket(new GodChoice(choice));
+    }
+
+    private void notifySocket(ToServerMessage messageChoice) {
         this.getSocket().update(messageChoice);
     }
 

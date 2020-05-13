@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP50;
 
 
-public class TurnTimer extends Thread {
+import java.io.Serializable;
+
+public class TurnTimer extends Thread implements Serializable {
     private int seconds;
     private boolean active=true;
 

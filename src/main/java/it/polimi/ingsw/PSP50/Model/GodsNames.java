@@ -1,9 +1,11 @@
 package it.polimi.ingsw.PSP50.Model;
 
+import java.io.Serializable;
+
 /**
  * Constant Enumeration that contains all the Gods names
  */
-public enum GodsNames {
+public enum GodsNames implements Serializable {
     /**
      * Apollo
      */

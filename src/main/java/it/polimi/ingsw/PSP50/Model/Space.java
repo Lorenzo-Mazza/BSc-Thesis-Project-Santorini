@@ -1,11 +1,12 @@
 package it.polimi.ingsw.PSP50.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Space contains all the space data and a reference to the board it belongs to
  */
-public class Space {
+public class Space implements Serializable {
 
     /**
      * X-coordinate on the board

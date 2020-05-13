@@ -2,13 +2,14 @@ package it.polimi.ingsw.PSP50.Model.GodsList;
 
 import it.polimi.ingsw.PSP50.Model.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * God is an abstract class that will be inherited by every God card
  */
-public abstract class God {
+public abstract class God implements Serializable {
 
     /**
      * A list of the different steps which compose the turn of play. The turn is different for every God so

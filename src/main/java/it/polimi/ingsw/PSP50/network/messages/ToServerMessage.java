@@ -1,10 +1,11 @@
 package it.polimi.ingsw.PSP50.network.messages;
 
 
+
 /*
  ** Message sent to the server
  */
-public abstract class ToServerMessage extends Message {
+public abstract class ToServerMessage extends Message  {
 
     private int playerId;
 

@@ -33,6 +33,7 @@ public class TurnManager implements Observer,Runnable{
         this.steps = new ArrayList<>(god.getAvailableSteps());
         this.blockedWorkers= new ArrayList<>();
         this.secondsLeft =30;
+        setObservable(this.virtualView);
     }
 
     public Player getPlayer() {
