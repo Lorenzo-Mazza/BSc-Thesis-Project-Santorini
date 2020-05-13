@@ -80,20 +80,27 @@ public class CLI extends ClientView {
     }
 
     @Override
-    public void chooseSpace(ArrayList<int[]> possibleChoices) {
-        Scanner scanner = new Scanner(System.in);
+    public void chooseSpaces(ArrayList<int[]> possibleChoices) {
+        ArrayList<int[]> choices = new ArrayList<>();
         int choice;
-        do{
-            printChoices(possibleChoices);
-            choice = scanner.nextInt();
-            choice--;
-            if((choice < 0) || (choice > possibleChoices.size())) {
-                writeLine("Wrong choice, you have to pick an integer between 1 - "+
-                        possibleChoices.size() +"\n");
-                printBuffer();
-            }
-        }while ((choice < 0) || (choice > possibleChoices.size()));
 
+        drawSection("Choose where to put your first worker");
+        choice = spaceChoice(possibleChoices);
+        choices.add(possibleChoices.get(choice));
+
+        possibleChoices.remove(choice);
+
+        drawSection("Choose where to put your second worker");
+        choice = spaceChoice(possibleChoices);
+        choices.add(possibleChoices.get(choice));
+
+        SpaceChoice messageChoice = new SpaceChoice(choices);
+        notifySocket(messageChoice);
+    }
+
+    @Override
+    public void chooseSpace(ArrayList<int[]> possibleChoices) {
+        int choice = spaceChoice(possibleChoices);
         SpaceChoice messageChoice = new SpaceChoice(possibleChoices.get(choice));
         notifySocket(messageChoice);
     }
@@ -199,5 +206,22 @@ public class CLI extends ClientView {
         }
 
         printBuffer();
+    }
+
+    private int spaceChoice(ArrayList<int[]> possibleChoices) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        printChoices(possibleChoices);
+        do{
+            choice = scanner.nextInt();
+            choice--;
+            if (!possibleChoices.contains(choice)) {
+                writeLine("Wrong choice, you have to pick an integer between 1 - "+
+                        (possibleChoices.size()));;
+                printBuffer();
+            }
+        }while ((choice < 0) || (choice > (possibleChoices.size() - 1)));
+
+        return choice;
     }
 }

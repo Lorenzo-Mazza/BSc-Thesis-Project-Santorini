@@ -15,8 +15,8 @@ public class InitializeWorkers extends ToClientMessage {
 
     @Override
     public void doAction(ClientView ui) {
-        ui.drawSection("Choose where to place the worker");
-        ui.chooseSpace(getPossibleCoordinates(getSpaces()));
+        ui.drawSection("Choose where to place the workers");
+        ui.chooseSpaces(getPossibleCoordinates(getSpaces()));
     }
 
     private ArrayList<Space> getSpaces() {
