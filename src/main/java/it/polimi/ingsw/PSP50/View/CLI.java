@@ -80,28 +80,37 @@ public class CLI extends ClientView {
     }
 
     @Override
+
     public void chooseSpaces(ArrayList<int[]> possibleChoices) {
         ArrayList<int[]> choices = new ArrayList<>();
         int choice;
 
         drawSection("Choose where to put your first worker");
-        choice = spaceChoice(possibleChoices);
+        choice = spaceChoice(possibleChoices, false);
         choices.add(possibleChoices.get(choice));
 
         possibleChoices.remove(choice);
 
         drawSection("Choose where to put your second worker");
-        choice = spaceChoice(possibleChoices);
+        choice = spaceChoice(possibleChoices, false);
         choices.add(possibleChoices.get(choice));
 
         SpaceChoice messageChoice = new SpaceChoice(choices);
         notifySocket(messageChoice);
     }
 
-    @Override
-    public void chooseSpace(ArrayList<int[]> possibleChoices) {
-        int choice = spaceChoice(possibleChoices);
-        SpaceChoice messageChoice = new SpaceChoice(possibleChoices.get(choice));
+
+    public void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional) {
+        if (optional) {
+            writeLine("The action is optional. To exit write <0>.");
+            printBuffer();
+        }
+        int choice = spaceChoice(possibleChoices, optional);
+        SpaceChoice messageChoice;
+        if(choice == -1)
+            messageChoice = new SpaceChoice(possibleChoices.get(-1));
+        else
+            messageChoice = new SpaceChoice(possibleChoices.get(choice));
         notifySocket(messageChoice);
     }
 
@@ -208,19 +217,23 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
-    private int spaceChoice(ArrayList<int[]> possibleChoices) {
+    private int spaceChoice(ArrayList<int[]> possibleChoices, boolean optional) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         printChoices(possibleChoices);
         do{
             choice = scanner.nextInt();
             choice--;
-            if (!possibleChoices.contains(choice)) {
-                writeLine("Wrong choice, you have to pick an integer between 1 - "+
-                        (possibleChoices.size()));;
+            if ((choice < 0) || (choice > (possibleChoices.size() - 1))) {
+                if(optional && (choice != -1))
+                    writeLine("Wrong choice, you have to pick an integer between 1 - "+
+                            possibleChoices.size() +" or <0> to exit");
+                else
+                    writeLine("Wrong choice, you have to pick an integer between 1 - "+
+                        (possibleChoices.size()));
                 printBuffer();
             }
-        }while ((choice < 0) || (choice > (possibleChoices.size() - 1)));
+        }while(((choice < 0) || (choice > possibleChoices.size())) && (!optional || (choice != -1)));
 
         return choice;
     }
