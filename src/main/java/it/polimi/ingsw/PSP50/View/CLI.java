@@ -1,15 +1,13 @@
 package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Model.*;
-import it.polimi.ingsw.PSP50.network.messages.Message;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.BlockChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.GodChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.SpaceChoice;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class CLI extends ClientView {
 
@@ -80,22 +78,43 @@ public class CLI extends ClientView {
     }
 
     @Override
-
-    public void chooseSpaces(ArrayList<int[]> possibleChoices) {
-        ArrayList<int[]> choices = new ArrayList<>();
+    public void initializeWorkers(ArrayList<int[]> possibleChoices) {
+        ArrayList<int[]> answer = new ArrayList<>();
         int choice;
 
-        drawSection("Choose where to put your first worker");
-        choice = spaceChoice(possibleChoices, false);
-        choices.add(possibleChoices.get(choice));
-
+        drawSection("Choose where to put your first worker. You can choose the position from this list:\n");
+        printAvailableSpaces(possibleChoices);
+        printBuffer();
+        choice= getChoiceWithTimeout(possibleChoices.size());
+        /*
+         **If a timer timeout happens, default option is the first choice
+         */
+        if(choice==0){
+            System.out.println("\nTimer is expired. The first option will be selected.");
+        } else {
+            choice--;
+        }
+        drawSection("For your first worker you have selected the space: "+ Arrays.toString(possibleChoices.get(choice)));
+        printBuffer();
+        answer.add(possibleChoices.get(choice));
         possibleChoices.remove(choice);
 
         drawSection("Choose where to put your second worker");
-        choice = spaceChoice(possibleChoices, false);
-        choices.add(possibleChoices.get(choice));
+        printBuffer();
+        choice= getChoiceWithTimeout(possibleChoices.size());
+        /*
+         **If a timer timeout happens, default option is the first choice
+         */
+        if(choice==0){
+            System.out.println("\nTimer is expired. The first option will be selected.");
+        } else {
+            choice--;
+        }
+        drawSection("For your second worker you have selected the space: "+ Arrays.toString(possibleChoices.get(choice)));
+        printBuffer();
+        answer.add(possibleChoices.get(choice));
 
-        SpaceChoice messageChoice = new SpaceChoice(choices);
+        SpaceChoice messageChoice = new SpaceChoice(answer, this.getPlayerId());
         notifySocket(messageChoice);
     }
 
@@ -108,9 +127,9 @@ public class CLI extends ClientView {
         int choice = spaceChoice(possibleChoices, optional);
         SpaceChoice messageChoice;
         if(choice == -1)
-            messageChoice = new SpaceChoice(possibleChoices.get(-1));
+            messageChoice = new SpaceChoice(possibleChoices.get(-1),this.getPlayerId());
         else
-            messageChoice = new SpaceChoice(possibleChoices.get(choice));
+            messageChoice = new SpaceChoice(possibleChoices.get(choice), this.getPlayerId());
         notifySocket(messageChoice);
     }
 
@@ -124,20 +143,60 @@ public class CLI extends ClientView {
         }
         printBuffer();
 
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-        do{
-            choice = scanner.nextInt();
+        int choice= getChoiceWithTimeout(possibleChoices.size());
+        /*
+         **If a timer timeout happens, default option is the first choice
+         */
+        if(choice==0){
+            System.out.println("\nTimer is expired. The first option will be selected.");
+        } else {
             choice--;
-            if (!possibleChoices.contains(choice)) {
-                writeLine("Wrong choice, you have to pick an integer between 1 - "+
-                        (possibleChoices.size()));;
-                printBuffer();
-            }
-        }while ((choice < 0) || (choice > (possibleChoices.size() - 1)));
-
-        GodChoice messageChoice = new GodChoice(choice);
+        }
+        drawSection("You have selected: "+ possibleChoices.get(choice));
+        printBuffer();
+        GodChoice messageChoice = new GodChoice(choice,this.getPlayerId());
         notifySocket(messageChoice);
+    }
+
+    private int getChoiceWithTimeout(int choiceSize){
+        Callable<Integer> k = () -> new Scanner(System.in).nextInt();
+        Long start= System.currentTimeMillis();
+        int choice=0;
+        ExecutorService l = Executors.newFixedThreadPool(1);  ;
+        Future<Integer> g;
+        System.out.println("Enter your choice in 15 seconds :");
+        g= l.submit(k);
+        while(System.currentTimeMillis()-start<15*1000 && !g.isDone()){
+            // Wait for future
+        }
+        if(g.isDone()){
+            try {
+                choice=g.get();
+                while ((choice < 1) || (choice > (choiceSize))) {
+                    writeLine("Wrong choice, you have to pick an integer between 1 - "+ (choiceSize));;
+                    printBuffer();
+                    g= l.submit(k);
+                    while(System.currentTimeMillis()-start<15*1000 && !g.isDone()){
+                        // Wait for future
+                    }
+                    if (System.currentTimeMillis()-start>15*1000)
+                    {
+                        choice=0;
+                        break;
+                    }
+                    else {
+                        choice = g.get();
+                    }
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        g.cancel(true);
+        /*
+         **WARNING: In the helper method context, value 0 represents a timer timeout
+         */
+        return choice;
     }
 
     @Override
@@ -157,13 +216,10 @@ public class CLI extends ClientView {
         if(choice == 4)
             choice = 10;
 
-        BlockChoice messageChoice = new BlockChoice(choice);
+        BlockChoice messageChoice = new BlockChoice(choice,this.getPlayerId());
         notifySocket(messageChoice);
     }
 
-    private void notifySocket(ToServerMessage messageChoice) {
-        this.getSocket().update(messageChoice);
-    }
 
     /**
      * @param space
@@ -204,23 +260,24 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
-    private void printChoices(ArrayList<int[]> coordinates) {
+    private void printAvailableSpaces(ArrayList<int[]> coordinates) {
         drawSection("This is the board:");
         printBoard();
         drawSection("Select one of this pairs");
 
         for(int index = 0; index < coordinates.size(); index++) {
-            writeLine(" --> Select "+ (index + 1) +" to choose: ");
+            writeLine(" --> Select "+ (index + 1) +" to choose the space: ");
             writeLine("("+ coordinates.get(index)[0] +","+ coordinates.get(index)[1] +")\n");
         }
 
         printBuffer();
     }
 
+    // To change
     private int spaceChoice(ArrayList<int[]> possibleChoices, boolean optional) {
         Scanner scanner = new Scanner(System.in);
         int choice;
-        printChoices(possibleChoices);
+        printAvailableSpaces(possibleChoices);
         do{
             choice = scanner.nextInt();
             choice--;
@@ -237,4 +294,12 @@ public class CLI extends ClientView {
 
         return choice;
     }
+
+
+
+    private void notifySocket(ToServerMessage messageChoice) {
+        this.getSocket().update(messageChoice);
+    }
 }
+
+

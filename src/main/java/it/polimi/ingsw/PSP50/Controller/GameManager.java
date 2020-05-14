@@ -17,6 +17,7 @@ import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameManager implements Runnable, Observer {
@@ -89,8 +90,6 @@ public class GameManager implements Runnable, Observer {
             // send cardsLeft to the player view and get a choice back (an int)
             int choice= chooseGod(player,cardsLeft);
             // random assignment if player doesn't answer correctly
-            if (choice==-1)
-                choice=0;
             player.setGod(cardsLeft.get(choice));
             cardsLeft.remove(choice);
             playersCopy.remove(randomIndex);
@@ -223,19 +222,17 @@ public class GameManager implements Runnable, Observer {
 
 
     private int chooseGod(Player player, ArrayList<God> cardsLeft){
-        int choice=-1;
+        int choice=0;
         VirtualView view= virtualViews.get(player.getName());
         setObservable(view);
         view.sendToClient(new ChooseGodCard(cardsLeft));
-        TurnTimer timer= new TurnTimer(30);
-        view.sendToClient(new TimerStarted(timer));
-        while (!timer.isInterrupted())
+
+        while (receiver==null)
         {
-            // get the God that the user has selected
-            if (((int) receiver >= 0 ) && (cardsLeft.get((int)receiver)!=null)) {
+        }
+        // get the God that the user has selected
+        if (((int) receiver >= 0 ) && (cardsLeft.get((int)receiver)!=null)) {
                 choice=(int) receiver;
-                timer.endTimer();
-            }
         }
         return choice;
     }
@@ -261,7 +258,7 @@ public class GameManager implements Runnable, Observer {
     }
 
     @Override
-    public void update(Message message) {
+    public synchronized void update(Message message) {
         receiver= ((ToServerMessage)message).castChoice();
     }
 

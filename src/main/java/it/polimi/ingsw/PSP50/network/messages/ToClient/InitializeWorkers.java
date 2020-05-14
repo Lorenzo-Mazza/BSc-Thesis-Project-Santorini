@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP50.Model.Space;
 import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class InitializeWorkers extends ToClientMessage {
@@ -16,7 +15,7 @@ public class InitializeWorkers extends ToClientMessage {
     @Override
     public void doAction(ClientView ui) {
         ui.drawSection("Choose where to place the workers");
-        ui.chooseSpaces(getPossibleCoordinates(getSpaces()));
+        ui.initializeWorkers(getPossibleCoordinates(getSpaces()));
     }
 
     private ArrayList<Space> getSpaces() {

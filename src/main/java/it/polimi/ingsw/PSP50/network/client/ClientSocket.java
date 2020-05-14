@@ -36,7 +36,9 @@ public class ClientSocket implements Runnable, Observer {
             fromServer = new ObjectInputStream(serverSocket.getInputStream());
             toServer.writeObject(userInterface.getName());
             toServer.flush();
+            toServer.reset();
             toServer.writeObject(gameType);
+            toServer.flush();
             receiveFromServer();
 
         } catch (IOException e) {

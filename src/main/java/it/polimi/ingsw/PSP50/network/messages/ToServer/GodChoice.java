@@ -8,8 +8,8 @@ public class GodChoice extends ToServerMessage {
     /**
      * Data contains the int representing the God
      */
-    public GodChoice(Object data) {
-        super(data);
+    public GodChoice(Object data, int sender) {
+        super(data,sender);
     }
 
     @Override

@@ -57,10 +57,8 @@ public class ClientHandler implements Runnable
       while (!client.isClosed()) {
         ToServerMessage msg;
         msg = (ToServerMessage) in.readObject();
-
         if (msg != null)
           server.interpretMessage(msg);
-
         Thread.sleep(100);
       }
     } catch (ClassNotFoundException | ClassCastException | InterruptedException e) {
@@ -76,7 +74,7 @@ public class ClientHandler implements Runnable
         if (!lobby.isFull()){
             lobby.addPlayer(playerId,view);
             if (lobby.isFull()){
-                server.startLobby(lobby);
+                new Thread(() -> {server.startLobby(lobby);}).start();
             }
         }
     }

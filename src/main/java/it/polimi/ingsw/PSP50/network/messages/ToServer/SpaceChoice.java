@@ -5,8 +5,8 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 public class SpaceChoice extends ToServerMessage {
-    public SpaceChoice(Object data) {
-        super(data);
+    public SpaceChoice(Object data, int sender) {
+        super(data,sender);
     }
 
     //Method casts the coordinates given by the CLI to a concrete Space of the Model

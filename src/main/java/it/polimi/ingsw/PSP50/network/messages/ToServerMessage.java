@@ -9,8 +9,9 @@ public abstract class ToServerMessage extends Message  {
 
     private int playerId;
 
-    public ToServerMessage(Object data) {
+    public ToServerMessage(Object data, int sender) {
         super(data);
+        playerId = sender;
     }
 
     public int getPlayerId() {

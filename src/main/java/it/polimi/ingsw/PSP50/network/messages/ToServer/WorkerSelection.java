@@ -6,8 +6,8 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 public class WorkerSelection extends ToServerMessage {
-    public WorkerSelection(Object data) {
-        super(data);
+    public WorkerSelection(Object data, int sender) {
+        super(data,sender);
     }
 
     @Override

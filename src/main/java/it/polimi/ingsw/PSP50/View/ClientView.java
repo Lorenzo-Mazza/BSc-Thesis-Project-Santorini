@@ -44,7 +44,7 @@ public abstract class ClientView extends Observable {
 
     public abstract void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional);
 
-    public abstract void chooseSpaces(ArrayList<int[]> possibleChoices);
+    public abstract void initializeWorkers(ArrayList<int[]> possibleChoices);
 
     public abstract void chooseGod(ArrayList<String> possibleChoices);
 
