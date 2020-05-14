@@ -186,6 +186,7 @@ public class GameManager implements Runnable, Observer {
 
                 // if a player neither won or lost, do nothing
             }
+            game.notifyChange();
 
             currentPlayer++;
             if (currentPlayer==game.getAllPlayers().size())

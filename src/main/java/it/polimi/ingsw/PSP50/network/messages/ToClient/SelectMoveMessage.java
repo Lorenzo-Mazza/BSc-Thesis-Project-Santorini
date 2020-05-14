@@ -8,13 +8,16 @@ import java.util.ArrayList;
 
 public class SelectMoveMessage extends ToClientMessage {
 
-    public SelectMoveMessage(Object data) {
+    private final boolean optional;
+
+    public SelectMoveMessage(Object data, boolean optional) {
         super(data);
+        this.optional=optional;
     }
 
     @Override
     public void doAction(ClientView ui){
         ui.drawSection("Choose where you want to move");
-        ui.chooseSpace(getPossibleCoordinates((ArrayList<Space>) data));
+        ui.chooseSpace(getPossibleCoordinates((ArrayList<Space>) data),optional);
     }
 }

@@ -42,7 +42,7 @@ public abstract class ClientView extends Observable {
 
     public abstract void drawSection(String line);
 
-    public abstract void chooseSpace(ArrayList<int[]> possibleChoices);
+    public abstract void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional);
 
     public abstract void chooseSpaces(ArrayList<int[]> possibleChoices);
 
