@@ -87,7 +87,7 @@ public class CLI extends ClientView {
         writeLine("\nChoose the space where to put your second worker.");
         printBuffer();
         printAvailableSpaces(possibleChoices);
-        choice= getChoiceWithTimeout(possibleChoices.size(),15,false);
+        choice= getChoiceWithTimeout(possibleChoices.size(),30,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -187,25 +187,21 @@ public class CLI extends ClientView {
 
     @Override
     public void chooseBlock(Block possibleBlock) {
-        writeLine("\n --> Select "+ possibleBlock.getValue() +" to choose: "+ possibleBlock.toString() );
-        writeLine("\n --> Select 4 to choose: DOME");
+        writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
+        writeLine("\n --> Select 2 to choose: DOME");
         printBuffer();
         Scanner scanner = new Scanner(System.in);
-        int choice;
-        do{
-            choice = scanner.nextInt();
-            if((choice != possibleBlock.getValue()) && (choice != 4)) {
-                writeLine("\nWrong choice, you have to pick "+ possibleBlock.getValue() +" or 4");
-                printBuffer();
-            }
-
-        }while((choice != possibleBlock.getValue()) && (choice != 4));
-
-        if(choice == 4)
-            choice = 10;
-
-        BlockChoice messageChoice = new BlockChoice(choice,this.getPlayerId());
-        notifySocket(messageChoice);
+        int choice= getChoiceWithTimeout(2,30,false);
+        if (choice==2) {
+            drawSection("You have selected: DOME");
+            notifySocket(new BlockChoice(Block.DOME,this.getPlayerId()));
+            return;
+        }
+        else if(choice==0){
+            System.out.println("\nTimer is expired. The first option will be selected.");
+        }
+        drawSection("\nYou have selected: " + possibleBlock.toString() );
+        notifySocket(new BlockChoice(possibleBlock,this.getPlayerId()));
     }
 
 
