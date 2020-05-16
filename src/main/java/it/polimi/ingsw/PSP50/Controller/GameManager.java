@@ -4,18 +4,13 @@ import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
-import it.polimi.ingsw.PSP50.TurnTimer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.*;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
-import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameManager implements Runnable, Observer {

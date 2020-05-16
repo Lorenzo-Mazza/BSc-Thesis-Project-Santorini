@@ -27,8 +27,8 @@ public class Demeter extends God {
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {
         ArrayList<Space> availableBuild = super.getAvailableBuild(player);
-        Space last_build = player.getLastBuild();
-        availableBuild.remove(last_build); //Demeter cannot build where she already built.
+        Space lastBuild = player.getLastBuild();
+        availableBuild.remove(lastBuild); //Demeter cannot build where she already built.
         return availableBuild;
     }
 }

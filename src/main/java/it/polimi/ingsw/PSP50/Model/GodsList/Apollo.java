@@ -47,6 +47,8 @@ public class Apollo extends God {
                 Worker playerWorker= player.getSelectedWorker();
                 playerWorker.move(space);
                 space.setWorker(playerWorker);  // set new space
+                player.setLastMove(oldSpace); //set last position
+
 
                 return playerWorker.getPosition()==space;
             }

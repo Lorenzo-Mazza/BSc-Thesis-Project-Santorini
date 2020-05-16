@@ -30,7 +30,7 @@ public class Minotaur extends God {
 
         for (Space occupiedSpace: reachable) {
             if (occupiedSpace.isOccupied()) {
-                int[] movement = thisWorker.getPosition().getCoordinatesFromSpaces(occupiedSpace);
+                int[] movement = thisWorker.getPosition().getDirection(occupiedSpace);
                 if (!occupiedSpace.thereIsNext(movement[0], movement[1]) ||
                         occupiedSpace.getNext(movement[0], movement[1]).isOccupied())
                     reachable.remove(occupiedSpace);
@@ -52,9 +52,9 @@ public class Minotaur extends God {
 
         if (space.isOccupied()) {
             Worker thisWorker = player.getSelectedWorker();
-            int[] movement = thisWorker.getPosition().getCoordinatesFromSpaces(space);
             Worker opponentWorker = space.getWorker();
-            //free the old space
+            int[] movement = thisWorker.getPosition().getDirection(space);
+            //free the old opponent's space
             space.setWorker(null);
             opponentWorker.move(space.getNext(movement[0], movement[1]));
             //occupy the new opponent's space

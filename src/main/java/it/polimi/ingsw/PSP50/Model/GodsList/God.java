@@ -150,8 +150,8 @@ public abstract class God implements Serializable {
     {
         player.getSelectedWorker().build(space);
         // if the outcome is correct
-        if (space.getHeight() == piece)
-        {   player.setHasBuilt(true);
+        if (space.getHeight() == piece) {
+            player.setHasBuilt(true);
             player.setLastBuild(space);
             return true;
         }

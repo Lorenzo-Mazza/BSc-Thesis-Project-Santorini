@@ -128,7 +128,8 @@ public class Space implements Serializable {
     public boolean isOccupied() {
         if(this.occupied == null)
             return false;
-        return true;
+        else
+            return true;
     }
 
     /**
@@ -210,7 +211,7 @@ public class Space implements Serializable {
      * @param nextSpace Space where to move
      * @return the difference of coordinates between nextSpace and this space
      */
-    public int[] getCoordinatesFromSpaces(Space nextSpace) {
+    public int[] getDirection(Space nextSpace) {
         int[] movement = new int[2];
         movement[0] = nextSpace.getXPosition() - this.xPosition;
         movement[1] = nextSpace.getYPosition() - this.yPosition;

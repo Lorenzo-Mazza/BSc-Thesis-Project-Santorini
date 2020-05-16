@@ -33,13 +33,6 @@ public class Worker implements Serializable {
         return owner;
     }
 
-    /**
-     *  We don't need it
-     * @param owner Player owning the worker
-     */
-   // public void setOwner(Player owner) {
-   //     this.owner = owner;
-   // }
 
     /**
      * Moves worker to a new space
@@ -50,7 +43,7 @@ public class Worker implements Serializable {
     }
 
     /**
-     * Occupies the position where the worker has moved
+     * Occupies the position where the worker is been placed (used in set-up phase)
      * @param position Space where the worker has moved
      */
     public void setPosition(Space position) {
@@ -60,29 +53,12 @@ public class Worker implements Serializable {
 
     /**
      * Builds a block following the game logic
-     * @param movement Space where the worker builds the block
+     * @param space Space where the worker builds the block
      */
-    public void build(Space movement){
+    public void build(Space space){
         // The method builds a Block without any check nor exception.
-        // Exceptions should be thrown by the Controller when a Block is not available.
-
-        //get current level of the Space and add 1.
-       int height_number= movement.getHeight().getValue() +1;
-       switch (height_number)
-       {
-           case 1:
-               movement.setHeight(Block.LEVEL1);
-               break;
-           case 2:
-               movement.setHeight(Block.LEVEL2);
-               break;
-           case 3:
-               movement.setHeight(Block.LEVEL3);
-               break;
-           case 4:
-               movement.setHeight(Block.DOME);
-               break;
-       }
+        Block nextHeight = space.getNextHeight();
+        space.setHeight(nextHeight);
     }
 
     /**
@@ -147,7 +123,8 @@ public class Worker implements Serializable {
         for(int index = 0; index < movable.size(); index++)
         {
             if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1) ||
-                    ( (movable.get(index).getWorker() != null)&& (movable.get(index).getWorker().getOwner() == this.getOwner())
+                    ( (movable.get(index).isOccupied())&&
+                            (movable.get(index).getWorker().getOwner() == this.getOwner())
                     ))
                 movable.remove(index); //If the Space is not reachable (too high or occupied), take it out of the list.
 

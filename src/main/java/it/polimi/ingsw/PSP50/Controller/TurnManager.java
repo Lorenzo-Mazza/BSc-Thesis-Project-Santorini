@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.Observer;
-import it.polimi.ingsw.PSP50.TurnTimer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.*;
@@ -12,8 +11,6 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static it.polimi.ingsw.PSP50.network.messages.ToServer.NoAction.NO_ACTION;
 
 public class TurnManager implements Observer{
 
@@ -63,6 +60,7 @@ public class TurnManager implements Observer{
                 return false;
             }
             //select another worker
+            virtualView.sendToClient(new WorkerBlocked(player.getSelectedWorker()));
             selectWorker();
             if (god.getAvailableMove(player)!=null)
                 spaceChoice = god.getAvailableMove(player);
@@ -79,7 +77,7 @@ public class TurnManager implements Observer{
             switch (turnPhase){
                 case MOVE:
                     spaceChoice = god.getAvailableMove(player);
-                    if (spaceChoice.isEmpty()) {
+                    if (spaceChoice==null) {
                         // the player has lost, go back to the game manager
                         player.setHasLost(true);
                         return false;
@@ -110,7 +108,7 @@ public class TurnManager implements Observer{
 
                 case BUILD:
                     spaceChoice = god.getAvailableBuild(player);
-                    if (spaceChoice.isEmpty()) {
+                     if (spaceChoice==null) {
                         // the player has lost, go back to the game manager
                         player.setHasLost(true);
                         return false;
@@ -160,8 +158,8 @@ public class TurnManager implements Observer{
 
                 case OPTIONALMOVE:
                     spaceChoice = god.getOptionalMove(player);
-                    if (spaceChoice.isEmpty()) {
-                        //the view prints a message
+                    if (spaceChoice==null) {
+                        //it's optional so do nothing
                         break;
                     }
 
@@ -171,9 +169,9 @@ public class TurnManager implements Observer{
                     {
                         Thread.yield();
                     }
-                    // get the space that the user has selected (DEBUG, Maybe it's useless)
+                    // get the space that the user has selected
                     if (receiver instanceof Integer){
-                        //do nothing
+                        //do nothing if you receive the NO_ACTION Constant
                     }
                     else if ( spaceChoice.contains(receiver)) {
                         playerSpace= (Space) receiver;
@@ -189,7 +187,7 @@ public class TurnManager implements Observer{
 
                 case OPTIONALBUILD:
                     spaceChoice = god.getOptionalBuild(player);
-                    if (spaceChoice.isEmpty()) {
+                    if (spaceChoice==null) {
                         //the view prints a message
                         break;
                     }
@@ -220,18 +218,15 @@ public class TurnManager implements Observer{
 
 
         }
-
+        // set all the player/worker parameters correctly, restore the steps available
+        player.setHasMovedUp(false);
         player.setHasBuilt(false);
         if (player.isPlayerBlocked())
             player.setPlayerBlocked(false);
 
-        // set all the player/worker parameters correctly, restore the steps available
         blockedWorkers=null;
         this.steps = new ArrayList<>(god.getAvailableSteps());
-
         return false;
-
-
     }
 
     public void selectWorker(){

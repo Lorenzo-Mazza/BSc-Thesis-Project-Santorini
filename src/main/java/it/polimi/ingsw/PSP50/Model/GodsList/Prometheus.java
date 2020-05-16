@@ -31,7 +31,7 @@ public class Prometheus extends God {
             Worker worker = player.getSelectedWorker();
             // level is the height where the worker is at right now.
             int level = worker.getPosition().getHeight().getValue();
-            ArrayList<Space> neighbors = new ArrayList<>(worker.getPosition().getNeighbors());
+            ArrayList<Space> neighbors = new ArrayList<>(worker.getMovable());
             ArrayList<Space> available = new ArrayList<>();
 
             for (int index = 0; index < neighbors.size(); index++) {
