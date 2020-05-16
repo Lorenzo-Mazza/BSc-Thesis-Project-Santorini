@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP50.Model.GodsList.God;
 import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
 
 public class ChooseGodCard extends ToClientMessage  {
@@ -12,7 +12,7 @@ public class ChooseGodCard extends ToClientMessage  {
     /**
      * Data is ArrayList that contains the remaining God cards
      */
-    public ChooseGodCard(Object data) {
+    public ChooseGodCard(ArrayList<God> data) {
         super(data);
     }
 

@@ -13,7 +13,9 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TurnManager implements Observer,Runnable{
+import static it.polimi.ingsw.PSP50.network.messages.ToServer.NoAction.NO_ACTION;
+
+public class TurnManager implements Observer{
 
     private final VirtualView virtualView;
     private final Game game;
@@ -22,7 +24,6 @@ public class TurnManager implements Observer,Runnable{
     private ArrayList<Phase> steps;
     private ArrayList <Worker> blockedWorkers;
     private Object receiver=null;
-    private int secondsLeft;
 
 
     TurnManager(Game game,Player player, VirtualView virtualView){
@@ -32,7 +33,6 @@ public class TurnManager implements Observer,Runnable{
         this.god = player.getGod();
         this.steps = new ArrayList<>(god.getAvailableSteps());
         this.blockedWorkers= new ArrayList<>();
-        this.secondsLeft =30;
         setObservable(this.virtualView);
     }
 
@@ -40,10 +40,6 @@ public class TurnManager implements Observer,Runnable{
         return player;
     }
 
-    @Override
-    public void run(){
-        playTurn();
-    }
 
     public boolean playTurn () {
         ArrayList <Space> spaceChoice;
@@ -72,12 +68,11 @@ public class TurnManager implements Observer,Runnable{
         }
 
 
-        while (steps.get(0) != null) {
+        while (steps.size() != 0) {
 
             Phase turnPhase= steps.get(0);
             Space playerSpace = null;
             Block playerBlock=null;
-            TurnTimer timer;
 
             switch (turnPhase){
                 case MOVE:
@@ -90,27 +85,25 @@ public class TurnManager implements Observer,Runnable{
 
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice,false));
-                    //create timer(30 sec)
-                    timer= new TurnTimer(secondsLeft);
-                    virtualView.sendToClient(new TimerStarted(timer));
-                    while (!timer.isInterrupted())
+                    while (receiver==null)
                     {
-                        // get the space that the user has selected
-                        if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
-                            playerSpace= (Space) receiver;
-                            timer.endTimer();
-                        }
                     }
-                    // if timer expired and there's no answer, get a random spaces between those available
-                    if (playerSpace==null)
+                    // get the space that the user has selected
+                    if (( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space) receiver;
+                    }
+                    // if there's no correct answer, get a random spaces between those available
+                    else
                     {
                         receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
                         playerSpace= (Space)receiver;
                     }
                     god.move(player,playerSpace);
                     game.notifyChange();
+                    receiver=null;
 
                     if (god.getWinCondition(player)) return true;
+                    break;
 
                 case BUILD:
                     spaceChoice = god.getAvailableBuild(player);
@@ -122,21 +115,15 @@ public class TurnManager implements Observer,Runnable{
 
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice,false));
-
-                    //create timeout(30 sec)
-                    timer= new TurnTimer(secondsLeft);
-                    virtualView.sendToClient(new TimerStarted(timer));
-                    while (!timer.isInterrupted())
+                    while (receiver==null)
                     {
-                        // get the space that the user has selected
-                        if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
-                            playerSpace= (Space) receiver;
-                            timer.endTimer();
-                        }
                     }
-
-                    // if timer expired and there's no answer, get a random spaces between those available
-                    if (playerSpace==null)
+                    // get the space that the user has selected
+                    if (( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space) receiver;
+                    }
+                    // if there's no correct answer, get a random spaces between those available
+                    else
                     {
                         receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
                         playerSpace= (Space)receiver;
@@ -145,20 +132,15 @@ public class TurnManager implements Observer,Runnable{
                     //if Atlas, get the Block selected by the user
                     if ((god.getName() == GodsNames.ATLAS) && (playerSpace.getNextHeight() != Block.DOME)) {
                         virtualView.sendToClient(new SelectBlockMessage(playerSpace));
-                        //create timeout(30 sec)
-                        timer= new TurnTimer(secondsLeft);
-                        virtualView.sendToClient(new TimerStarted(timer));
-                        while (!timer.isInterrupted())
+                        // get the block that the user has selected
+                        while (receiver==null)
                         {
-                            // get the block that the user has selected
-                            if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
-                                playerBlock= (Block) receiver;
-                                timer.endTimer();
-                            }
+                        }
+                        if (( playerSpace.getNextHeight()== (Block)receiver)|| (Block.DOME== (Block)receiver)) {
+                            playerBlock= (Block) receiver;
                         }
                         // if timer expired and there's no answer, get a random spaces between those available
-                        if (playerBlock==null)
-                        {
+                        else {
                             playerBlock= playerSpace.getNextHeight();
                         }
                     }
@@ -166,9 +148,10 @@ public class TurnManager implements Observer,Runnable{
                     else {
                         playerBlock = playerSpace.getNextHeight();
                     }
-
                     god.build(player,playerSpace,playerBlock);
+                    receiver=null;
                     game.notifyChange();
+                    break;
 
                 case OPTIONALMOVE:
                     spaceChoice = god.getOptionalMove(player);
@@ -179,29 +162,28 @@ public class TurnManager implements Observer,Runnable{
 
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice,true));
-
-                    //create timer(30 sec)
-                    timer= new TurnTimer(secondsLeft);
-                    virtualView.sendToClient(new TimerStarted(timer));
-                    while (!timer.isInterrupted())
+                    while (receiver==null)
                     {
-                        // get the space that the user has selected
-                        if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
-                            playerSpace= (Space) receiver;
-                            timer.endTimer();
-                        }
                     }
-                    // if timer expired and there's no answer, get a random spaces between those available
-                    if (playerSpace==null)
-                    {
-                        receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
-                        playerSpace= (Space)receiver;
+                    // get the space that the user has selected (DEBUG, Maybe it's useless)
+                    if (receiver instanceof Integer){
+                        //do nothing
                     }
-                    god.move(player,playerSpace);
-                    game.notifyChange();
 
+                    else if ( spaceChoice.contains(receiver)) {
+                        playerSpace= (Space) receiver;
+                        god.move(player,playerSpace);
+                        game.notifyChange();
+                    }
+                    // if  there's no answer, do nothing
+                    else
+                    {
+                    }
+                    receiver=null;
 
                     if (god.getWinCondition(player)) return true;
+                    break;
+
 
                 case OPTIONALBUILD:
                     spaceChoice = god.getOptionalBuild(player);
@@ -211,28 +193,27 @@ public class TurnManager implements Observer,Runnable{
                     }
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice,true));
-
-                    //create timer(30 sec)
-                    timer= new TurnTimer(secondsLeft);
-                    virtualView.sendToClient(new TimerStarted(timer));
-                    while (!timer.isInterrupted())
+                    while (receiver==null)
                     {
-                        // get the space that the user has selected
-                        if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
-                            playerSpace= (Space) receiver;
-                            timer.endTimer();
-                        }
                     }
-                    // if timer expired and there's no answer, get a random spaces between those available
-                    if (playerSpace==null)
-                    {
-                        receiver= spaceChoice.get(new Random().nextInt(spaceChoice.size()) - 1);
-                        playerSpace= (Space)receiver;
+                    // get the space that the user has selected (DEBUG, Maybe it's useless)
+                    if (receiver instanceof Integer){
+                        //do nothing
+                    }
+                    else if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                        playerSpace= (Space) receiver;
+                        playerBlock= playerSpace.getNextHeight();
+                        god.build(player,playerSpace,playerBlock);
+                        game.notifyChange();
                     }
 
-                    playerBlock= playerSpace.getNextHeight();
-                    god.build(player,playerSpace,playerBlock);
-                    game.notifyChange();
+                    // if there's no answer, do nothing
+                    else {
+                    }
+                    receiver=null;
+                    break;
+
+
 
             }
 
@@ -245,8 +226,9 @@ public class TurnManager implements Observer,Runnable{
         if (player.isPlayerBlocked())
             player.setPlayerBlocked(false);
 
-        // set all the player/worker parameters correctly
+        // set all the player/worker parameters correctly, restore the steps available
         blockedWorkers=null;
+        this.steps = new ArrayList<>(god.getAvailableSteps());
 
         return false;
 
@@ -255,25 +237,30 @@ public class TurnManager implements Observer,Runnable{
 
     public void selectWorker(){
         Worker selectedWorker=null;
+        ArrayList<Space> workersPosition = new ArrayList<>();
+        workersPosition.add(player.getWorkers()[0].getPosition());
+        workersPosition.add(player.getWorkers()[1].getPosition());
         virtualView.sendToClient(new SelectWorkerMessage(player.getWorkers()));
-        //create timeout(30 sec)
-        TurnTimer timer= new TurnTimer(secondsLeft);
-        virtualView.sendToClient(new TimerStarted(timer));
-        while (!timer.isInterrupted())
+        while (receiver==null)
         {
-            // get the worker that the user has selected
-            if ((receiver!= null) && ( player.getWorkers()[0].equals(receiver)) || ( player.getWorkers()[1].equals(receiver))) {
-                selectedWorker=(Worker) receiver;
-                timer.endTimer();
-            }
         }
-        // if timer expired and there's no answer, get a random spaces between those available
+        // get the worker that the user has selected
+        if (workersPosition.contains(receiver))
+        {
+            selectedWorker=((Space) receiver).getWorker();
+        }
+        else{
+            selectedWorker= player.getWorkers()[new Random().nextInt( 1)];
+        }
+      /*  // if there's no answer, get a random spaces between those available
         if (selectedWorker==null)
         {
             selectedWorker= player.getWorkers()[new Random().nextInt( 1)];
-        }
+        } */
+
         //Save the choice in player.selectedWorker
         player.selectWorker(selectedWorker);
+        receiver=null;
     }
 
     /*

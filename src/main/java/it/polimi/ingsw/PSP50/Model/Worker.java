@@ -1,11 +1,12 @@
 package it.polimi.ingsw.PSP50.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *  Worker contains all of the worker parameters
  */
-public class Worker {
+public class Worker implements Serializable {
     /**
      *  Reference to his owner
      */
@@ -146,7 +147,8 @@ public class Worker {
         for(int index = 0; index < movable.size(); index++)
         {
             if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1) ||
-                    (movable.get(index).getWorker().getOwner() == this.getOwner()))
+                    ( (movable.get(index).getWorker() != null)&& (movable.get(index).getWorker().getOwner() == this.getOwner())
+                    ))
                 movable.remove(index); //If the Space is not reachable (too high or occupied), take it out of the list.
 
 

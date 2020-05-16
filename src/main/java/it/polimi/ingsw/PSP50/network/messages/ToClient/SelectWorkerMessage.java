@@ -9,16 +9,16 @@ import java.util.ArrayList;
 
 public class SelectWorkerMessage extends ToClientMessage {
 
-    public SelectWorkerMessage(Object data) {
+    public SelectWorkerMessage(Worker[] data) {
         super(data);
     }
 
     @Override
     public void doAction(ClientView ui){
         ArrayList<Space> workersPositions = new ArrayList<>();
-        for(Worker worker: ((ArrayList<Worker>) data))
+        for(Worker worker: ((Worker[]) data))
             workersPositions.add(worker.getPosition());
-        ui.drawSection("Choose the worker to use");
+        ui.drawSection("Choose the worker to use for this turn");
         ui.chooseSpace(getPossibleCoordinates(workersPositions),false);
     }
 

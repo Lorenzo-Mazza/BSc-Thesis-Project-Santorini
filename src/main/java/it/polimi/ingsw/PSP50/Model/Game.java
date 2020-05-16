@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP50.Model;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.SetModelCopy;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
@@ -12,8 +13,6 @@ import java.util.ArrayList;
  * Game contains all of the parameters needed to play a game
  */
 public class Game extends Observable implements Serializable{
-
-    private ArrayList<VirtualView> views= new ArrayList<>();
 
     /**
      * List of players in the game
@@ -149,24 +148,9 @@ public class Game extends Observable implements Serializable{
         }
     }
 
-    public VirtualView getView(Player player){
-        VirtualView vv = null;
-        boolean found=false;
-        for (int i = 0; i<views.size() && !found; i++){
-            vv= views.get(i);
-            if (vv.getPlayerName().equals(player.getName()))
-                found=true;
-        }
-        return vv;
-    }
 
-    public ArrayList<VirtualView> getViews() {
-        return views;
-    }
 
-    public void setViews(ArrayList<VirtualView> views) {
-        this.views = views;
-    }
+
 
     /**
      ** Method sends to every virtual view an updated copy of the model. It implements the Observer/Observable pattern
@@ -174,6 +158,11 @@ public class Game extends Observable implements Serializable{
     public void notifyChange(){
         Game modelCopy= copyModel();
         notifyObservers(new ModelMessage(modelCopy));
+    }
+
+    public void setModelCopy(){
+        Game modelCopy= copyModel();
+        notifyObservers(new SetModelCopy(modelCopy));
     }
 
     /**

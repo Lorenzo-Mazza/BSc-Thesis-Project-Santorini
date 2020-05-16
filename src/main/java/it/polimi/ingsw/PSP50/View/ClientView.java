@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Model.Block;
+import it.polimi.ingsw.PSP50.Model.Game;
 import it.polimi.ingsw.PSP50.Observable;
 import it.polimi.ingsw.PSP50.network.client.ClientSocket;
 import it.polimi.ingsw.PSP50.network.messages.Message;
@@ -17,6 +18,16 @@ public abstract class ClientView extends Observable {
     private ClientSocket socket;
 
     private int playerId;
+
+    Game gameCopy;
+
+    public Game getGameCopy() {
+        return gameCopy;
+    }
+
+    public void setGameCopy(Game gameCopy) {
+        this.gameCopy = gameCopy;
+    }
 
     public int getPlayerId() {
         return playerId;

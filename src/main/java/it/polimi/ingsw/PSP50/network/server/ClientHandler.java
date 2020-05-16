@@ -74,7 +74,7 @@ public class ClientHandler implements Runnable
         if (!lobby.isFull()){
             lobby.addPlayer(playerId,view);
             if (lobby.isFull()){
-                new Thread(() -> {server.startLobby(lobby);}).start();
+               server.startLobby(lobby);
             }
         }
     }

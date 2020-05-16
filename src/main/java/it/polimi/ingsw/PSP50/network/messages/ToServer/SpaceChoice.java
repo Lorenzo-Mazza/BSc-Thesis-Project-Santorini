@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP50.Model.Space;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
+import java.io.Serializable;
+
 public class SpaceChoice extends ToServerMessage {
     public SpaceChoice(Object data, int sender) {
         super(data,sender);

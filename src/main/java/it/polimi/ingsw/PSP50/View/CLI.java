@@ -1,9 +1,7 @@
 package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Model.*;
-import it.polimi.ingsw.PSP50.network.messages.ToServer.BlockChoice;
-import it.polimi.ingsw.PSP50.network.messages.ToServer.GodChoice;
-import it.polimi.ingsw.PSP50.network.messages.ToServer.SpaceChoice;
+import it.polimi.ingsw.PSP50.network.messages.ToServer.*;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
 import java.util.*;
@@ -11,7 +9,6 @@ import java.util.concurrent.*;
 
 public class CLI extends ClientView {
 
-    private Game gameCopy;
     private StringBuilder buffer = new StringBuilder();
 
     public CLI() {
@@ -26,7 +23,7 @@ public class CLI extends ClientView {
     @Override
     public void update(Object gameCopy){
         this.gameCopy = (Game) gameCopy;
-
+        drawSection("The board has changed! Here it is an update of it : ");
         printBoard();
     }
 
@@ -54,7 +51,7 @@ public class CLI extends ClientView {
         for (int i = 0; i < (line.length()); i++) {
             this.buffer.append("_");
         }
-        this.buffer.append("\n");
+        printBuffer();
     }
 
     private void writeLine(String line) {
@@ -66,26 +63,17 @@ public class CLI extends ClientView {
         return (scanner.nextLine());
     }
     
-    public void displayEmptyMap() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            stringBuilder.append(" __ __ __ __ __");
-            stringBuilder.append("\n");
-            stringBuilder.append("|  |  |  |  |  |");
-            stringBuilder.append("\n");
-            stringBuilder.append(" __ __ __ __ __");
-        }
-    }
+
 
     @Override
     public void initializeWorkers(ArrayList<int[]> possibleChoices) {
         ArrayList<int[]> answer = new ArrayList<>();
         int choice;
-
-        drawSection("Choose where to put your first worker. You can choose the position from this list:\n");
-        printAvailableSpaces(possibleChoices);
+        printBoard();
+        writeLine("\nChoose the space where to put your first worker.");
         printBuffer();
-        choice= getChoiceWithTimeout(possibleChoices.size());
+        printAvailableSpaces(possibleChoices);
+        choice= getChoiceWithTimeout(possibleChoices.size(),30,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -94,14 +82,12 @@ public class CLI extends ClientView {
         } else {
             choice--;
         }
-        drawSection("For your first worker you have selected the space: "+ Arrays.toString(possibleChoices.get(choice)));
-        printBuffer();
         answer.add(possibleChoices.get(choice));
         possibleChoices.remove(choice);
-
-        drawSection("Choose where to put your second worker");
+        writeLine("\nChoose the space where to put your second worker.");
         printBuffer();
-        choice= getChoiceWithTimeout(possibleChoices.size());
+        printAvailableSpaces(possibleChoices);
+        choice= getChoiceWithTimeout(possibleChoices.size(),15,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -110,40 +96,50 @@ public class CLI extends ClientView {
         } else {
             choice--;
         }
-        drawSection("For your second worker you have selected the space: "+ Arrays.toString(possibleChoices.get(choice)));
-        printBuffer();
         answer.add(possibleChoices.get(choice));
+        drawSection("For your first Worker you selected the space " + Arrays.toString(answer.get(0)) + "." +
+                "For your second Worker you selected the space " + Arrays.toString(answer.get(1)) );
 
-        SpaceChoice messageChoice = new SpaceChoice(answer, this.getPlayerId());
-        notifySocket(messageChoice);
+        notifySocket(new WorkersInitialChoice(answer, this.getPlayerId()));
     }
 
 
     public void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional) {
+        printAvailableSpaces(possibleChoices);
         if (optional) {
-            writeLine("The action is optional. To exit write <0>.");
+            writeLine("\nThe action is optional. To exit write <0>.");
             printBuffer();
         }
-        int choice = spaceChoice(possibleChoices, optional);
-        SpaceChoice messageChoice;
-        if(choice == -1)
-            messageChoice = new SpaceChoice(possibleChoices.get(-1),this.getPlayerId());
-        else
-            messageChoice = new SpaceChoice(possibleChoices.get(choice), this.getPlayerId());
-        notifySocket(messageChoice);
+        int choice = getChoiceWithTimeout(possibleChoices.size(),30,optional);
+        if(choice==0){
+            if (optional) {
+                System.out.println("\n No action will be performed.");
+                notifySocket(new NoAction(null,this.getPlayerId()));
+                return;
+            }
+            else {
+                System.out.println("\nTimer is expired. The first option will be selected.");
+            }
+        }
+        else {
+            choice--;
+        }
+        drawSection("You selected the space ("+
+                possibleChoices.get(choice)[0] +","+ possibleChoices.get(choice)[1] +").");
+        notifySocket(new SpaceChoice(possibleChoices.get(choice), this.getPlayerId()));
     }
 
     @Override
     public void chooseGod(ArrayList<String> possibleChoices) {
         drawSection("Choose the God you want to use (Write an integer between 1 - "+ (possibleChoices.size()));
-        writeLine("You can choose the god from this list:\n ");
+        writeLine("\nYou can choose the god from this list:  ");
         for (int index = 0; index < possibleChoices.size(); index++) {
-            writeLine(" --> Select "+ (index + 1) +" to choose: ");
-            writeLine(possibleChoices.get(index) +"\n");
+            writeLine("\n--> Select "+ (index + 1) +" to choose: ");
+            writeLine(possibleChoices.get(index) +".");
         }
         printBuffer();
 
-        int choice= getChoiceWithTimeout(possibleChoices.size());
+        int choice= getChoiceWithTimeout(possibleChoices.size(),15,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -152,42 +148,32 @@ public class CLI extends ClientView {
         } else {
             choice--;
         }
-        drawSection("You have selected: "+ possibleChoices.get(choice));
-        printBuffer();
+        drawSection("\nYou have selected: "+ possibleChoices.get(choice));
         GodChoice messageChoice = new GodChoice(choice,this.getPlayerId());
         notifySocket(messageChoice);
     }
 
-    private int getChoiceWithTimeout(int choiceSize){
+    private int getChoiceWithTimeout(int choiceSize, int timeout, boolean optional){
         Callable<Integer> k = () -> new Scanner(System.in).nextInt();
         Long start= System.currentTimeMillis();
         int choice=0;
         ExecutorService l = Executors.newFixedThreadPool(1);  ;
         Future<Integer> g;
-        System.out.println("Enter your choice in 15 seconds :");
+        System.out.println("\nEnter your choice in "+ timeout + " seconds. " +
+                "If you insert a wrong input, the first option will be selected.");
         g= l.submit(k);
-        while(System.currentTimeMillis()-start<15*1000 && !g.isDone()){
+        while(System.currentTimeMillis()-start<timeout*1000 && !g.isDone()){
             // Wait for future
         }
         if(g.isDone()){
             try {
                 choice=g.get();
-                while ((choice < 1) || (choice > (choiceSize))) {
-                    writeLine("Wrong choice, you have to pick an integer between 1 - "+ (choiceSize));;
-                    printBuffer();
-                    g= l.submit(k);
-                    while(System.currentTimeMillis()-start<15*1000 && !g.isDone()){
-                        // Wait for future
-                    }
-                    if (System.currentTimeMillis()-start>15*1000)
-                    {
-                        choice=0;
-                        break;
-                    }
-                    else {
-                        choice = g.get();
-                    }
+                if ((choice<0 || choice>choiceSize) || (!optional && choice==0))
+                {
+                    //System.out.println("\nWrong input inserted; the first option will be selected ");
+                    choice=1;
                 }
+
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -201,16 +187,18 @@ public class CLI extends ClientView {
 
     @Override
     public void chooseBlock(Block possibleBlock) {
-        printBoard();
-        writeLine(" --> Select "+ possibleBlock.getValue() +" to choose: "+ possibleBlock.toString() +"\n");
-        writeLine(" --> Select 4 to choose: DOME");
+        writeLine("\n --> Select "+ possibleBlock.getValue() +" to choose: "+ possibleBlock.toString() );
+        writeLine("\n --> Select 4 to choose: DOME");
         printBuffer();
         Scanner scanner = new Scanner(System.in);
         int choice;
         do{
             choice = scanner.nextInt();
-            if((choice != possibleBlock.getValue()) && (choice != 4))
-                writeLine("Wrong choice, you have to pick "+ possibleBlock.getValue() +" or 4\n");
+            if((choice != possibleBlock.getValue()) && (choice != 4)) {
+                writeLine("\nWrong choice, you have to pick "+ possibleBlock.getValue() +" or 4");
+                printBuffer();
+            }
+
         }while((choice != possibleBlock.getValue()) && (choice != 4));
 
         if(choice == 4)
@@ -248,32 +236,34 @@ public class CLI extends ClientView {
      * Prints the game board to terminal
      */
     private void printBoard() {
+        writeLine("\nThis is the board.\n Reminder: Space (0,0) is the first one on the left, " +
+                "Space (4,4) is the last one on the right; Domes are marked with an 'X'.");
+        printBuffer();
         for (int i = 0; i < 5; i++) {
-            writeLine("+---+---+---+---+---+");
+            writeLine("\n+-----+-----+-----+-----+-----+ \n");
             String line = "| ";
             for (int j = 0; j < 5; j++) {
-                line += printSpace(gameCopy.getBoard().getSpace(j, i)) + " | ";
+                line += printSpace(gameCopy.getBoard().getSpace(i, j)) + "   | ";
             }
             writeLine(line);
+            writeLine("\n+-----+-----+-----+-----+-----+");
         }
-        writeLine("+---+---+---+---+---+");
         printBuffer();
     }
 
     private void printAvailableSpaces(ArrayList<int[]> coordinates) {
-        drawSection("This is the board:");
-        printBoard();
-        drawSection("Select one of this pairs");
+        writeLine("\nSelect one of these pairs:");
+        printBuffer();
 
         for(int index = 0; index < coordinates.size(); index++) {
-            writeLine(" --> Select "+ (index + 1) +" to choose the space: ");
-            writeLine("("+ coordinates.get(index)[0] +","+ coordinates.get(index)[1] +")\n");
+            writeLine("\n --> Select "+ (index + 1) +" to choose the space: ");
+            writeLine("("+ coordinates.get(index)[0] +","+ coordinates.get(index)[1] +").");
         }
 
         printBuffer();
     }
 
-    // To change
+    /* To change
     private int spaceChoice(ArrayList<int[]> possibleChoices, boolean optional) {
         Scanner scanner = new Scanner(System.in);
         int choice;
@@ -293,7 +283,7 @@ public class CLI extends ClientView {
         }while(((choice < 0) || (choice > possibleChoices.size())) && (!optional || (choice != -1)));
 
         return choice;
-    }
+    } */
 
 
 

@@ -2,12 +2,13 @@ package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Player contains all of the player's data.
  */
-public class Player implements Cloneable {
+public class Player implements Cloneable, Serializable {
 
     /**
      * A String that contains player's name

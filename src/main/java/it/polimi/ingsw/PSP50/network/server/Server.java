@@ -52,8 +52,8 @@ public class Server extends Thread{
      * WARNING: Method called in the context of the Client Handler class. The last added client starts the game.
      * Starts the lobby and the game main engine.
      */
-    public synchronized void startLobby(Lobby lobby){
-        lobby.startGame();
+    public void startLobby(Lobby lobby){
+        new Thread(lobby).start();
     }
 
     /**
@@ -65,6 +65,12 @@ public class Server extends Thread{
         while ((index < this.numberOfLobbies) && (lobbies.get(index) != null)) {
             if ((!lobbies.get(index).isFull()) && (lobbies.get(index).getType()==type)) {
                 firstAvailableLobby = lobbies.get(index);
+            }
+            else if (lobbies.get(index).isOver()) {
+                lobbies.remove(index);
+                addLobby(index,type);
+                firstAvailableLobby=lobbies.get(index);
+                break;
             }
             index++;
         }

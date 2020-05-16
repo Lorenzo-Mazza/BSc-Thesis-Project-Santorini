@@ -7,14 +7,12 @@ import it.polimi.ingsw.PSP50.Observer;
 import it.polimi.ingsw.PSP50.TurnTimer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.Message;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.ChooseGodCard;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.InitializeWorkers;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.TimerStarted;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.WinnerMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.*;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -24,7 +22,6 @@ public class GameManager implements Runnable, Observer {
 
     private final Game game;
     private  ConcurrentHashMap<String,VirtualView> virtualViews;
-    private final List<Player> players;
     private Object receiver=null;
 
 
@@ -33,15 +30,20 @@ public class GameManager implements Runnable, Observer {
     public GameManager(ConcurrentHashMap<String, VirtualView> lobby){
         virtualViews = lobby;
         game = new Game();
-        ArrayList <VirtualView> list = new ArrayList<>(lobby.values());
-        game.setViews(list);
         List<String> nicknames = new ArrayList<>(lobby.keySet());
+        ArrayList<Color> colors = new ArrayList<Color>(Arrays.asList(Color.values()));
         for (int i = 0; i < nicknames.size(); i++) {
             String nickname = nicknames.get(i);
             Player player = new Player(nickname);
+            int randomIndex = new Random().nextInt(colors.size());
+            player.setColor(colors.get(randomIndex));
+            colors.remove(randomIndex);
             game.setPlayer(player);
+            /*
+            Register every virtual view as Observers of the Model
+            */
+            virtualViews.get(nickname).setObservable(game);
         }
-        players = game.getAllPlayers();
     }
 
 
@@ -53,7 +55,6 @@ public class GameManager implements Runnable, Observer {
     public void run(){
         startGame();
         setUpGame();
-        ServerManager.getServer().print("Starting game");
         runGame();
         endGame();
     }
@@ -67,12 +68,13 @@ public class GameManager implements Runnable, Observer {
         game.setOpponents();
         Board gameBoard = new Board();
         game.setBoard(gameBoard);
-        if (players.size() == 2) { game.setType(GameType.TWOPLAYERS);}
-        else if (players.size() == 3) {game.setType(GameType.THREEPLAYERS);}
+        if (game.getAllPlayers().size() == 2) { game.setType(GameType.TWOPLAYERS);}
+        else if (game.getAllPlayers().size() == 3) {game.setType(GameType.THREEPLAYERS);}
 
         Deck gameDeck = new Deck();
         game.setDeck(gameDeck);
         dealCards();
+        game.setModelCopy();
     }
 
     /**
@@ -114,23 +116,20 @@ public class GameManager implements Runnable, Observer {
             int randomIndex = (new Random().nextInt(playersLeft.size()));
             Player player = playersLeft.get(randomIndex);
             orderOfPlay.add(player);
-            // player chooses where to place his workers on the board
+            // Game is starting!
             VirtualView view= virtualViews.get(player.getName());
+            view.sendToClient(new GameStarting(player));
+            // player chooses where to place his workers on the board
             view.sendToClient(new InitializeWorkers(this.game.getBoard()));
-            TurnTimer timer= new TurnTimer(30);
-            view.sendToClient(new TimerStarted(timer));
-            while (!timer.isInterrupted())
+            while (receiver==null)
             {
-                // get the Spaces that the user has selected
-                if (receiver!= null) {
-                    player.getWorkers()[0].setPosition((((Space[])receiver)[0]));
-                    player.getWorkers()[1].setPosition((((Space[])receiver)[1]));
-                }
             }
-            if (receiver==null)
-                randomAssignWorkers(player);
-            view.unregister(this);
+            // get the Spaces that the user has selected
+            player.getWorkers()[0].setPosition(((ArrayList<Space>)receiver).get(0));
+            player.getWorkers()[1].setPosition(((ArrayList<Space>)receiver).get(1));
+            game.notifyChange();
             receiver=null;
+            view.unregister(this);
             playersLeft.remove(randomIndex);
         }
         // set the correct order of play in the players array of game
@@ -147,7 +146,7 @@ public class GameManager implements Runnable, Observer {
         for (int currentPlayer=0; currentPlayer<game.getType().getSize();currentPlayer++)
         {
             Player player= game.getPlayer(currentPlayer);
-            TurnManager turn= new TurnManager(game,player,game.getView(player));
+            TurnManager turn= new TurnManager(game,player,virtualViews.get(player.getName()));
             turnList.add(turn);
         }
 
@@ -156,7 +155,6 @@ public class GameManager implements Runnable, Observer {
         while ( game.getWinner()==null)
         {
             Player player =turnList.get(currentPlayer).getPlayer();
-            turnList.get(currentPlayer).run();
             boolean result=turnList.get(currentPlayer).playTurn();
             // if a player won in his turn
             if (result)
@@ -170,10 +168,16 @@ public class GameManager implements Runnable, Observer {
                 {
                     //eliminate player from the game
                     // set parameters correctly, remove his workers from the board, remove the turn from TurnList
+                    // player is not eliminated from the game Observers so he keeps receiving updates of the game
                     Worker[] workers= player.getWorkers();
                     workers[0].getPosition().setWorker(null);
                     workers[1].getPosition().setWorker(null);
                     game.getAllPlayers().remove(player);
+                    // tell the client he lost
+                    this.virtualViews.get(player.getName()).sendToClient(new YouLostMessage(null));
+                    for (Player otherPlayer: game.getAllPlayers())
+                        otherPlayer.getOpponents().remove(player);
+
                     turnList.remove(currentPlayer);
 
                     //if only a player is left, he wins automatically
@@ -185,7 +189,6 @@ public class GameManager implements Runnable, Observer {
 
                 // if a player neither won or lost, do nothing
             }
-            game.notifyChange();
 
             currentPlayer++;
             if (currentPlayer==game.getAllPlayers().size())
@@ -224,7 +227,7 @@ public class GameManager implements Runnable, Observer {
     private int chooseGod(Player player, ArrayList<God> cardsLeft){
         int choice=0;
         VirtualView view= virtualViews.get(player.getName());
-        setObservable(view);
+        this.setObservable(view);
         view.sendToClient(new ChooseGodCard(cardsLeft));
 
         while (receiver==null)
@@ -237,7 +240,7 @@ public class GameManager implements Runnable, Observer {
         return choice;
     }
 
-    private void randomAssignWorkers(Player player){
+   /* private void randomAssignWorkers(Player player){
         Space [] randomSpaces = new Space[2];
         boolean active=true;
         for (int x=0; x<5 && active;x++){
@@ -255,7 +258,7 @@ public class GameManager implements Runnable, Observer {
         }
         player.getWorkers()[0].setPosition(randomSpaces[0]);
         player.getWorkers()[1].setPosition(randomSpaces[1]);
-    }
+    } */
 
     @Override
     public synchronized void update(Message message) {

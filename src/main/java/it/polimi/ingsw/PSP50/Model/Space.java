@@ -150,7 +150,7 @@ public class Space implements Serializable {
         }
         else {
             row_inf = this.getXPosition() - 1;
-            row_sup = this.getYPosition() + 1;
+            row_sup = this.getXPosition() + 1;
         }
 
         if (this.getYPosition() == 0) {

@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Model.GodsList.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -9,7 +10,7 @@ import java.util.Random;
 /**
  * Deck contains all the God cards
  */
-public class Deck {
+public class Deck implements Serializable {
     /**
      *  Deck is an ArrayList containing every God card
      */
