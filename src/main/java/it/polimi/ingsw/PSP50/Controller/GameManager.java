@@ -193,7 +193,6 @@ public class GameManager implements Runnable, Observer {
             }
         }
         // after a winner is declared, end the game.
-        this.endGame();
     }
 
 

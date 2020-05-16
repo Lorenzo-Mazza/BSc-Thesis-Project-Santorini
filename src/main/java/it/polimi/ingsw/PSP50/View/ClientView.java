@@ -41,6 +41,10 @@ public abstract class ClientView extends Observable {
         return this.name;
     }
 
+    public void setName(String name){
+        this.name=name;
+    }
+
     public ClientSocket getSocket() {
         return socket;
     }

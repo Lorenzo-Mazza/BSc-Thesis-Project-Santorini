@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SelectBlockMessage extends ToClientMessage {
 
-    public SelectBlockMessage(Object data) {
+    public SelectBlockMessage(Space data) {
         super(data);
     }
 

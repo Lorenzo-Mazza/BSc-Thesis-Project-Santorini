@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP50;
 import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.NameChanged;
 
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,14 +27,15 @@ public class Lobby implements Runnable{
     public void addPlayer(int user, VirtualView view) {
         players.put(user,view);
 
-        // If two players have the same name in the same lobby, it creates a unique identifier
-        int duplicate=0;
+        // If two players have the same name in the same lobby, it gives a unique name to every player
+        int duplicate=1;
         for (String name: nicknames.keySet())
         {
             if (view.getPlayerName().equals(name))
             {
                 duplicate++;
                 view.setPlayerName(view.getPlayerName() + duplicate);
+                view.sendToClient(new NameChanged(view.getPlayerName()));
             }
 
         }
