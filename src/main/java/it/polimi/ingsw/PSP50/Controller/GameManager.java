@@ -123,6 +123,7 @@ public class GameManager implements Runnable, Observer {
             view.sendToClient(new InitializeWorkers(this.game.getBoard()));
             while (receiver==null)
             {
+                Thread.yield();
             }
             // get the Spaces that the user has selected
             player.getWorkers()[0].setPosition(((ArrayList<Space>)receiver).get(0));
@@ -232,6 +233,7 @@ public class GameManager implements Runnable, Observer {
 
         while (receiver==null)
         {
+            Thread.yield();
         }
         // get the God that the user has selected
         if (((int) receiver >= 0 ) && (cardsLeft.get((int)receiver)!=null)) {

@@ -42,14 +42,15 @@ public class TurnManager implements Observer{
 
 
     public boolean playTurn () {
-        ArrayList <Space> spaceChoice;
+        ArrayList <Space> spaceChoice=null;
 
         //Get Selected Worker from the View
         selectWorker();
         //First and only check
-        spaceChoice = god.getAvailableMove(player);
+        if (god.getAvailableMove(player)!=null)
+            spaceChoice = god.getAvailableMove(player);
         int counter=0;
-        while (spaceChoice.isEmpty())
+        while (spaceChoice==null)
         {
             if (!blockedWorkers.contains(player.getSelectedWorker()))
             {
@@ -63,7 +64,8 @@ public class TurnManager implements Observer{
             }
             //select another worker
             selectWorker();
-            spaceChoice = god.getAvailableMove(player);
+            if (god.getAvailableMove(player)!=null)
+                spaceChoice = god.getAvailableMove(player);
             counter ++;
         }
 
@@ -87,6 +89,7 @@ public class TurnManager implements Observer{
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice,false));
                     while (receiver==null)
                     {
+                        Thread.yield();
                     }
                     // get the space that the user has selected
                     if (( spaceChoice.contains(receiver))) {
@@ -117,6 +120,7 @@ public class TurnManager implements Observer{
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice,false));
                     while (receiver==null)
                     {
+                        Thread.yield();
                     }
                     // get the space that the user has selected
                     if (( spaceChoice.contains(receiver))) {
@@ -135,6 +139,7 @@ public class TurnManager implements Observer{
                         // get the block that the user has selected
                         while (receiver==null)
                         {
+                            Thread.yield();
                         }
                         if (( playerSpace.getNextHeight()== (Block)receiver)|| (Block.DOME== (Block)receiver)) {
                             playerBlock= (Block) receiver;
@@ -164,21 +169,18 @@ public class TurnManager implements Observer{
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice,true));
                     while (receiver==null)
                     {
+                        Thread.yield();
                     }
                     // get the space that the user has selected (DEBUG, Maybe it's useless)
                     if (receiver instanceof Integer){
                         //do nothing
                     }
-
                     else if ( spaceChoice.contains(receiver)) {
                         playerSpace= (Space) receiver;
                         god.move(player,playerSpace);
                         game.notifyChange();
                     }
-                    // if  there's no answer, do nothing
-                    else
-                    {
-                    }
+
                     receiver=null;
 
                     if (god.getWinCondition(player)) return true;
@@ -195,6 +197,7 @@ public class TurnManager implements Observer{
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice,true));
                     while (receiver==null)
                     {
+                        Thread.yield();
                     }
                     // get the space that the user has selected (DEBUG, Maybe it's useless)
                     if (receiver instanceof Integer){
@@ -205,10 +208,6 @@ public class TurnManager implements Observer{
                         playerBlock= playerSpace.getNextHeight();
                         god.build(player,playerSpace,playerBlock);
                         game.notifyChange();
-                    }
-
-                    // if there's no answer, do nothing
-                    else {
                     }
                     receiver=null;
                     break;
@@ -243,6 +242,7 @@ public class TurnManager implements Observer{
         virtualView.sendToClient(new SelectWorkerMessage(player.getWorkers()));
         while (receiver==null)
         {
+            Thread.yield();
         }
         // get the worker that the user has selected
         if (workersPosition.contains(receiver))
