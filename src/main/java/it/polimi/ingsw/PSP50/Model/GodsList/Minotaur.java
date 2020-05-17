@@ -27,17 +27,18 @@ public class Minotaur extends God {
     public ArrayList<Space> getAvailableMove(Player player) {
         Worker thisWorker = player.getSelectedWorker();
         ArrayList<Space> reachable = thisWorker.getMovableWithWorkers();
+        ArrayList<Space> movable = new ArrayList<>(thisWorker.getMovableWithWorkers());
 
         for (Space occupiedSpace: reachable) {
             if (occupiedSpace.isOccupied()) {
                 int[] movement = thisWorker.getPosition().getDirection(occupiedSpace);
                 if (!occupiedSpace.thereIsNext(movement[0], movement[1]) ||
                         occupiedSpace.getNext(movement[0], movement[1]).isOccupied())
-                    reachable.remove(occupiedSpace);
+                    movable.remove(occupiedSpace);
             }
         }
 
-        return reachable;
+        return movable;
     }
 
     /**

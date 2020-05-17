@@ -11,10 +11,6 @@ public class GameStarting extends ToClientMessage {
 
     @Override
     public void doAction(ClientView ui) {
-        String colorStart;
-        String colorEnd = "\u001b[0m";
-        colorStart = ((Player)data).getColor().getSequence();
-        ui.drawSection("The color of your workers will be: " + colorStart+((Player)data).getColor().getName()+colorEnd);
         ui.drawSection("Game is starting! GET READY \uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25");
 
     }

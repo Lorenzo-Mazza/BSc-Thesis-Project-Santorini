@@ -13,7 +13,7 @@ public class WorkerBlocked extends ToClientMessage {
     public void doAction(ClientView ui) {
         int XCoordinate= ((Worker) data).getPosition().getXPosition();
         int YCoordinate= ((Worker) data).getPosition().getYPosition();
-        ui.drawSection("The Worker you selected in position (" + XCoordinate + YCoordinate +
+        ui.drawSection("The Worker you selected in position (" + XCoordinate + ", " +YCoordinate +
                 ") is blocked;try to choose another worker or you will lose.");
     }
 }

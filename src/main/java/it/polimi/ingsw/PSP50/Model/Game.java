@@ -1,8 +1,7 @@
 package it.polimi.ingsw.PSP50.Model;
 
 import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.View.VirtualView;
-import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelMessage;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelUpdate;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.SetModelCopy;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -157,7 +156,7 @@ public class Game extends Observable implements Serializable{
      */
     public void notifyChange(){
         Game modelCopy= copyModel();
-        notifyObservers(new ModelMessage(modelCopy));
+        notifyObservers(new ModelUpdate(modelCopy));
     }
 
     public void setModelCopy(){

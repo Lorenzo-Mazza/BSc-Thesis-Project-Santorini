@@ -26,7 +26,7 @@ public class GameManager implements Runnable, Observer {
         virtualViews = lobby;
         game = new Game();
         List<String> nicknames = new ArrayList<>(lobby.keySet());
-        ArrayList<Color> colors = new ArrayList<Color>(Arrays.asList(Color.values()));
+        ArrayList<Color> colors = new ArrayList<>(Arrays.asList(Color.values()));
         for (int i = 0; i < nicknames.size(); i++) {
             String nickname = nicknames.get(i);
             Player player = new Player(nickname);
@@ -65,6 +65,12 @@ public class GameManager implements Runnable, Observer {
         game.setBoard(gameBoard);
         if (game.getAllPlayers().size() == 2) { game.setType(GameType.TWOPLAYERS);}
         else if (game.getAllPlayers().size() == 3) {game.setType(GameType.THREEPLAYERS);}
+
+        for (Player player: game.getAllPlayers())
+        {
+            VirtualView view= virtualViews.get(player.getName());
+            view.sendToClient(new WelcomeMessage(player));
+        }
 
         Deck gameDeck = new Deck();
         game.setDeck(gameDeck);

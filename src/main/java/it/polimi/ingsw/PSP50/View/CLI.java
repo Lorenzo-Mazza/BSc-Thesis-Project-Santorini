@@ -62,8 +62,72 @@ public class CLI extends ClientView {
         Scanner scanner = new Scanner(System.in);
         return (scanner.nextLine());
     }
-    
 
+    /* private int getChoiceWithTimeout(int choiceSize, int timeout, boolean optional){
+        Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
+        long start= System.currentTimeMillis();
+        int choice=0;
+        ExecutorService executorService = Executors.newFixedThreadPool(1);  ;
+        Future<Integer> future;
+        System.out.println("\nEnter your choice in "+ timeout + " seconds. " +
+                "If you insert a wrong input, the first option will be selected.");
+        future= executorService.submit(callable);
+        while(System.currentTimeMillis()-start<timeout*1000 && !future.isDone()){
+            // Wait for future
+        }
+        if(future.isDone()){
+            try {
+                choice=future.get();
+                if ((choice<0 || choice>choiceSize) || (!optional && choice==0))
+                {
+                    //System.out.println("\nWrong input inserted; the first option will be selected ");
+                    choice=1;
+                }
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        future.cancel(true);
+
+        return choice;
+    }*/
+
+    private int getChoiceWithTimeout(int range, int timeout, boolean optional) {
+        Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
+        long start = System.currentTimeMillis();
+        int choice = 0;
+        boolean valid=true;
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        Future<Integer> future;
+        System.out.println("Enter your choice in " + timeout + " seconds :");
+        future = pool.submit(callable);
+        done: while (System.currentTimeMillis() - start < timeout * 1000) {
+            do {
+                valid = true;
+                if (future.isDone()) {
+                    try {
+                        choice = future.get();
+                        if ((choice >= 1 && choice <= range)||(choice >=0 && choice <= range && optional)) {
+                            break done;
+                        } else {
+                            throw new IllegalArgumentException();
+                        }
+                    } catch (InterruptedException | ExecutionException | IllegalArgumentException e) {
+                        System.out.println("Wrong choice, you have to pick an integer between 1 - " + range);
+                        future = pool.submit(callable);
+                        valid = false;
+                    }
+                }
+            } while (!valid);
+        }
+
+
+        future.cancel(true);
+        if ((choice < 0 || choice > range))
+            choice=0;
+        return choice;
+    }
 
     @Override
     public void initializeWorkers(ArrayList<int[]> possibleChoices) {
@@ -153,44 +217,13 @@ public class CLI extends ClientView {
         notifySocket(messageChoice);
     }
 
-    private int getChoiceWithTimeout(int choiceSize, int timeout, boolean optional){
-        Callable<Integer> k = () -> new Scanner(System.in).nextInt();
-        Long start= System.currentTimeMillis();
-        int choice=0;
-        ExecutorService l = Executors.newFixedThreadPool(1);  ;
-        Future<Integer> g;
-        System.out.println("\nEnter your choice in "+ timeout + " seconds. " +
-                "If you insert a wrong input, the first option will be selected.");
-        g= l.submit(k);
-        while(System.currentTimeMillis()-start<timeout*1000 && !g.isDone()){
-            // Wait for future
-        }
-        if(g.isDone()){
-            try {
-                choice=g.get();
-                if ((choice<0 || choice>choiceSize) || (!optional && choice==0))
-                {
-                    //System.out.println("\nWrong input inserted; the first option will be selected ");
-                    choice=1;
-                }
 
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        g.cancel(true);
-        /*
-         **WARNING: In the helper method context, value 0 represents a timer timeout
-         */
-        return choice;
-    }
 
     @Override
     public void chooseBlock(Block possibleBlock) {
         writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
         writeLine("\n --> Select 2 to choose: DOME");
         printBuffer();
-        Scanner scanner = new Scanner(System.in);
         int choice= getChoiceWithTimeout(2,30,false);
         if (choice==2) {
             drawSection("You have selected: DOME");
@@ -258,28 +291,6 @@ public class CLI extends ClientView {
 
         printBuffer();
     }
-
-    /* To change
-    private int spaceChoice(ArrayList<int[]> possibleChoices, boolean optional) {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-        printAvailableSpaces(possibleChoices);
-        do{
-            choice = scanner.nextInt();
-            choice--;
-            if ((choice < 0) || (choice > (possibleChoices.size() - 1))) {
-                if(optional && (choice != -1))
-                    writeLine("Wrong choice, you have to pick an integer between 1 - "+
-                            possibleChoices.size() +" or <0> to exit");
-                else
-                    writeLine("Wrong choice, you have to pick an integer between 1 - "+
-                        (possibleChoices.size()));
-                printBuffer();
-            }
-        }while(((choice < 0) || (choice > possibleChoices.size())) && (!optional || (choice != -1)));
-
-        return choice;
-    } */
 
 
 
