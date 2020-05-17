@@ -75,23 +75,17 @@ public class Worker implements Serializable {
      */
     public ArrayList<Space> getMovable() {
         ArrayList<Space> movable = new ArrayList<>(this.position.getNeighbors());
+        ArrayList<Space> neighbors = this.position.getNeighbors();
 
-        for(int index = 0; index < movable.size(); index++)
-        {
-            if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1)
-                || (movable.get(index).isOccupied()))
-
-                 { movable.remove(index); } //If the Space is not reachable (too high or occupied), take it out of the list.
-
-            // if the player is blocked, he cannot move up
-            if (this.getOwner().isPlayerBlocked())
-            {
-                if((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 0)
-
-                    movable.remove(index);
-
+        for (Space neighbor : neighbors) {
+            if (((neighbor.getHeight().getValue() - this.position.getHeight().getValue()) > 1)
+                    || (neighbor.isOccupied()))
+                movable.remove(neighbor); //If the Space is not reachable (too high or occupied), take it out of the list.
+            else if (this.getOwner().isPlayerBlocked()) {
+                // if the player is blocked, he cannot move up
+                if ((neighbor.getHeight().getValue() - this.position.getHeight().getValue()) > 0)
+                    movable.remove(neighbor);
             }
-
         }
         return movable;
     }
@@ -102,11 +96,12 @@ public class Worker implements Serializable {
      */
     public ArrayList<Space> getBuildable() {
         ArrayList<Space> buildable = new ArrayList<>(this.position.getNeighbors());
+        ArrayList<Space> neighbors= this.position.getNeighbors();
 
-        for(int index = 0; index < buildable.size(); index++)
+        for(Space neighbor : neighbors)
         {
-            if((buildable.get(index).getHeight() == Block.DOME) || (buildable.get(index).isOccupied()))
-                 {buildable.remove(index);} //If there is a Dome or another Player, take out that Space from the list.
+            if((neighbor.getHeight() == Block.DOME) || (neighbor.isOccupied()))
+                 {buildable.remove(neighbor);} //If there is a Dome or another Player, take out that Space from the list.
         }
 
         return buildable;
@@ -119,23 +114,18 @@ public class Worker implements Serializable {
      */
     public ArrayList<Space> getMovableWithWorkers() {
         ArrayList<Space> movable = new ArrayList<>(this.position.getNeighbors());
+        ArrayList<Space> neighbors= this.position.getNeighbors();
 
-        for(int index = 0; index < movable.size(); index++)
-        {
-            if(((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 1) ||
-                    ( (movable.get(index).isOccupied())&&
-                            (movable.get(index).getWorker().getOwner() == this.getOwner())
+        for (Space neighbor : neighbors) {
+            if (((neighbor.getHeight().getValue() - this.position.getHeight().getValue()) > 1) ||
+                    ((neighbor.isOccupied()) &&
+                            (neighbor.getWorker().getOwner() == this.getOwner())
                     ))
-                movable.remove(index); //If the Space is not reachable (too high or occupied), take it out of the list.
-
-
-            // if the player is blocked, he cannot move up
-            if (this.getOwner().isPlayerBlocked())
-            {
-                if((movable.get(index).getHeight().getValue() - this.position.getHeight().getValue()) > 0)
-
-                    movable.remove(index);
-
+                movable.remove(neighbor); //If the Space is not reachable (too high or occupied), take it out of the list.
+            else if (this.getOwner().isPlayerBlocked()) {
+                // if the player is blocked, he cannot move up
+                if ((neighbor.getHeight().getValue() - this.position.getHeight().getValue()) > 0)
+                    movable.remove(neighbor);
             }
         }
         return movable;

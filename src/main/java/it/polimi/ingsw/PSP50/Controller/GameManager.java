@@ -236,26 +236,6 @@ public class GameManager implements Runnable, Observer {
         return choice;
     }
 
-   /* private void randomAssignWorkers(Player player){
-        Space [] randomSpaces = new Space[2];
-        boolean active=true;
-        for (int x=0; x<5 && active;x++){
-            for (int y=0; y<5 && active; y++){
-                if (!this.game.getBoard().getSpace(x,y).isOccupied()) {
-                    if (randomSpaces[0] == null)
-                        randomSpaces[0] = this.game.getBoard().getSpace(x, y);
-                    else {
-                        randomSpaces[1] = this.game.getBoard().getSpace(x, y);
-                        active=false;
-                    }
-
-                }
-            }
-        }
-        player.getWorkers()[0].setPosition(randomSpaces[0]);
-        player.getWorkers()[1].setPosition(randomSpaces[1]);
-    } */
-
     @Override
     public synchronized void update(Message message) {
         receiver= ((ToServerMessage)message).castChoice();

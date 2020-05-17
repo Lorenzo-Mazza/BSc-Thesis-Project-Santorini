@@ -46,18 +46,16 @@ public class Prometheus extends God {
         else return (super.getAvailableMove(player));
     }
 
-   /* /**
-     * *Description of method*
-     * @param player a Player variable that is playing during this turn
-     * @return an ArrayList of Space which contains the allowed spaces where worker can build
-     *
+    /**
+     * Overrides the default getOptionalBuild method to implement Prometheus's power.
+     * @param player The owner of the God card
+     * @return an ArrayList of the available spaces where to perform an "Optional Build" action
+     */
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {
-        ArrayList<Space> availableBuild = super.getAvailableBuild(player);
-     //   player.setHasBuilt(true);  // in god.build, here it's still optional
-        return availableBuild;
+        return super.getAvailableBuild(player);
     }
 
 
-    */
+
 }

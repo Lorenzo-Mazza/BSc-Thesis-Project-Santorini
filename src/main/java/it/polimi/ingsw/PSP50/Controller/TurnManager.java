@@ -44,27 +44,25 @@ public class TurnManager implements Observer{
         //Get Selected Worker from the View
         selectWorker();
         //First and only check
-        if (god.getAvailableMove(player)!=null)
-            spaceChoice = god.getAvailableMove(player);
-        int counter=0;
-        while (spaceChoice==null)
-        {
-            if (!blockedWorkers.contains(player.getSelectedWorker()))
+        if (god.getAvailableMove(player).isEmpty()) {
+            int counter = 0;
+            while(spaceChoice == null)
             {
-                blockedWorkers.add(player.getSelectedWorker());
-            }
+                if (!blockedWorkers.contains(player.getSelectedWorker())) {
+                    blockedWorkers.add(player.getSelectedWorker());
+                }
 
-            if (blockedWorkers.size()==2 || counter==5)
-            {
-                player.setHasLost(true);
-                return false;
+                if (blockedWorkers.size() == 2 || counter == 3) {
+                    player.setHasLost(true);
+                    return false;
+                }
+                //select another worker
+                virtualView.sendToClient(new WorkerBlocked(player.getSelectedWorker()));
+                selectWorker();
+                if (!god.getAvailableMove(player).isEmpty())
+                    spaceChoice = god.getAvailableMove(player);
+                counter++;
             }
-            //select another worker
-            virtualView.sendToClient(new WorkerBlocked(player.getSelectedWorker()));
-            selectWorker();
-            if (god.getAvailableMove(player)!=null)
-                spaceChoice = god.getAvailableMove(player);
-            counter ++;
         }
 
 
@@ -76,12 +74,12 @@ public class TurnManager implements Observer{
 
             switch (turnPhase){
                 case MOVE:
-                    spaceChoice = god.getAvailableMove(player);
-                    if (spaceChoice==null) {
+                    if (god.getAvailableMove(player).isEmpty()) {
                         // the player has lost, go back to the game manager
                         player.setHasLost(true);
                         return false;
                     }
+                    spaceChoice = god.getAvailableMove(player);
 
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice,false));
@@ -107,13 +105,12 @@ public class TurnManager implements Observer{
                     break;
 
                 case BUILD:
-                    spaceChoice = god.getAvailableBuild(player);
-                     if (spaceChoice==null) {
+                     if (god.getAvailableBuild(player).isEmpty()) {
                         // the player has lost, go back to the game manager
                         player.setHasLost(true);
                         return false;
                     }
-
+                    spaceChoice = god.getAvailableBuild(player);
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice,false));
                     while (receiver==null)
@@ -157,12 +154,11 @@ public class TurnManager implements Observer{
                     break;
 
                 case OPTIONALMOVE:
-                    spaceChoice = god.getOptionalMove(player);
-                    if (spaceChoice==null) {
+                    if (god.getOptionalMove(player).isEmpty()) {
                         //it's optional so do nothing
                         break;
                     }
-
+                    spaceChoice = god.getOptionalMove(player);
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectMoveMessage(spaceChoice,true));
                     while (receiver==null)
@@ -186,11 +182,11 @@ public class TurnManager implements Observer{
 
 
                 case OPTIONALBUILD:
-                    spaceChoice = god.getOptionalBuild(player);
-                    if (spaceChoice==null) {
+                    if (god.getOptionalBuild(player).isEmpty()) {
                         //the view prints a message
                         break;
                     }
+                    spaceChoice = god.getOptionalBuild(player);
                     //give the space choices to the view
                     virtualView.sendToClient(new SelectBuildMessage(spaceChoice,true));
                     while (receiver==null)
@@ -201,7 +197,7 @@ public class TurnManager implements Observer{
                     if (receiver instanceof Integer){
                         //do nothing
                     }
-                    else if ((receiver!= null) && ( spaceChoice.contains(receiver))) {
+                    else if (spaceChoice.contains(receiver)) {
                         playerSpace= (Space) receiver;
                         playerBlock= playerSpace.getNextHeight();
                         god.build(player,playerSpace,playerBlock);
@@ -247,11 +243,6 @@ public class TurnManager implements Observer{
         else{
             selectedWorker= player.getWorkers()[new Random().nextInt( 1)];
         }
-      /*  // if there's no answer, get a random spaces between those available
-        if (selectedWorker==null)
-        {
-            selectedWorker= player.getWorkers()[new Random().nextInt( 1)];
-        } */
 
         //Save the choice in player.selectedWorker
         player.selectWorker(selectedWorker);
