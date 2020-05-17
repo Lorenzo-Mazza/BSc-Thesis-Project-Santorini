@@ -1,15 +1,19 @@
 package it.polimi.ingsw.PSP50.View;
 
+import it.polimi.ingsw.PSP50.Utils.ConsoleInput;
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.*;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class CLI extends ClientView {
 
     private StringBuilder buffer = new StringBuilder();
+    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public CLI() {
         this.buffer.append("Insert Username");
@@ -94,7 +98,8 @@ public class CLI extends ClientView {
     }*/
 
     private int getChoiceWithTimeout(int range, int timeout, boolean optional) {
-        Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
+        //Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
+        ConsoleInput callable= new ConsoleInput(reader);
         long start = System.currentTimeMillis();
         int choice = 0;
         boolean valid=true;

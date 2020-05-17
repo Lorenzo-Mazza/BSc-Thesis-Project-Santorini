@@ -2,9 +2,8 @@ package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Model.Block;
 import it.polimi.ingsw.PSP50.Model.Game;
-import it.polimi.ingsw.PSP50.Observable;
+import it.polimi.ingsw.PSP50.Utils.Observable;
 import it.polimi.ingsw.PSP50.network.client.ClientSocket;
-import it.polimi.ingsw.PSP50.network.messages.Message;
 
 import java.util.ArrayList;
 

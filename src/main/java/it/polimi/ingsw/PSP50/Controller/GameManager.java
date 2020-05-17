@@ -1,9 +1,11 @@
 package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
+import it.polimi.ingsw.PSP50.Model.GodsList.Athena;
+import it.polimi.ingsw.PSP50.Model.GodsList.Atlas;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
-import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.Observer;
+import it.polimi.ingsw.PSP50.Utils.Observable;
+import it.polimi.ingsw.PSP50.Utils.Observer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.*;

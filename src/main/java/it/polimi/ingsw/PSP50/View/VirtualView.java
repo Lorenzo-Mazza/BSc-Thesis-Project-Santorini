@@ -1,13 +1,11 @@
 package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Controller.GameManager;
-import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.Observer;
+import it.polimi.ingsw.PSP50.Utils.Observable;
+import it.polimi.ingsw.PSP50.Utils.Observer;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.server.ServerManager;
-
-import java.io.Serializable;
 
 /**
  *  Server-side View

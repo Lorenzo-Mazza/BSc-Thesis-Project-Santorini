@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP50;
+package it.polimi.ingsw.PSP50.Utils;
 
 import it.polimi.ingsw.PSP50.network.messages.Message;
 

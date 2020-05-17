@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP50.Model;
 
-import it.polimi.ingsw.PSP50.Observable;
+import it.polimi.ingsw.PSP50.Utils.Observable;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelUpdate;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.SetModelCopy;
 import org.apache.commons.lang3.SerializationUtils;

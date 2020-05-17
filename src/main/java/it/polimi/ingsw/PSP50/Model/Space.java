@@ -200,9 +200,6 @@ public class Space implements Serializable {
      * @return the neighboring space in the direction (X,Y) from the actual space
      */
     public Space getNext(int movementOnX, int movementOnY) {
-        if (!thereIsNext(this.xPosition + movementOnX, this.yPosition + movementOnY))
-            return null;
-        else
             return board.getSpace(this.xPosition + movementOnX, this.yPosition + movementOnY);
     }
 

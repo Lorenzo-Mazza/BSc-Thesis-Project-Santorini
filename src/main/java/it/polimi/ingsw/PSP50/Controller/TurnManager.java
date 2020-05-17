@@ -2,8 +2,8 @@ package it.polimi.ingsw.PSP50.Controller;
 
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.Model.GodsList.God;
-import it.polimi.ingsw.PSP50.Observable;
-import it.polimi.ingsw.PSP50.Observer;
+import it.polimi.ingsw.PSP50.Utils.Observable;
+import it.polimi.ingsw.PSP50.Utils.Observer;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.Message;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.*;
@@ -130,17 +130,19 @@ public class TurnManager implements Observer{
 
                     //if Atlas, get the Block selected by the user
                     if ((god.getName() == GodsNames.ATLAS) && (playerSpace.getNextHeight() != Block.DOME)) {
+                        receiver=null;
                         virtualView.sendToClient(new SelectBlockMessage(playerSpace));
                         // get the block that the user has selected
                         while (receiver==null)
                         {
                             Thread.yield();
                         }
-                        if (( playerSpace.getNextHeight()== (Block)receiver)|| (Block.DOME== (Block)receiver)) {
+                        if (( playerSpace.getNextHeight()== (Block) receiver) || (Block.DOME== (Block)receiver))
+                        {
                             playerBlock= (Block) receiver;
                         }
-                        // if timer expired and there's no answer, get a random spaces between those available
                         else {
+                            // if timer expired and there's no answer, get a random spaces between those available
                             playerBlock= playerSpace.getNextHeight();
                         }
                     }

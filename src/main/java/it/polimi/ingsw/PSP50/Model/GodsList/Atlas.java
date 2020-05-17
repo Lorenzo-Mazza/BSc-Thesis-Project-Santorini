@@ -31,4 +31,26 @@ public class Atlas extends God {
         return list;
     }
 
+    /**
+     * Overrides the default Build method to implement Atlas's power.
+     * @param player The owner of the God card
+     * @param space a Space variable that indicate where to build
+     * @param piece a Block variable that indicate what to build
+     * @return a boolean variable to report the outcome of the action
+     */
+    @Override
+    public boolean build(Player player, Space space, Block piece)
+    {
+        space.setHeight(piece);
+        // if the outcome is correct
+        if (space.getHeight() == piece) {
+            player.setHasBuilt(true);
+            player.setLastBuild(space);
+            return true;
+        }
+        // if the outcome is wrong
+        else
+            return false;
+    }
+
 }

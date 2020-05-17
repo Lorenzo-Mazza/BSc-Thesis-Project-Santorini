@@ -33,7 +33,8 @@ public class Minotaur extends God {
             if (occupiedSpace.isOccupied()) {
                 int[] movement = thisWorker.getPosition().getDirection(occupiedSpace);
                 if (!occupiedSpace.thereIsNext(movement[0], movement[1]) ||
-                        occupiedSpace.getNext(movement[0], movement[1]).isOccupied())
+                        (occupiedSpace.getNext(movement[0], movement[1])!=null &&
+                                occupiedSpace.getNext(movement[0], movement[1]).isOccupied()))
                     movable.remove(occupiedSpace);
             }
         }
