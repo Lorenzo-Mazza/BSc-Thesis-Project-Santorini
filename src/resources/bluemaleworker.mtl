@@ -1,0 +1,17 @@
+# Blender MTL File: 'worker.blend'
+# Material Count: 1
+
+newmtl Material.007
+Kd 1 1 1
+map_Kd tex/MaleBuilder_Blue_v001.png
+illum 7
+
+newmtl Material.007
+Ns 87.794327
+Ka 1.000000 1.000000 1.000000
+Kd 0.041778 0.708877 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3
