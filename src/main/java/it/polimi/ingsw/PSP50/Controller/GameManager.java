@@ -246,7 +246,7 @@ public class GameManager implements Runnable, Observer {
 
     @Override
     public synchronized void update(Message message) {
-        receiver= ((ToServerMessage)message).castChoice();
+        receiver = ((ToServerMessage)message).castChoice();
     }
 
     @Override
