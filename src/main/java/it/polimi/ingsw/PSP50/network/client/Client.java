@@ -3,6 +3,9 @@ package it.polimi.ingsw.PSP50.network.client;
 import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.View.CLI;
 import it.polimi.ingsw.PSP50.View.ClientView;
+import it.polimi.ingsw.PSP50.View.GUI.GuiView;
+import it.polimi.ingsw.PSP50.View.GUI.LoginController;
+import it.polimi.ingsw.PSP50.View.GUI.LoginPage;
 import it.polimi.ingsw.PSP50.network.server.Server;
 
 import java.io.IOException;
@@ -54,7 +57,7 @@ public class Client implements Runnable {
     private ClientView genUi(Scanner scanner)  {
         ClientView generatedUi;
         String ui;
-        System.out.println("\nWhat interface do you wanna use to play Santorini? Options are: cli");
+        System.out.println("\nWhat interface do you wanna use to play Santorini? Options are: <cli>,<gui>");
         while(true) {
             ui=scanner.nextLine();
             if ("cli".equals(ui)) {
@@ -62,12 +65,13 @@ public class Client implements Runnable {
                 System.out.println("your CLI has been generated!");
                 break;
             }
-   /* else if ("gui".equals(ui)) {
-      generatedUi = new GUI();
-      System.out.println("your GUI has been generated!");
-    }*/
+            else if ("gui".equals(ui)) {
+                LoginPage.loginPage();
+                GuiView gui = new GuiView();
+                System.out.println("your GUI has been generated!");
+            }
             else {
-                System.out.println("Wrong ui param. Valid are <cli>");
+                System.out.println("Wrong ui param. Valid are <cli>,<gui>");
             }
         }
         return generatedUi;

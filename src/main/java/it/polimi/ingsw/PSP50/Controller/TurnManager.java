@@ -222,7 +222,7 @@ public class TurnManager implements Observer{
         if (player.isPlayerBlocked())
             player.setPlayerBlocked(false);
 
-        blockedWorkers=null;
+        blockedWorkers = new ArrayList<>();
         this.steps = new ArrayList<>(god.getAvailableSteps());
         return false;
     }
