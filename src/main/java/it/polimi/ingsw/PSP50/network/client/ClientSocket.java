@@ -22,7 +22,7 @@ public class ClientSocket implements Runnable, Observer {
     private ObjectInputStream fromServer;
 
 
-    ClientSocket(ClientView userInterface, GameType gameType,Socket serverSocket) {
+    public ClientSocket(ClientView userInterface, GameType gameType, Socket serverSocket) {
         this.userInterface = userInterface;
         this.serverSocket = serverSocket;
         this.gameType= gameType;

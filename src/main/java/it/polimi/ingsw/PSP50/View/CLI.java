@@ -2,11 +2,15 @@ package it.polimi.ingsw.PSP50.View;
 
 import it.polimi.ingsw.PSP50.Utils.ConsoleInput;
 import it.polimi.ingsw.PSP50.Model.*;
+import it.polimi.ingsw.PSP50.network.client.ClientSocket;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.*;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
+import it.polimi.ingsw.PSP50.network.server.Server;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -16,10 +20,57 @@ public class CLI extends ClientView {
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public CLI() {
+        Socket server = connect();
         this.buffer.append("Insert Username");
         this.printBuffer();
         this.name = this.readLine();
+        GameType gameType= chooseGame(new Scanner(System.in));
+        /* Create the client socket that will allow communication with the server */
+        ClientSocket socket = new ClientSocket(this, gameType, server);
+        this.setSocket(socket);
+        Thread socketThread = new Thread(socket);
+        socketThread.start();
     }
+
+    private GameType chooseGame(Scanner scanner){
+        int numberOfPlayers;
+        GameType type;
+        System.out.println("\nHow many players do you wanna play against? (write an integer, options are: 1,2");
+        while(true) {
+            numberOfPlayers=scanner.nextInt();
+            if (numberOfPlayers==1) {
+                type=GameType.TWOPLAYERS;
+                System.out.println("\nStart looking for a two-players lobby!");
+                break;
+            }
+            if (numberOfPlayers==2) {
+                type=GameType.THREEPLAYERS;
+                System.out.println("\nStart looking for a three-players lobby!");
+                break;
+            }
+            else {
+                System.out.println("Wrong param. Valid are <1>,<2>.");
+            }
+        }
+        return type;
+    }
+
+
+    private Socket connect(){
+        Socket server = null;
+        try{
+            System.out.println("IP address of server?");
+            String ip = reader.readLine();
+
+            /* open a connection to the server */
+            server = new Socket(ip, Server.SOCKET_PORT);
+        } catch (IOException e) {
+            System.out.println("server unreachable");
+        }
+        System.out.println("Connected");
+        return server;
+    }
+
 
     /**
      * Updates the CLI whenever the Model changes
@@ -67,35 +118,7 @@ public class CLI extends ClientView {
         return (scanner.nextLine());
     }
 
-    /* private int getChoiceWithTimeout(int choiceSize, int timeout, boolean optional){
-        Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
-        long start= System.currentTimeMillis();
-        int choice=0;
-        ExecutorService executorService = Executors.newFixedThreadPool(1);  ;
-        Future<Integer> future;
-        System.out.println("\nEnter your choice in "+ timeout + " seconds. " +
-                "If you insert a wrong input, the first option will be selected.");
-        future= executorService.submit(callable);
-        while(System.currentTimeMillis()-start<timeout*1000 && !future.isDone()){
-            // Wait for future
-        }
-        if(future.isDone()){
-            try {
-                choice=future.get();
-                if ((choice<0 || choice>choiceSize) || (!optional && choice==0))
-                {
-                    //System.out.println("\nWrong input inserted; the first option will be selected ");
-                    choice=1;
-                }
 
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        future.cancel(true);
-
-        return choice;
-    }*/
 
     private int getChoiceWithTimeout(int range, int timeout, boolean optional) {
         //Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
@@ -132,6 +155,21 @@ public class CLI extends ClientView {
         if ((choice < 0 || choice > range))
             choice=0;
         return choice;
+    }
+
+    @Override
+    public void welcomeMessage(HashMap<String,Color> opponentsMap, Color playerColor) {
+        //ArrayList<String> opponents = new ArrayList<>(opponentsMap.keySet());
+        String colorEnd = "\u001b[0m";
+        String message = " Welcome to SANTORINI, " + this.getName().toUpperCase() + "!!! " +
+                "The color of your workers will be: " +
+                playerColor.getSequence()+ playerColor.getName()+ colorEnd + ". ";
+        String secondMessage=  "Your rivals are:  ";
+        for (String opponent : opponentsMap.keySet())
+            secondMessage+= "---> "+ opponent +" with the color "+
+                    (opponentsMap.get(opponent))+(opponentsMap.get(opponent).getName())+ colorEnd + ".  ";
+        drawSection(message);
+        drawSection(secondMessage);
     }
 
     @Override

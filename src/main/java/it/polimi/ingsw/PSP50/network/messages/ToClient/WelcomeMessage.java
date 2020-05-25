@@ -1,10 +1,12 @@
 package it.polimi.ingsw.PSP50.network.messages.ToClient;
 
+import it.polimi.ingsw.PSP50.Model.Color;
 import it.polimi.ingsw.PSP50.Model.Player;
 import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WelcomeMessage extends ToClientMessage {
     public WelcomeMessage(Player data) {
@@ -13,16 +15,11 @@ public class WelcomeMessage extends ToClientMessage {
 
     @Override
     public void doAction(ClientView ui) {
-        String colorEnd = "\u001b[0m";
-        String message = " Welcome to SANTORINI, " + ((Player) data).getName().toUpperCase() + "!!! " +
-                "The color of your workers will be: " +
-                ((Player)data).getColor().getSequence()+((Player)data).getColor().getName()+colorEnd + ". ";
+        Color playerColor = ((Player) data).getColor();
         ArrayList<Player> opponents=  ((Player)data).getOpponents();
-        String secondMessage=  "Your rivals are:  ";
-        for (Player opp: opponents)
-            secondMessage+= "---> "+(opp.getName())+" with the color "+
-                    (opp.getColor().getSequence())+(opp.getColor().getName())+ colorEnd + ".  ";
-        ui.drawSection(message);
-        ui.drawSection(secondMessage);
+        HashMap<String,Color> opponentsMap = new HashMap<>();
+        for (Player opp : opponents)
+            opponentsMap.put(opp.getName(),opp.getColor());
+        ui.welcomeMessage(opponentsMap, playerColor);
     }
 }
