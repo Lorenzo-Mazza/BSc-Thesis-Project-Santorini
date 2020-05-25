@@ -32,6 +32,21 @@ public class CLI extends ClientView {
         socketThread.start();
     }
 
+    private Socket connect(){
+        Socket server = null;
+        try{
+            System.out.println("IP address of server?");
+            String ip = reader.readLine();
+
+            /* open a connection to the server */
+            server = new Socket(ip, Server.SOCKET_PORT);
+        } catch (IOException e) {
+            System.out.println("server unreachable");
+        }
+        System.out.println("Connected");
+        return server;
+    }
+
     private GameType chooseGame(Scanner scanner){
         int numberOfPlayers;
         GameType type;
@@ -56,20 +71,7 @@ public class CLI extends ClientView {
     }
 
 
-    private Socket connect(){
-        Socket server = null;
-        try{
-            System.out.println("IP address of server?");
-            String ip = reader.readLine();
 
-            /* open a connection to the server */
-            server = new Socket(ip, Server.SOCKET_PORT);
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-        }
-        System.out.println("Connected");
-        return server;
-    }
 
 
     /**
