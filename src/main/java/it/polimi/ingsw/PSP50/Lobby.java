@@ -20,8 +20,8 @@ public class Lobby implements Runnable{
         this.type = type;
         this.isFull = false;
         isOver = false;
-        players=new ConcurrentHashMap<>();
-        nicknames=new ConcurrentHashMap<>();
+        players = new ConcurrentHashMap<>();
+        nicknames = new ConcurrentHashMap<>();
     }
 
     public void addPlayer(int user, VirtualView view) {
@@ -76,6 +76,13 @@ public class Lobby implements Runnable{
     }
     public boolean isOver(){
         return isOver;
+    }
+
+    public void removeClient(String name, int id, VirtualView client) {
+        if (this.players.containsKey(id) && this.players.containsValue(client))
+            this.players.remove(id, client);
+        if (this.players.containsKey(name) && this.players.containsValue(client))
+            this.nicknames.remove(name, client);
     }
 
     @Override

@@ -115,7 +115,7 @@ public class Server extends Thread{
                 ObjectInputStream input = new ObjectInputStream(client.getInputStream());
                 String user = (String) input.readObject();
                 //debugging
-                System.out.println("Client name=" + user);
+                System.out.println("Client name = " + user);
                 GameType gameType= (GameType) input.readObject();
                 VirtualView virtualView = new VirtualView(++playerId,user);
                 ClientHandler clientHandler = new ClientHandler(client, this, output, input, virtualView,gameType);
@@ -123,7 +123,7 @@ public class Server extends Thread{
                 thread.start();
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                System.out.println("connection dropped");
+                System.out.println("connection dropped!");
             }
         }
 
@@ -155,6 +155,4 @@ public class Server extends Thread{
     public void print(String str){
         System.out.print(str);
     }
-
-
 }

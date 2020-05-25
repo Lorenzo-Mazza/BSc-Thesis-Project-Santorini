@@ -180,7 +180,7 @@ public class CLI extends ClientView {
         writeLine("\nChoose the space where to put your first worker.");
         printBuffer();
         printAvailableSpaces(possibleChoices);
-        choice= getChoiceWithTimeout(possibleChoices.size(),30,false);
+        choice= getChoiceWithTimeout(possibleChoices.size(),45,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -194,7 +194,7 @@ public class CLI extends ClientView {
         writeLine("\nChoose the space where to put your second worker.");
         printBuffer();
         printAvailableSpaces(possibleChoices);
-        choice= getChoiceWithTimeout(possibleChoices.size(),30,false);
+        choice= getChoiceWithTimeout(possibleChoices.size(),45,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -217,7 +217,7 @@ public class CLI extends ClientView {
             writeLine("\nThe action is optional. To exit write <0>.");
             printBuffer();
         }
-        int choice = getChoiceWithTimeout(possibleChoices.size(),30,optional);
+        int choice = getChoiceWithTimeout(possibleChoices.size(),45,optional);
         if(choice==0){
             if (optional) {
                 System.out.println("\n No action will be performed.");
@@ -246,7 +246,7 @@ public class CLI extends ClientView {
         }
         printBuffer();
 
-        int choice= getChoiceWithTimeout(possibleChoices.size(),15,false);
+        int choice= getChoiceWithTimeout(possibleChoices.size(),30,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -267,7 +267,7 @@ public class CLI extends ClientView {
         writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
         writeLine("\n --> Select 2 to choose: DOME");
         printBuffer();
-        int choice= getChoiceWithTimeout(2,30,false);
+        int choice= getChoiceWithTimeout(2,45, false);
         if (choice==2) {
             drawSection("You have selected: DOME");
             notifySocket(new BlockChoice(Block.DOME,this.getPlayerId()));
@@ -321,6 +321,33 @@ public class CLI extends ClientView {
             writeLine("\n+-----+-----+-----+-----+-----+");
         }
         printBuffer();
+    }
+
+    private void printBoard2(ArrayList<int[]> avaiableMove) {
+        writeLine("\nThis is the board.\n Reminder: Space (0,0) is the first one on the left, " +
+                "Space (4,4) is the last one on the right; Domes are marked with an 'X'.");
+        printBuffer();
+
+        int arrayIndex = 1;
+        for (int row = 0; row < 10; row++) {
+            writeLine("+-----+-----+-----+-----+-----+\n");
+            String line = "| ";
+            if((row % 2) == 0) {
+                for (int colomn = 0; colomn < 5; colomn++)
+                    line += printSpace(gameCopy.getBoard().getSpace(row, colomn)) + "  | ";
+            }
+            else {
+                for (int colomn = 0; colomn < 5; colomn++) {
+                    int[] prova = {row, colomn};
+                    if(avaiableMove.contains(prova))
+                        line += "("+ arrayIndex + ") | ";
+                    else
+                        line += "    | ";
+                }
+                writeLine(line);
+                writeLine("\n+-----+-----+-----+-----+-----+");
+            }
+        }
     }
 
     private void printAvailableSpaces(ArrayList<int[]> coordinates) {

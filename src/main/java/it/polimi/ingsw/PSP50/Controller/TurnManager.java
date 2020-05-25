@@ -208,8 +208,6 @@ public class TurnManager implements Observer{
                     receiver=null;
                     break;
 
-
-
             }
 
             steps.remove(0);
