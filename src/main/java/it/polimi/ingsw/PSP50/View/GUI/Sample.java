@@ -12,9 +12,14 @@ import org.fxyz3d.importers.obj.ObjImporter;
 
 import java.io.IOException;
 
+/**
+ *  TESTING CLASS
+ */
+
+
 public class Sample extends Application {
 
-    private ObjImporter importer = new ObjImporter();
+    private Importer3D importer = new Importer3D();
 
     private static final int WIDTH = 1400;
     private static final int  HEIGHT = 800;
@@ -37,7 +42,7 @@ public class Sample extends Application {
 
         group.getTransforms().add(new Rotate(90, Rotate.Y_AXIS));
         group.getTransforms().add(new Rotate(180, Rotate.X_AXIS));
-        group.getTransforms().add(new Translate(0,-1));
+        group.getTransforms().add(new Translate(0,1));
 
 
         Group root = new Group(group);
@@ -63,7 +68,6 @@ public class Sample extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 
 
 

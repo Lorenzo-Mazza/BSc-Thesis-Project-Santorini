@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="1081.0" style="-fx-border-color: #DAA520; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP50.View.GUI.ChooseGodController">
+    <children>
+    <ImageView fitHeight="689.0" fitWidth="1071.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true">
+        <image>
+            <Image url="@../itl.cat_santorini-wallpaper_428032.png" />
+        </image>
+    </ImageView>
+      <Text layoutX="287.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHOOSE YOUR GOD" wrappingWidth="469.1739196777344">
+         <font>
+            <Font name="Trebuchet MS Bold" size="52.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="godImage1" fitHeight="245.0" fitWidth="178.0" layoutX="85.0" layoutY="230.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="godImage3" fitHeight="245.0" fitWidth="178.0" layoutX="430.0" layoutY="230.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="godImage2" fitHeight="245.0" fitWidth="178.0" layoutX="800.0" layoutY="230.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="godPower1" fitHeight="179.0" fitWidth="200.0" layoutX="74.0" layoutY="484.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="godPower3" fitHeight="179.0" fitWidth="200.0" layoutX="427.0" layoutY="484.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="godPower2" fitHeight="179.0" fitWidth="200.0" layoutX="802.0" layoutY="484.0" pickOnBounds="true" preserveRatio="true" />
+      <RadioButton fx:id="selectFirstGod" disable="true" layoutX="85.0" layoutY="145.0" mnemonicParsing="false" onAction="#selectGod" prefHeight="33.0" prefWidth="231.0">
+         <font>
+            <Font name="Trebuchet MS" size="22.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="toggleGroup" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="selectThirdGod" disable="true" layoutX="430.0" layoutY="145.0" mnemonicParsing="false" onAction="#selectGod" prefHeight="33.0" prefWidth="265.0" toggleGroup="$toggleGroup">
+         <font>
+            <Font name="Trebuchet MS" size="22.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="selectSecondGod" disable="true" layoutX="800.0" layoutY="145.0" mnemonicParsing="false" onAction="#selectGod" prefHeight="33.0" prefWidth="231.0" toggleGroup="$toggleGroup">
+         <font>
+            <Font name="Trebuchet MS" size="22.0" />
+         </font>
+      </RadioButton>
+ </children>
+</AnchorPane>

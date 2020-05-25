@@ -7,18 +7,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.net.URL;
+
 public class LoginPage extends Application {
-
-
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/LoginPage.fxml"));
-        Parent root = loader.load();
-        LoginController loginController = loader.getController();
+        loader.setLocation(new URL("file:///Users/lollo/Desktop/ing-sw-2019-miraka-mazza-garofalo/src/main/resources/fxml/LoginPage.fxml"));
+        Parent root = loader.<Parent>load();
         primaryStage.setTitle("SANTORINI");
         Scene scene = new Scene(root, 1100, 700);
         primaryStage.setScene(scene);

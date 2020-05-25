@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP50.Model.Color;
 import it.polimi.ingsw.PSP50.Model.Game;
 import it.polimi.ingsw.PSP50.Utils.Observable;
 import it.polimi.ingsw.PSP50.network.client.ClientSocket;
+import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,5 +68,10 @@ public abstract class ClientView extends Observable {
     public abstract void chooseBlock(Block possibleBlock);
 
     public abstract void welcomeMessage(HashMap<String,Color> opponents, Color playerColor);
+
+    public void notifySocket(ToServerMessage messageChoice) {
+        this.getSocket().update(messageChoice);
+    }
+
 
 }

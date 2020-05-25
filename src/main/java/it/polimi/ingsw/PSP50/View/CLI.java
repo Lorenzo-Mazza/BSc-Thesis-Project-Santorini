@@ -337,9 +337,6 @@ public class CLI extends ClientView {
 
 
 
-    private void notifySocket(ToServerMessage messageChoice) {
-        this.getSocket().update(messageChoice);
-    }
 }
 
 

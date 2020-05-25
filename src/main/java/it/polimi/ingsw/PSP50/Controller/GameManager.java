@@ -60,7 +60,7 @@ public class GameManager implements Runnable, Observer {
     /**
      * Start a new game
      */
-    public void startGame()  //
+    public void startGame()
     {
         game.setOpponents();
         Board gameBoard = new Board();
@@ -72,6 +72,12 @@ public class GameManager implements Runnable, Observer {
         {
             VirtualView view= virtualViews.get(player.getName());
             view.sendToClient(new WelcomeMessage(player));
+        }
+        // Give a short pause to read the Welcome Message (5 seconds)
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         Deck gameDeck = new Deck();
