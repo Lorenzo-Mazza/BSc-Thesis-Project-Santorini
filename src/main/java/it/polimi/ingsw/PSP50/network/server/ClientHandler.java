@@ -42,7 +42,9 @@ public class ClientHandler implements Runnable
     try {
       handleClientConnection();
     } catch (IOException e) {
-      System.out.println("client " + client.getInetAddress() + " connection dropped");
+      Lobby thisLobby = this.server.getFirstAvailableLobby(gameType);
+      System.out.println("client " + client.getInetAddress() + " connection dropped!");
+      thisLobby.removeClient(this.user, this.playerId, this.view);
     }
   }
 
