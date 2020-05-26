@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP50.network.server;
 import it.polimi.ingsw.PSP50.Lobby;
 import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.View.VirtualView;
+import it.polimi.ingsw.PSP50.network.messages.ToClient.DisconnectMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.PlayerIdMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
 import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
@@ -13,40 +14,43 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable
 {
-  private Socket client;
-  private Server server;
-  private String user;
-  private int playerId;
-  private ObjectOutputStream out;
-  private ObjectInputStream in;
-  private VirtualView view;
-  private GameType gameType;
+    private Socket client;
+    private Server server;
+    private String user;
+    private int playerId;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private VirtualView view;
+    private GameType gameType;
+    private Lobby playerLobby;
 
-
-  ClientHandler(Socket client, Server server, ObjectOutputStream out, ObjectInputStream in, VirtualView view, GameType gameType)
-  {
-    this.client = client;
-    this.server = server;
-    this.out = out;
-    this.in = in;
-    this.view = view;
-    this.user = view.getPlayerName();
-    this.playerId = view.getPlayerId();
-    this.gameType = gameType;
-  }
-
-
-  @Override
-  public void run()
-  {
-    try {
-      handleClientConnection();
-    } catch (IOException e) {
-      Lobby thisLobby = this.server.getFirstAvailableLobby(gameType);
-      System.out.println("client " + client.getInetAddress() + " connection dropped!");
-      thisLobby.removeClient(this.user, this.playerId, this.view);
+    ClientHandler(Socket client, Server server, ObjectOutputStream out, ObjectInputStream in, VirtualView view, GameType gameType)
+    {
+        this.client = client;
+        this.server = server;
+        this.out = out;
+        this.in = in;
+        this.view = view;
+        this.user = view.getPlayerName();
+        this.playerId = view.getPlayerId();
+        this.gameType = gameType;
     }
-  }
+
+
+    @Override
+    public void run() {
+        try {
+            handleClientConnection();
+        } catch (IOException e) {
+            System.out.println("client " + client.getInetAddress() + " connection dropped!");
+            if(!playerLobby.isInGame()) {
+              playerLobby.removeClient(this.user, this.playerId, this.view);
+            }
+            else {
+                manageDisconnection(this.view);
+            }
+        }
+    }
 
 
   private void handleClientConnection() throws IOException
@@ -71,14 +75,15 @@ public class ClientHandler implements Runnable
     client.close();
   }
 
-    private void addToLobby() {
-        Lobby lobby= this.server.getFirstAvailableLobby(gameType);
-        if (!lobby.isFull()){
-            lobby.addPlayer(playerId,view);
-            if (lobby.isFull()){
-               server.startLobby(lobby);
-            }
-        }
+  private void addToLobby() {
+      playerLobby = this.server.getFirstAvailableLobby(gameType);
+      if (!playerLobby.isFull()){
+          playerLobby.addPlayer(playerId,view);
+          if (playerLobby.isFull()){
+              playerLobby.setInGame();
+              server.startLobby(playerLobby);
+          }
+      }
     }
 
 
@@ -91,6 +96,18 @@ public class ClientHandler implements Runnable
         server.messageClient(idMessage,playerId);
         System.out.println("User" + playerId+ "accepted on SocketServer");
     }
+
+    private void manageDisconnection(VirtualView clientView) {
+        for(int playerId: playerLobby.getPlayers().keySet() )
+            if(playerId != this.playerId)
+                server.messageClient(new DisconnectMessage(this.user), playerId);
+    }
+
+
+    public int getPlayerId() {
+        return this.playerId;
+    }
+
 
   public ObjectOutputStream getOutput() {
     return out;

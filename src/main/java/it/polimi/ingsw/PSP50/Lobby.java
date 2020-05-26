@@ -15,10 +15,12 @@ public class Lobby implements Runnable{
     private boolean isFull;
     private GameType type;
     private boolean isOver;
+    private boolean inGame;
 
     public Lobby(GameType type){
         this.type = type;
         this.isFull = false;
+        this.inGame = false;
         isOver = false;
         players = new ConcurrentHashMap<>();
         nicknames = new ConcurrentHashMap<>();
@@ -77,11 +79,18 @@ public class Lobby implements Runnable{
     public boolean isOver(){
         return isOver;
     }
+    public void setInGame() {
+        this.inGame = true;
+    }
+    public boolean isInGame() {
+        return  this.inGame;
+    }
+    public ConcurrentHashMap<Integer, VirtualView> getPlayers() {
+        return players;
+    }
 
     public void removeClient(String name, int id, VirtualView client) {
-        if (this.players.containsKey(id) && this.players.containsValue(client))
             this.players.remove(id, client);
-        if (this.players.containsKey(name) && this.players.containsValue(client))
             this.nicknames.remove(name, client);
     }
 
@@ -89,5 +98,10 @@ public class Lobby implements Runnable{
     public void run() {
         startGame();
         freeLobby();
+    }
+
+    public void printPlayers() {
+        for (String name: nicknames.keySet())
+            System.out.println(name);
     }
 }
