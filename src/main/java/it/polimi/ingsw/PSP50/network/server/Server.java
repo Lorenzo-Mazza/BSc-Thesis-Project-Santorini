@@ -151,4 +151,8 @@ public class Server extends Thread{
     public void print(String str){
         System.out.print(str);
     }
+
+    public void removeLobby() {
+        numberOfLobbies--;
+    }
 }

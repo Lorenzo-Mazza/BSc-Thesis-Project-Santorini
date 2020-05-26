@@ -46,9 +46,8 @@ public class ClientHandler implements Runnable
             if(!playerLobby.isInGame()) {
               playerLobby.removeClient(this.user, this.playerId, this.view);
             }
-            else {
-                manageDisconnection(this.view);
-            }
+            else
+                manageDisconnection();
         }
     }
 
@@ -97,15 +96,17 @@ public class ClientHandler implements Runnable
         System.out.println("User" + playerId+ "accepted on SocketServer");
     }
 
-    private void manageDisconnection(VirtualView clientView) {
-        for(int playerId: playerLobby.getPlayers().keySet() )
-            if(playerId != this.playerId)
+    private synchronized void manageDisconnection() {
+        for (int playerId : playerLobby.getPlayers().keySet()){
+            if (playerId != this.playerId)
                 server.messageClient(new DisconnectMessage(this.user), playerId);
-    }
+        }
 
+        server.getViews().remove(this.playerId);
+        server.getNicknames().remove(this.playerId);
+        server.getConnections().remove(this.playerId);
 
-    public int getPlayerId() {
-        return this.playerId;
+        this.playerLobby.removeClient(this.user, this.playerId, this.view);
     }
 
 
