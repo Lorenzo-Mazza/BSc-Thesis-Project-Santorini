@@ -1,15 +1,8 @@
 package it.polimi.ingsw.PSP50.network.client;
 
-import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.View.CLI;
-import it.polimi.ingsw.PSP50.View.ClientView;
-import it.polimi.ingsw.PSP50.View.GUI.GuiView;
-import it.polimi.ingsw.PSP50.View.GUI.LoginController;
 import it.polimi.ingsw.PSP50.View.GUI.LoginPage;
-import it.polimi.ingsw.PSP50.network.server.Server;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 

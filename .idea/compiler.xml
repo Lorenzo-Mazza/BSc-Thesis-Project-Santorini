@@ -14,7 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ProgettoSantorini" options="--add-exports=org.fxyz3d.importers/org.fxyz3d.importers.obj=it.polimi.ingsw.PSP50" />
+      <module name="ProgettoSantorini" options="" />
     </option>
   </component>
 </project>

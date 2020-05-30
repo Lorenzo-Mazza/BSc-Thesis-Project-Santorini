@@ -71,8 +71,8 @@ public class Player implements Cloneable, Serializable {
      */
     public Player(String name) {
         this.name = name;
-        this.workers[0] = new Worker(this);
-        this.workers[1] = new Worker(this);
+        this.workers[0] = new Worker(this,0);
+        this.workers[1] = new Worker(this,1);
         this.selectedWorker = null;
         this.lastMove = null;
         this.lastBuild = null;

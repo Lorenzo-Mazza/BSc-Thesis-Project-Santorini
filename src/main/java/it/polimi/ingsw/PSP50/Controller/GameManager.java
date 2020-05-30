@@ -94,10 +94,12 @@ public class GameManager implements Runnable, Observer {
         Deck deck = game.getDeck();
         ArrayList<God> cardsLeft = deck.getChosenCards(game.getType());
         ArrayList<Player> playersCopy = new ArrayList<>(game.getAllPlayers());
+        ArrayList<Player> orderOfPlay = new ArrayList<>();
         while (cardsLeft.size()>0)
         {
             int randomIndex = (new Random().nextInt(playersCopy.size())) ;
             Player player = playersCopy.get(randomIndex);
+            orderOfPlay.add(player);
             // send cardsLeft to the player view and get a choice back (an int)
             int choice= chooseGod(player,cardsLeft);
             // random assignment if player doesn't answer correctly
@@ -106,6 +108,8 @@ public class GameManager implements Runnable, Observer {
             playersCopy.remove(randomIndex);
             receiver=null;
         }
+        // set the correct order of play in the players array of game
+        game.setPlayers(orderOfPlay);
     }
 
 
@@ -114,21 +118,27 @@ public class GameManager implements Runnable, Observer {
 
     /**
      * Complete set-up of the game.
-     * Players choose the initial position of their Workers and an order of Play is established.
+     * Players choose the initial position of their Workers.
      */
     public void setUpGame()
     {
+        // Game is starting!
+        for (Player player: game.getAllPlayers()) {
+            VirtualView view = virtualViews.get(player.getName());
+            view.sendToClient(new GameStarting(player));
+            // Waits for player's OK signal (If not the GUI is too slow to respond correctly
+            while(receiver == null) {
+                Thread.yield();
+            }
+            receiver=null;
+        }
         ArrayList<Player> playersLeft = new ArrayList<>(game.getAllPlayers());
-        ArrayList<Player> orderOfPlay = new ArrayList<>();
         while (playersLeft.size()>0)
         {
-            int randomIndex = (new Random().nextInt(playersLeft.size()));
-            Player player = playersLeft.get(randomIndex);
-            orderOfPlay.add(player);
-            // Game is starting!
-            VirtualView view= virtualViews.get(player.getName());
-            view.sendToClient(new GameStarting(player));
+            Player player = playersLeft.get(0);
+            receiver=null;
             // player chooses where to place his workers on the board
+            VirtualView view = virtualViews.get(player.getName());
             view.sendToClient(new InitializeWorkers(this.game.getBoard()));
             while (receiver==null)
             {
@@ -140,10 +150,8 @@ public class GameManager implements Runnable, Observer {
             game.notifyChange();
             receiver=null;
             view.unregister(this);
-            playersLeft.remove(randomIndex);
+            playersLeft.remove(0);
         }
-        // set the correct order of play in the players array of game
-        game.setPlayers(orderOfPlay);
     }
 
     /**
@@ -195,6 +203,7 @@ public class GameManager implements Runnable, Observer {
                     {
                         game.setWinner(turnList.get(0).getPlayer());
                     }
+                    else game.notifyChange();
                 }
 
                 // if a player neither won or lost, do nothing
@@ -216,6 +225,12 @@ public class GameManager implements Runnable, Observer {
      */
     private void endGame()
     {
+        // Give a short pause to see the last move of the game (5 seconds)
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // tells to every client the name of the winner.
         notifyAll(new WinnerMessage(game.getWinner().getName()));
     }

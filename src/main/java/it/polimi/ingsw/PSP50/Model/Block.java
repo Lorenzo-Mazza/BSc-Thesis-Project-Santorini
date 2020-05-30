@@ -31,7 +31,7 @@ public enum Block {
      * *Constructor*
      * @param value an integer that indicate the enum constant value
      */
-    private Block(int value) {
+    Block(int value) {
         this.value = value;
     }
 

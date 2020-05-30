@@ -1,7 +1,5 @@
 package it.polimi.ingsw.PSP50.View.GUI;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
 import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.network.server.Server;
 import javafx.fxml.*;
@@ -34,7 +32,7 @@ public class LoginController {
 
     @FXML
     public void login() {
-        Socket server= null;
+        Socket server;
         try{
             String ip = ipAddress.getText();
             if (ip.equals(""))
@@ -53,18 +51,18 @@ public class LoginController {
             alert.setTitle("Error");
             alert.setHeaderText("Invalid username");
             alert.showAndWait();
+            return;
+        }
+        GameType type;
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        if (gameType.equals("")) {
+
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid GameType");
+            alert.showAndWait();
+            return;
         }
 
-        GameType type;
-        while (true) {
-            if (gameType.equals("")) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error");
-                alert.setHeaderText("Invalid GameType");
-                alert.showAndWait();
-            }
-            else break;
-        }
         if (gameType.equals("TWO PLAYERS")) {
             type= GameType.TWOPLAYERS;
         }

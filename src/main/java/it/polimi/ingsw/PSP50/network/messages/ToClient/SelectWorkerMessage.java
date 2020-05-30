@@ -18,8 +18,7 @@ public class SelectWorkerMessage extends ToClientMessage {
         ArrayList<Space> workersPositions = new ArrayList<>();
         for(Worker worker: ((Worker[]) data))
             workersPositions.add(worker.getPosition());
-        ui.drawSection("Choose the worker to use for this turn");
-        ui.chooseSpace(getPossibleCoordinates(workersPositions),false);
+        ui.selectWorker(getPossibleCoordinates(workersPositions));
     }
 
 }

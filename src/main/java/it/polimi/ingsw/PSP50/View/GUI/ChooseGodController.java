@@ -61,6 +61,7 @@ public class ChooseGodController {
         else
             answer=3;
         System.out.println("\n" + answer);
+        gui.setGod(selection);
         gui.sendGodChoice(answer);
     }
 

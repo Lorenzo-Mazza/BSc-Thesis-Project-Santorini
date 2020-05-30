@@ -11,19 +11,26 @@ public class Worker implements Serializable {
      *  Reference to his owner
      */
     final private Player owner;
+
+    final private int workerId;
     /**
      *  Reference to the position where the worker is on the board
      */
     private Space position;
 
+    private Space lastPosition;
+
     /**
      * Constructor
      * @param owner Player owning this worker
      */
-    public Worker(Player owner) {
+    public Worker(Player owner, int workerId) {
         this.owner = owner;
+        this.workerId = workerId;
         this.position = null;
+        this.lastPosition = null;
     }
+
 
     /**
      *
@@ -33,12 +40,20 @@ public class Worker implements Serializable {
         return owner;
     }
 
+    public int getWorkerId() {
+        return workerId;
+    }
+
+    public Space getLastPosition() {
+        return lastPosition;
+    }
 
     /**
      * Moves worker to a new space
      * @param movement The space the worker moves to
      */
     public void move(Space movement){
+        this.lastPosition = this.position;
         this.position = movement;
     }
 

@@ -10,7 +10,6 @@ public class YouLostMessage extends ToClientMessage {
 
     @Override
     public void doAction(ClientView ui) {
-        ui.drawSection("You LOST! \uD83D\uDE2D \uD83D\uDE2D \uD83D\uDE2D");
-        ui.drawSection("Keep the connection active to see how the game plays out!");
+        ui.loseAlert();
     }
 }

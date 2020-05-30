@@ -11,6 +11,6 @@ public class NameChanged extends ToClientMessage {
     @Override
     public void doAction(ClientView ui) {
         ui.setName((String)data);
-        ui.drawSection("There is a player with your same name on the lobby. Your new name is " + ui.getName());
+        ui.nameChanged();
     }
 }

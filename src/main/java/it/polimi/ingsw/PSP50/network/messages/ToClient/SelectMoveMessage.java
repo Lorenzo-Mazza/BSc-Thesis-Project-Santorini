@@ -17,7 +17,6 @@ public class SelectMoveMessage extends ToClientMessage {
 
     @Override
     public void doAction(ClientView ui){
-        ui.drawSection("Choose where you want to move your worker!");
-        ui.chooseSpace(getPossibleCoordinates((ArrayList<Space>) data),optional);
+        ui.moveAction(getPossibleCoordinates((ArrayList<Space>) data),optional);
     }
 }

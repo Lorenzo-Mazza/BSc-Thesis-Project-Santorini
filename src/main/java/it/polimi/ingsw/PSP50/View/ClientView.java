@@ -57,7 +57,14 @@ public abstract class ClientView extends Observable {
 
     public abstract void update(Object modelCopy);
 
-    public abstract void drawSection(String line);
+
+    public abstract void startingGame();
+
+    public abstract void selectWorker(ArrayList<int[]> possibleChoices);
+
+    public abstract void moveAction (ArrayList<int[]> possibleChoices, boolean optional);
+
+    public abstract void buildAction (ArrayList<int[]> possibleChoices, boolean optional);
 
     public abstract void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional);
 
@@ -67,7 +74,15 @@ public abstract class ClientView extends Observable {
 
     public abstract void chooseBlock(Block possibleBlock);
 
+    public abstract void workerIsBlocked (int x, int y);
+
     public abstract void welcomeMessage(HashMap<String,Color> opponents, Color playerColor);
+
+    public abstract void winAlert (String winner) ;
+
+    public abstract void loseAlert ();
+
+    public abstract void nameChanged();
 
     public void notifySocket(ToServerMessage messageChoice) {
         this.getSocket().update(messageChoice);

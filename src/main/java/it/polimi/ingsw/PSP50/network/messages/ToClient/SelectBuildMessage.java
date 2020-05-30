@@ -17,7 +17,6 @@ public class SelectBuildMessage extends ToClientMessage {
 
     @Override
     public void doAction(ClientView ui) {
-        ui.drawSection("Choose where to build");
-        ui.chooseSpace(getPossibleCoordinates((ArrayList<Space>) data),optional);
+        ui.buildAction(getPossibleCoordinates((ArrayList<Space>) data),optional);
     }
 }

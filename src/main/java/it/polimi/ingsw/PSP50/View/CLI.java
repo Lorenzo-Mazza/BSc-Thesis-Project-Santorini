@@ -84,6 +84,8 @@ public class CLI extends ClientView {
         printBoard();
     }
 
+
+
     private void printBuffer() {
         System.out.print(this.buffer.toString());
         System.out.print("\n");
@@ -92,7 +94,6 @@ public class CLI extends ClientView {
         System.out.flush();
     }
 
-    @Override
     public void drawSection(String line) {
         for (int i = 0; i < (line.length()); i++) {
             this.buffer.append("_");
@@ -109,6 +110,31 @@ public class CLI extends ClientView {
             this.buffer.append("_");
         }
         printBuffer();
+    }
+
+    @Override
+    public void startingGame() {
+        drawSection("Game is starting! GET READY \uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25");
+        notifySocket(new GameStarted(true,this.getPlayerId()));
+    }
+
+    @Override
+    public void selectWorker(ArrayList<int[]> possibleChoices) {
+        drawSection("Choose the worker to use for this turn");
+        chooseSpace(possibleChoices,false);
+    }
+
+    @Override
+    public void moveAction(ArrayList<int[]> possibleChoices, boolean optional) {
+        drawSection("Choose where you want to move your worker!");
+        chooseSpace(possibleChoices,optional);
+    }
+
+    @Override
+    public void buildAction(ArrayList<int[]> possibleChoices, boolean optional) {
+        drawSection("Choose where to build");
+        chooseSpace(possibleChoices, optional);
+
     }
 
     private void writeLine(String line) {
@@ -169,13 +195,34 @@ public class CLI extends ClientView {
         String secondMessage=  "Your rivals are:  ";
         for (String opponent : opponentsMap.keySet())
             secondMessage+= "---> "+ opponent +" with the color "+
-                    (opponentsMap.get(opponent))+(opponentsMap.get(opponent).getName())+ colorEnd + ".  ";
+                    (opponentsMap.get(opponent).getSequence())+(opponentsMap.get(opponent).getName())+ colorEnd + ".  ";
         drawSection(message);
         drawSection(secondMessage);
     }
 
     @Override
+    public void winAlert(String winnerName) {
+        if (winnerName.equals(this.getName()))
+            drawSection("CONGRATULATIONS "+ winnerName.toUpperCase()
+                    + ", YOU'RE THE CHAMPION!!! \uD83C\uDFC6 \uD83C\uDFC6 \uD83C\uDFC6");
+        else drawSection(winnerName+ " has won the game! Unfortunately You LOST. \uD83D\uDE2D \uD83D\uDE2D \uD83D\uDE2D"
+                + "\nTry again next time!");
+    }
+
+    @Override
+    public void loseAlert() {
+        drawSection("You LOST! \uD83D\uDE2D \uD83D\uDE2D \uD83D\uDE2D");
+        drawSection("Keep the connection active to see how the game plays out!");
+    }
+
+    @Override
+    public void nameChanged() {
+        drawSection("There is a player with your same name on the lobby. Your new name is " + this.getName());
+    }
+
+    @Override
     public void initializeWorkers(ArrayList<int[]> possibleChoices) {
+        drawSection("Choose where to place the workers");
         ArrayList<int[]> answer = new ArrayList<>();
         int choice;
         printBoard();
@@ -262,11 +309,18 @@ public class CLI extends ClientView {
         notifySocket(messageChoice);
     }
 
-
-
     @Override
+    public void workerIsBlocked (int x, int y) {
+        drawSection("The Worker you selected in position (" + x + ", " + y +
+                ") is blocked;try to choose another worker or you will lose.");
+    }
+
+
+
+        @Override
     public void chooseBlock(Block possibleBlock) {
-        writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
+            drawSection("Choose which block you want to build");
+            writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
         writeLine("\n --> Select 2 to choose: DOME");
         printBuffer();
         int choice= getChoiceWithTimeout(2,45, false);

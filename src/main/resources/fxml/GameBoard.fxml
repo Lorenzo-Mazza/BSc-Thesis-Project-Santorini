@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP50.View.GUI.BoardController">
+   <children>
+      <ImageView fitHeight="432.0" fitWidth="273.0" layoutX="-7.0" layoutY="8.0" pickOnBounds="true">
+         <image>
+            <Image url="@../Sprite/fg_panel4.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="myGodImage" fitHeight="95.0" fitWidth="95.0" layoutX="50.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="myGodName" layoutX="27.0" layoutY="574.0" prefHeight="19.0" prefWidth="141.0" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="myName" layoutX="27.0" layoutY="616.0" prefHeight="19.0" prefWidth="141.0" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="opp1GodImage" fitHeight="74.0" fitWidth="65.0" layoutX="1121.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="opp1GodName" layoutX="955.0" layoutY="21.0" prefHeight="19.0" prefWidth="141.0" visible="false" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="opp1Name" layoutX="955.0" layoutY="58.0" prefHeight="19.0" prefWidth="141.0" visible="false" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="opp2GodImage" fitHeight="74.0" fitWidth="65.0" layoutX="1121.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="opp2GodName" layoutX="955.0" layoutY="134.0" prefHeight="19.0" prefWidth="141.0" visible="false" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="opp2Name" layoutX="955.0" layoutY="171.0" prefHeight="19.0" prefWidth="141.0" visible="false" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="spaceChoice" disable="true" layoutX="35.0" layoutY="210.0" prefWidth="150.0" promptText="Space Choice..." visible="false" visibleRowCount="4" />
+      <Button fx:id="commandAction" disable="true" layoutX="50.0" layoutY="250.0" mnemonicParsing="false" onMouseClicked="#getInitWorkerPosition" prefHeight="27.0" prefWidth="121.0" text="Choose" visible="false">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="13.0" />
+         </font>
+      </Button>
+      <Label fx:id="commandLabel" disable="true" layoutX="15.0" layoutY="112.0" prefHeight="95.0" prefWidth="220.0" style="-fx-background-color: gold;" visible="false" wrapText="true">
+         <font>
+            <Font name="Trebuchet MS" size="15.0" />
+         </font></Label>
+      <Button fx:id="commandAction2" disable="true" layoutX="50.0" layoutY="250.0" mnemonicParsing="false" onAction="#performAction" prefHeight="27.0" prefWidth="121.0" text="Choose" visible="false">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="skipButton" disable="true" layoutX="60.0" layoutY="290.0" mnemonicParsing="false" onMouseClicked="#skipAction" prefHeight="27.0" prefWidth="95.0" text="SKIP" visible="false">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="blockButton" disable="true" layoutX="50.0" layoutY="250.0" mnemonicParsing="false" onMouseClicked="#chooseBlock" prefHeight="27.0" prefWidth="121.0" text="Choose Block" visible="false">
+         <font>
+            <Font name="Trebuchet MS Bold Italic" size="13.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

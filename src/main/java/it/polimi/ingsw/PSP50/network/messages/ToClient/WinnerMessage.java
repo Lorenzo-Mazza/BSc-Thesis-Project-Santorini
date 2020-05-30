@@ -14,10 +14,6 @@ public class WinnerMessage extends ToClientMessage {
     @Override
     public void doAction(ClientView ui) {
         String winnerName= (String)data;
-        if (winnerName.equals(ui.getName()))
-            ui.drawSection("CONGRATULATIONS "+ winnerName.toUpperCase()
-                    + ", YOU'RE THE CHAMPION!!! \uD83C\uDFC6 \uD83C\uDFC6 \uD83C\uDFC6");
-        else ui.drawSection(winnerName+ " has won the game! Unfortunately You LOST. \uD83D\uDE2D \uD83D\uDE2D \uD83D\uDE2D"
-                + "\nTry again next time!");
+        ui.winAlert(winnerName);
     }
 }
