@@ -99,15 +99,22 @@ public class ClientHandler implements Runnable
 
     private synchronized void manageDisconnection() {
         for (int playerId : playerLobby.getPlayers().keySet()){
-            if (playerId != this.playerId && playerLobby.getGameManager().getGame().getWinner()== null)
-                server.messageClient(new DisconnectMessage(this.user), playerId);
+            if (playerLobby.getGameManager()!=null) {
+                // notify only if the player that has disconnected didn't lose before
+                if (playerId != this.playerId && playerLobby.getGameManager().getGame().getWinner()== null
+                        && !view.hasLost()) {
+                    server.messageClient(new DisconnectMessage(this.user), playerId);
+                    playerLobby.getGameManager().stopThread();
+                    playerLobby.setGameManager(null);
+                }
+            }
+
         }
-        playerLobby.getGameManager().stopThread();
         server.getViews().remove(this.playerId);
         server.getNicknames().remove(this.playerId);
         server.getConnections().remove(this.playerId);
 
-        this.playerLobby.removeClient(this.user, this.playerId, this.view);
+        playerLobby.removeClient(this.user, this.playerId, this.view);
     }
 
 

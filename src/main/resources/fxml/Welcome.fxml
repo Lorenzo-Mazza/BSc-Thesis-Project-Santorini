@@ -18,7 +18,7 @@
             <Image url="@../Sprite/cl_bg.png" />
          </image>
       </ImageView>
-      <Label fx:id="textLabel" layoutX="368.0" layoutY="218.0" prefHeight="316.0" prefWidth="384.0" textFill="WHITE" wrapText="true">
+      <Label fx:id="textLabel" layoutX="368.0" layoutY="218.0" prefHeight="316.0" prefWidth="384.0" textFill="BLACK" wrapText="true">
          <font>
             <Font name="Trebuchet MS" size="18.0" />
          </font>

@@ -147,12 +147,4 @@ public class Server extends Thread{
             System.out.println("invalid stream from server");
         }
     }
-
-    public void print(String str){
-        System.out.print(str);
-    }
-
-    public void removeLobby() {
-        numberOfLobbies--;
-    }
 }

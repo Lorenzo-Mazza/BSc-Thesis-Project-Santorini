@@ -157,6 +157,7 @@ public class GuiView extends ClientView {
                         Scene gameBoard = new Scene(testing);
                         this.gameBoard = gameBoard;
                         primaryStage.setScene(gameBoard);
+                        primaryStage.setTitle("Game's on");
                         primaryStage.setResizable(false);
                         primaryStage.show();
                         notifySocket(new GameStarted(true,this.getPlayerId()));
