@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP50.network.server;
 
+import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Lobby;
 import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.View.VirtualView;
@@ -101,7 +102,7 @@ public class ClientHandler implements Runnable
             if (playerId != this.playerId)
                 server.messageClient(new DisconnectMessage(this.user), playerId);
         }
-
+        playerLobby.getGameManager().stopThread();
         server.getViews().remove(this.playerId);
         server.getNicknames().remove(this.playerId);
         server.getConnections().remove(this.playerId);

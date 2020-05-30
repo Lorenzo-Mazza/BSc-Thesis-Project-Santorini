@@ -21,7 +21,7 @@ import java.io.IOException;
  *  TESTING CLASS
  */
 
-
+/*
 public class Sample extends Application {
 
     private Importer3D importer = new Importer3D();
@@ -160,7 +160,7 @@ public class Sample extends Application {
 
     /*  Timeline timeline = new Timeline();
       timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(3),new KeyValue(workerObject.translateXProperty(),-2.3),new KeyValue(workerObject.translateYProperty(),-2.5)));
-      timeline.play(); */
+      timeline.play();
       root3D.getChildren().add(workerObject);
     }
 
@@ -174,3 +174,5 @@ public class Sample extends Application {
 
 
 }
+
+*/

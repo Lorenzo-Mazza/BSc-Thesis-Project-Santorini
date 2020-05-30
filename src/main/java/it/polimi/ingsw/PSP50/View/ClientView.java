@@ -88,5 +88,5 @@ public abstract class ClientView extends Observable {
         this.getSocket().update(messageChoice);
     }
 
-    public abstract void disconnectCLI(String userDisconnect);
+    public abstract void disconnectUI(String userDisconnect);
 }

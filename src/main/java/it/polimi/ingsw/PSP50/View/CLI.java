@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP50.Utils.ConsoleInput;
 import it.polimi.ingsw.PSP50.Model.*;
 import it.polimi.ingsw.PSP50.network.client.ClientSocket;
 import it.polimi.ingsw.PSP50.network.messages.ToServer.*;
-import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import it.polimi.ingsw.PSP50.network.server.Server;
 
 import java.io.BufferedReader;
@@ -375,32 +374,6 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
-    private void printBoard2(ArrayList<int[]> avaiableMove) {
-        writeLine("\nThis is the board.\n Reminder: Space (0,0) is the first one on the left, " +
-                "Space (4,4) is the last one on the right; Domes are marked with an 'X'.");
-        printBuffer();
-
-        int arrayIndex = 1;
-        for (int row = 0; row < 10; row++) {
-            writeLine("+-----+-----+-----+-----+-----+\n");
-            String line = "| ";
-            if((row % 2) == 0) {
-                for (int colomn = 0; colomn < 5; colomn++)
-                    line += printSpace(gameCopy.getBoard().getSpace(row, colomn)) + "  | ";
-            }
-            else {
-                for (int colomn = 0; colomn < 5; colomn++) {
-                    int[] prova = {row, colomn};
-                    if(avaiableMove.contains(prova))
-                        line += "("+ arrayIndex + ") | ";
-                    else
-                        line += "    | ";
-                }
-                writeLine(line);
-                writeLine("\n+-----+-----+-----+-----+-----+");
-            }
-        }
-    }
 
     private void printAvailableSpaces(ArrayList<int[]> coordinates) {
         writeLine("\nSelect one of these pairs:");
@@ -415,8 +388,8 @@ public class CLI extends ClientView {
     }
 
     @Override
-    public void disconnectCLI(String userDisconnect) {
-        drawSection("Player ->"+ userDisconnect +"<- has been disconnect so the game ended.");
+    public void disconnectUI(String userDisconnect) {
+        drawSection("Player ->"+ userDisconnect +"<- is been disconnected so the game ended.");
         printBuffer();
         Thread.yield();
         System.exit(0);

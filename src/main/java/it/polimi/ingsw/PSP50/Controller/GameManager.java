@@ -251,9 +251,10 @@ public class GameManager implements Runnable, Observer {
     private int chooseGod(Player player, ArrayList<God> cardsLeft){
         int choice=0;
         VirtualView view= virtualViews.get(player.getName());
-        this.setObservable(view);
-        view.sendToClient(new ChooseGodCard(cardsLeft));
-
+        if (view!=null) {
+            this.setObservable(view);
+            view.sendToClient(new ChooseGodCard(cardsLeft));
+        }
         while (receiver==null)
         {
             Thread.yield();
@@ -273,5 +274,9 @@ public class GameManager implements Runnable, Observer {
     @Override
     public void setObservable(Observable observable) {
         observable.register(this);
+    }
+
+    public void stopThread(){
+        Thread.currentThread().interrupt();
     }
 }

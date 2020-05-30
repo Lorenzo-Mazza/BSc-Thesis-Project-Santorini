@@ -97,6 +97,16 @@ public class Lobby implements Runnable{
                 freeLobby();
     }
 
+    public void removeClients() {
+        this.players.clear();
+        this.nicknames.clear();
+        freeLobby();
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
     @Override
     public void run() {
         startGame();

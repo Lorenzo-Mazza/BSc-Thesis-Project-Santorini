@@ -150,23 +150,7 @@ public class GuiView extends ClientView {
                 Model3D builder;
                 boolean male = checkIfMaleWorker(worker.getOwner().getGod().getName().name());
                 String color = worker.getOwner().getColor().getName();
-                if (male)
-                {
-                    if (color.equals("Orange"))
-                        builder = Importer3D.loadAsPoly(getClass().getResource("/orangemalebuilder.obj"));
-                    else if (color.equals("Blue"))
-                        builder = Importer3D.loadAsPoly(getClass().getResource("/maleblueworker.obj"));
-                    else
-                        builder = Importer3D.loadAsPoly(getClass().getResource("/maleworkerpink.obj"));
-                }
-                else {
-                    if (color.equals("Orange"))
-                        builder = Importer3D.loadAsPoly(getClass().getResource("/femaleorange.obj"));
-                    else if (color.equals("Blue"))
-                        builder = Importer3D.loadAsPoly(getClass().getResource("/femaleblue.obj"));
-                    else
-                        builder = Importer3D.loadAsPoly(getClass().getResource("/femalepink.obj"));
-                }
+                builder = loadCorrectWorker(male,color);
                 Group workerObject = builder.getRoot();
                 setInitialWorker(workerObject,worker.getPosition().getXPosition(),
                        worker.getPosition().getYPosition());
@@ -414,28 +398,6 @@ public class GuiView extends ClientView {
                 });
     }
 
-    private String findGodImage(String god){
-        if (god.equals("APOLLO"))
-            return("Sprite/Cards/Small/podium-characters-Apolo.png");
-        if (god.equals("ARTEMIS"))
-            return("Sprite/Cards/Small/podium-characters-Artemis.png");
-        if (god.equals("ATHENA"))
-            return("Sprite/Cards/Small/podium-characters-Athena.png");
-        if (god.equals("ATLAS"))
-            return("Sprite/Cards/Small/podium-characters-Atlas.png");
-        if (god.equals("DEMETER"))
-            return("Sprite/Cards/Small/podium-characters-Demeter.png");
-        if (god.equals("HEPHAESTUS"))
-            return("Sprite/Cards/Small/podium-characters-Hephaestus.png");
-        if (god.equals("MINOTAUR"))
-            return("Sprite/Cards/Small/podium-characters-Minotaur.png");
-        if (god.equals("PAN"))
-            return("Sprite/Cards/Small/podium-characters-Pan.png");
-        if (god.equals("PROMETHEUS"))
-            return("Sprite/Cards/Small/podium-characters-Prometheus.png");
-        return "";
-    }
-
 
     @Override
     public void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional) {
@@ -492,13 +454,16 @@ public class GuiView extends ClientView {
     }
 
 
+
     public void placeWorker(int[] coordinates){
         Platform.runLater(
                 () -> {
-
                     try {
-            Model3D worker = Importer3D.loadAsPoly(getClass().getResource("/orangemalebuilder.obj"));
-            Group workerObject = worker.getRoot();
+                        Model3D builder;
+                        boolean male = checkIfMaleWorker(this.getGod());
+                        String color = this.getPlayerColor().getName();
+                       builder = loadCorrectWorker(male,color);
+            Group workerObject = builder.getRoot();
             myWorkers.add(workerObject);
             myWorkersPosition.add(coordinates);
             setInitialWorker(workerObject,coordinates[0],coordinates[1]);
@@ -709,6 +674,18 @@ public class GuiView extends ClientView {
                 });
     }
 
+    @Override
+    public void disconnectUI(String userDisconnect) {
+        Platform.runLater(
+                () -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Disconnection");
+                    alert.setHeaderText("Player ->"+ userDisconnect +"<- is been disconnected so the game ended.");
+                    alert.showAndWait();
+                    System.exit(0);
+                });
+    }
+
     public void setGod(String god) {
         this.god = god;
     }
@@ -738,5 +715,49 @@ public class GuiView extends ClientView {
 
     public Color getPlayerColor() {
         return playerColor;
+    }
+
+    private Model3D loadCorrectWorker (boolean male, String color) throws IOException {
+        Model3D builder;
+        if (male)
+        {
+            if (color.equals("Orange"))
+                builder = Importer3D.loadAsPoly(getClass().getResource("/orangemalebuilder.obj"));
+            else if (color.equals("Blue"))
+                builder = Importer3D.loadAsPoly(getClass().getResource("/maleblueworker.obj"));
+            else
+                builder = Importer3D.loadAsPoly(getClass().getResource("/maleworkerpink.obj"));
+        }
+        else {
+            if (color.equals("Orange"))
+                builder = Importer3D.loadAsPoly(getClass().getResource("/femaleorange.obj"));
+            else if (color.equals("Blue"))
+                builder = Importer3D.loadAsPoly(getClass().getResource("/femaleblue.obj"));
+            else
+                builder = Importer3D.loadAsPoly(getClass().getResource("/femalepink.obj"));
+        }
+        return builder;
+    }
+
+    private String findGodImage(String god){
+        if (god.equals("APOLLO"))
+            return("Sprite/Cards/Small/podium-characters-Apolo.png");
+        if (god.equals("ARTEMIS"))
+            return("Sprite/Cards/Small/podium-characters-Artemis.png");
+        if (god.equals("ATHENA"))
+            return("Sprite/Cards/Small/podium-characters-Athena.png");
+        if (god.equals("ATLAS"))
+            return("Sprite/Cards/Small/podium-characters-Atlas.png");
+        if (god.equals("DEMETER"))
+            return("Sprite/Cards/Small/podium-characters-Demeter.png");
+        if (god.equals("HEPHAESTUS"))
+            return("Sprite/Cards/Small/podium-characters-Hephaestus.png");
+        if (god.equals("MINOTAUR"))
+            return("Sprite/Cards/Small/podium-characters-Minotaur.png");
+        if (god.equals("PAN"))
+            return("Sprite/Cards/Small/podium-characters-Pan.png");
+        if (god.equals("PROMETHEUS"))
+            return("Sprite/Cards/Small/podium-characters-Prometheus.png");
+        return "";
     }
 }
