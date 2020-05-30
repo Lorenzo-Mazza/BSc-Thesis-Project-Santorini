@@ -99,7 +99,7 @@ public class ClientHandler implements Runnable
 
     private synchronized void manageDisconnection() {
         for (int playerId : playerLobby.getPlayers().keySet()){
-            if (playerId != this.playerId)
+            if (playerId != this.playerId && playerLobby.getGameManager().getGame().getWinner()== null)
                 server.messageClient(new DisconnectMessage(this.user), playerId);
         }
         playerLobby.getGameManager().stopThread();

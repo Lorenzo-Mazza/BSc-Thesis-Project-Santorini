@@ -39,7 +39,6 @@ public class Prometheus extends God {
                     // if the neighbor space is not higher than level, it's available.
                     available.add(neighbors.get(index));
             }
-            player.setHasBuilt(false);
             return available;
         }
         // else, normal move mechanism.

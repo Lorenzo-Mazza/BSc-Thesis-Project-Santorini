@@ -11,6 +11,7 @@ import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
@@ -21,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.fxyz3d.importers.Importer3D;
 import org.fxyz3d.importers.Model3D;
@@ -34,14 +36,12 @@ public class GuiView extends ClientView {
 
     private Stage primaryStage;
 
-    private Scene lobby;
     private Scene welcome;
     private Scene chooseGod;
     private Scene gameBoard;
     private Scene endGame;
     private SubScene subScene3D;
 
-    private LobbyController lobbyController;
     private WelcomeController welcomeController;
     private ChooseGodController chooseGodController;
     private BoardController boardController;
@@ -68,7 +68,7 @@ public class GuiView extends ClientView {
 
 
 
-    public GuiView(GameType gameType, Socket server, String name, Stage primaryStage){
+    GuiView(GameType gameType, Socket server, String name, Stage primaryStage){
         this.setName(name);
         ClientSocket socket = new ClientSocket(this, gameType, server);
         this.setSocket(socket);
@@ -77,13 +77,11 @@ public class GuiView extends ClientView {
         socketThread.start();
     }
 
-    public void startGame(){
+    void startGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Lobby.fxml"));
         try {
             Parent root = loader.load();
-            primaryStage.setTitle("Lobby");
-            lobby = new Scene(root);
-            lobbyController = loader.getController();
+            Scene lobby = new Scene(root);
             primaryStage.setScene(lobby);
             primaryStage.setTitle("Lobby");
             primaryStage.setResizable(false);
@@ -93,10 +91,22 @@ public class GuiView extends ClientView {
         }
     }
 
+    void loadingGameBoard(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingBoard.fxml"));
+        try {
+            Parent root = loader.load();
+            primaryStage.setTitle("Loading Board");
+            Scene loading = new Scene(root);
+            primaryStage.setScene(loading);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("Error loading the board");
+        }
+    }
 
     @Override
     public void update(Object modelCopy) {
-
         Platform.runLater(
                 () -> {
         Board newCopy = ((Game) modelCopy).getBoard();
@@ -104,235 +114,6 @@ public class GuiView extends ClientView {
         updateBoard(newCopy);
         this.setGameCopy( (Game) modelCopy);
                 });
-    }
-
-    /**
-     * Update the board through animations every time the Server validates a new Move/Build Action.
-     * @param newCopy the new version of the board
-     */
-    private void updateBoard(Board newCopy){
-        Board oldCopy = this.getGameCopy().getBoard();
-        for (int row = 0; row<5; row++) {
-            for (int column = 0; column < 5; column++) {
-                Space newSpace = newCopy.getSpace(row, column);
-                Space oldSpace = oldCopy.getSpace(row, column);
-                // first check the workers positions
-                if (newSpace.getWorker() != null) {
-                    Worker worker = newCopy.getSpace(row, column).getWorker();
-                    // if the worker doesn't have a Last Position, it might need to be initialized.
-                    if (worker.getLastPosition()==null)
-                        newWorkerAnimation(worker);
-                    else{
-                        // if the worker moved, make a move animation.
-                        if (oldSpace.getWorker()==null || (
-                                oldSpace.getWorker().getWorkerId()!=newSpace.getWorker().getWorkerId() ||
-                                !oldSpace.getWorker().getOwner().getName().equals(newSpace.getWorker().getOwner().getName())))
-                            moveAnimation(worker);
-                        // else the worker has not moved.
-                    }
-                }
-                //  check the blocks positions
-                if (newSpace.getHeight() != oldCopy.getSpace(row, column).getHeight()) {
-                    buildAnimation(oldCopy.getSpace(row, column).getHeight(),newSpace);
-                }
-            }
-        }
-    }
-
-    private void newWorkerAnimation(Worker worker){
-        // check if worker is already in the gui. If not proceed with the animation
-        String opponentName = worker.getOwner().getName();
-        if ( opponents.contains(opponentName)  && (opponentsWorkers.size()==0 ||
-        !opponentsWorkers.containsKey(opponentName)
-                || opponentsWorkers.get(opponentName)[worker.getWorkerId()] ==null )){
-            try {
-                //animation
-                Model3D builder;
-                boolean male = checkIfMaleWorker(worker.getOwner().getGod().getName().name());
-                String color = worker.getOwner().getColor().getName();
-                builder = loadCorrectWorker(male,color);
-                Group workerObject = builder.getRoot();
-                setInitialWorker(workerObject,worker.getPosition().getXPosition(),
-                       worker.getPosition().getYPosition());
-                if (opponentsWorkers.containsKey(opponentName))
-                opponentsWorkers.get(opponentName)[worker.getWorkerId()]= workerObject;
-                else {
-                    Group[] workers = new Group[2];
-                    workers[worker.getWorkerId()] = workerObject;
-                    opponentsWorkers.put(opponentName, workers);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private boolean checkIfMaleWorker(String God) {
-        return God.equals("APOLLO") || God.equals("ATLAS") || God.equals("HEPHAESTUS") ||
-                God.equals("MINOTAUR") || God.equals("PAN") || God.equals("PROMETHEUS");
-    }
-
-
-    private void setInitialWorker(Group worker, int x, int z){
-        double[] translation = getTranslationNeeded(x,z);
-        worker.getTransforms().add(new Translate(-0.8,1,0));
-        TranslateTransition preventCollisions = new TranslateTransition(Duration.seconds(0.2),worker);
-        preventCollisions.setToY(5);
-        TranslateTransition newTransition = new TranslateTransition(Duration.seconds(2),worker);
-        newTransition.setToX(translation[1]);
-        newTransition.setToY(0);
-        newTransition.setToZ(translation[0]);
-        SequentialTransition sequentialTransition = new SequentialTransition();
-        sequentialTransition.getChildren().addAll(preventCollisions,newTransition);
-        sequentialTransition.play();
-        board.getChildren().add(worker);
-        primaryStage.show();
-    }
-
-
-    private void moveAnimation(Worker worker){
-       int x = worker.getPosition().getXPosition();
-       int y = worker.getPosition().getYPosition();
-       double[] translation = getTranslationNeeded(x,y);
-       int height = worker.getPosition().getHeight().getValue();
-       double z = 0;
-       switch (height) {
-           case 3:
-               z = LEVEL_3;
-               break;
-           case 2:
-               z = LEVEL_2;
-               break;
-           case 1:
-               z = LEVEL_1;
-               break;
-           case 0:
-               z = EMPTY;
-               break;
-       }
-       // check which worker you have to move
-      // if (worker.getWorkerId()==worker.getOwner().getWorkers()[0].getWorkerId())
-           Group workerObject;
-           if (worker.getOwner().getName().equals(this.getName()))
-               workerObject = this.myWorkers.get(worker.getWorkerId());
-           else
-               workerObject = this.opponentsWorkers.get(worker.getOwner().getName())
-                       [worker.getWorkerId()];
-           animateMove(workerObject,translation[1],z,translation[0]);
-    }
-
-    private void animateMove(Group workerObject, double x, double y, double z) {
-        TranslateTransition preventCollisions = new TranslateTransition(Duration.seconds(0.2),workerObject);
-        preventCollisions.setToY(6);
-        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2.5),workerObject);
-        rotateTransition.setByAngle(360);
-        rotateTransition.setCycleCount(1);
-        rotateTransition.setAxis(Rotate.Z_AXIS);
-        TranslateTransition newTransition = new TranslateTransition(Duration.seconds(2.5),workerObject);
-        newTransition.setToX(x);
-        newTransition.setToY(y);
-        newTransition.setToZ(z);
-        ParallelTransition parallel = new ParallelTransition();
-        parallel.getChildren().addAll(rotateTransition,newTransition);
-        SequentialTransition sequentialTransition = new SequentialTransition();
-        sequentialTransition.getChildren().addAll(preventCollisions,parallel);
-        sequentialTransition.play();
-    }
-
-
-
-    private void buildAnimation(Block oldHeight, Space space){
-        try {
-            int x = space.getXPosition();
-            int y = space.getYPosition();
-            double[] translation = getTranslationNeeded(x,y);
-            double height = 0;
-            Model3D model3D;
-
-            switch (space.getHeight().getValue()){
-                case 1:
-                    model3D = Importer3D.loadAsPoly(getClass().getResource("/firstblock2.obj"));
-                    break;
-                case 2:
-                    model3D = Importer3D.loadAsPoly(getClass().getResource("/secondblock2.obj"));
-                    break;
-                case 3:
-                    model3D = Importer3D.loadAsPoly(getClass().getResource("/thirdblock.obj"));
-                    break;
-                default:
-                    switch (oldHeight.getValue()){
-                        case 0:
-                            height = EMPTY-LEVEL_3;
-                            break;
-                        case 1:
-                            height = LEVEL_1-LEVEL_3;
-                            break;
-                        case 2:
-                            height = LEVEL_2-LEVEL_3;
-                            break;
-                        default:
-                            height = 0;
-                            break;
-                    }
-                    model3D = Importer3D.loadAsPoly(getClass().getResource("/dome.obj"));
-            }
-            Group block = model3D.getRoot();
-            block.getTransforms().add(new Translate(-0.6, 0));
-            if (space.getHeight().getValue()==10)
-                block.getTransforms().add(new Translate(0, 0.3,0));
-            block.getTransforms().add(new Translate(translation[1],height,translation[0]));
-            board.getChildren().add(block);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private double[] getTranslationNeeded
-            ( int toXCoordinate, int toZCoordinate)
-    {
-        double xTranslation;
-        if ((toXCoordinate-2)>0)
-            xTranslation = (toXCoordinate-2)*POSITIVE_Z_TRANSLATION;
-        else
-            xTranslation = (toXCoordinate-2)*NEGATIVE_Z_TRANSLATION;
-        double zTranslation = (toZCoordinate - 2)*X_TRANSLATION;
-
-
-        double[] result = new double[2];
-        result[0] = xTranslation;
-        result[1] = zTranslation;
-        return result;
-    }
-
-    /**
-     * Removes the opponent workers from the screen and remove opponent from various Lists/Maps
-     * @param opponent The opponent to remove
-     */
-    private void eliminateOpponent (String opponent ){
-        Group[] toRemove = opponentsWorkers.get(opponent);
-        toRemove[0].setDisable(true);
-        toRemove[0].setVisible(false);
-        toRemove[1].setDisable(true);
-        toRemove[1].setVisible(false);
-        opponentsWorkers.remove(opponent);
-        opponents.remove(opponent);
-        opponentsColor.remove(opponent);
-        opponentsGods.remove(opponent);
-    }
-
-    /**
-     * Update the opponents list in case someone has lost before the end.
-     * @param newGameCopy The new game update
-     */
-    private void updateOpponents(Game newGameCopy){
-        ArrayList<String> activePlayers = new ArrayList<>();
-        for (Player active : newGameCopy.getAllPlayers() )
-            activePlayers.add(active.getName());
-        // if the opponent is not in the active players List, eliminate the opponent
-        for (String player : opponents) {
-            if (!activePlayers.contains(player))
-                eliminateOpponent(player);
-        }
     }
 
     @Override
@@ -455,7 +236,7 @@ public class GuiView extends ClientView {
 
 
 
-    public void placeWorker(int[] coordinates){
+    void placeWorker(int[] coordinates){
         Platform.runLater(
                 () -> {
                     try {
@@ -491,7 +272,7 @@ public class GuiView extends ClientView {
                 });
     }
 
-    public void initializeSecondWorker(){
+    private void initializeSecondWorker(){
         Platform.runLater(
                 () -> {
         boardController.setSpaceChoice(possibleChoices);
@@ -577,7 +358,7 @@ public class GuiView extends ClientView {
 
     }
 
-    public void sendGodChoice(int choice){
+    void sendGodChoice(int choice){
         this.notifySocket(new GodChoice(choice,this.getPlayerId()));
     }
 
@@ -646,6 +427,7 @@ public class GuiView extends ClientView {
                         primaryStage.setScene(endGame);
                         primaryStage.setResizable(false);
                         primaryStage.show();
+                        primaryStage.setOnCloseRequest(windowEvent -> System.exit(0));
                     } catch (IOException  e) {
                             System.out.println("Error ending the game");
                         }
@@ -705,15 +487,15 @@ public class GuiView extends ClientView {
         this.opponentsGods = opponentsGods;
     }
 
-    public HashMap<String, String> getOpponentsGods() {
+    HashMap<String, String> getOpponentsGods() {
         return opponentsGods;
     }
 
-    public HashMap<String, Color> getOpponentsColor() {
+    HashMap<String, Color> getOpponentsColor() {
         return opponentsColor;
     }
 
-    public Color getPlayerColor() {
+    Color getPlayerColor() {
         return playerColor;
     }
 
@@ -759,5 +541,233 @@ public class GuiView extends ClientView {
         if (god.equals("PROMETHEUS"))
             return("Sprite/Cards/Small/podium-characters-Prometheus.png");
         return "";
+    }
+
+    /**
+     * Update the board through animations every time the Server validates a new Move/Build Action.
+     * @param newCopy the new version of the board
+     */
+    private void updateBoard(Board newCopy){
+        Board oldCopy = this.getGameCopy().getBoard();
+        for (int row = 0; row<5; row++) {
+            for (int column = 0; column < 5; column++) {
+                Space newSpace = newCopy.getSpace(row, column);
+                Space oldSpace = oldCopy.getSpace(row, column);
+                // first check the workers positions
+                if (newSpace.getWorker() != null) {
+                    Worker worker = newCopy.getSpace(row, column).getWorker();
+                    // if the worker doesn't have a Last Position, it might need to be initialized.
+                    if (worker.getLastPosition()==null)
+                        newWorkerAnimation(worker);
+                    else{
+                        // if the worker moved, make a move animation.
+                        if (oldSpace.getWorker()==null || (
+                                oldSpace.getWorker().getWorkerId()!=newSpace.getWorker().getWorkerId() ||
+                                        !oldSpace.getWorker().getOwner().getName().equals(newSpace.getWorker().getOwner().getName())))
+                            moveAnimation(worker);
+                        // else the worker has not moved.
+                    }
+                }
+                //  check the blocks positions
+                if (newSpace.getHeight() != oldCopy.getSpace(row, column).getHeight()) {
+                    buildAnimation(oldCopy.getSpace(row, column).getHeight(),newSpace);
+                }
+            }
+        }
+    }
+
+    private void newWorkerAnimation(Worker worker){
+        // check if worker is already in the gui. If not proceed with the animation
+        String opponentName = worker.getOwner().getName();
+        if ( opponents.contains(opponentName)  && (opponentsWorkers.size()==0 ||
+                !opponentsWorkers.containsKey(opponentName)
+                || opponentsWorkers.get(opponentName)[worker.getWorkerId()] ==null )){
+            try {
+                //animation
+                Model3D builder;
+                boolean male = checkIfMaleWorker(worker.getOwner().getGod().getName().name());
+                String color = worker.getOwner().getColor().getName();
+                builder = loadCorrectWorker(male,color);
+                Group workerObject = builder.getRoot();
+                setInitialWorker(workerObject,worker.getPosition().getXPosition(),
+                        worker.getPosition().getYPosition());
+                if (opponentsWorkers.containsKey(opponentName))
+                    opponentsWorkers.get(opponentName)[worker.getWorkerId()]= workerObject;
+                else {
+                    Group[] workers = new Group[2];
+                    workers[worker.getWorkerId()] = workerObject;
+                    opponentsWorkers.put(opponentName, workers);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean checkIfMaleWorker(String God) {
+        return God.equals("APOLLO") || God.equals("ATLAS") || God.equals("HEPHAESTUS") ||
+                God.equals("MINOTAUR") || God.equals("PAN") || God.equals("PROMETHEUS");
+    }
+
+
+    private void setInitialWorker(Group worker, int x, int z){
+        double[] translation = getTranslationNeeded(x,z);
+        worker.getTransforms().add(new Translate(-0.8,1,0));
+        TranslateTransition preventCollisions = new TranslateTransition(Duration.seconds(0.2),worker);
+        preventCollisions.setToY(5);
+        TranslateTransition newTransition = new TranslateTransition(Duration.seconds(2),worker);
+        newTransition.setToX(translation[1]);
+        newTransition.setToY(0);
+        newTransition.setToZ(translation[0]);
+        SequentialTransition sequentialTransition = new SequentialTransition();
+        sequentialTransition.getChildren().addAll(preventCollisions,newTransition);
+        sequentialTransition.play();
+        board.getChildren().add(worker);
+        primaryStage.show();
+    }
+
+
+    private void moveAnimation(Worker worker){
+        int x = worker.getPosition().getXPosition();
+        int y = worker.getPosition().getYPosition();
+        double[] translation = getTranslationNeeded(x,y);
+        int height = worker.getPosition().getHeight().getValue();
+        double z = 0;
+        switch (height) {
+            case 3:
+                z = LEVEL_3;
+                break;
+            case 2:
+                z = LEVEL_2;
+                break;
+            case 1:
+                z = LEVEL_1;
+                break;
+            case 0:
+                z = EMPTY;
+                break;
+        }
+        // check which worker you have to move
+        Group workerObject;
+        if (worker.getOwner().getName().equals(this.getName()))
+            workerObject = this.myWorkers.get(worker.getWorkerId());
+        else
+            workerObject = this.opponentsWorkers.get(worker.getOwner().getName())
+                    [worker.getWorkerId()];
+        animateMove(workerObject,translation[1],z,translation[0]);
+    }
+
+    private void animateMove(Group workerObject, double x, double y, double z) {
+        TranslateTransition preventCollisions = new TranslateTransition(Duration.seconds(0.2),workerObject);
+        preventCollisions.setToY(6);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2.5),workerObject);
+        rotateTransition.setByAngle(360);
+        rotateTransition.setCycleCount(1);
+        rotateTransition.setAxis(Rotate.Z_AXIS);
+        TranslateTransition newTransition = new TranslateTransition(Duration.seconds(2.5),workerObject);
+        newTransition.setToX(x);
+        newTransition.setToY(y);
+        newTransition.setToZ(z);
+        ParallelTransition parallel = new ParallelTransition();
+        parallel.getChildren().addAll(rotateTransition,newTransition);
+        SequentialTransition sequentialTransition = new SequentialTransition();
+        sequentialTransition.getChildren().addAll(preventCollisions,parallel);
+        sequentialTransition.play();
+    }
+
+
+
+    private void buildAnimation(Block oldHeight, Space space){
+        try {
+            int x = space.getXPosition();
+            int y = space.getYPosition();
+            double[] translation = getTranslationNeeded(x,y);
+            double height = 0;
+            Model3D model3D;
+
+            switch (space.getHeight().getValue()){
+                case 1:
+                    model3D = Importer3D.loadAsPoly(getClass().getResource("/firstblock2.obj"));
+                    break;
+                case 2:
+                    model3D = Importer3D.loadAsPoly(getClass().getResource("/secondblock2.obj"));
+                    break;
+                case 3:
+                    model3D = Importer3D.loadAsPoly(getClass().getResource("/thirdblock.obj"));
+                    break;
+                default:
+                    switch (oldHeight.getValue()){
+                        case 0:
+                            height = EMPTY-LEVEL_3;
+                            break;
+                        case 1:
+                            height = LEVEL_1-LEVEL_3;
+                            break;
+                        case 2:
+                            height = LEVEL_2-LEVEL_3;
+                            break;
+                        default:
+                            height = 0;
+                            break;
+                    }
+                    model3D = Importer3D.loadAsPoly(getClass().getResource("/dome.obj"));
+            }
+            Group block = model3D.getRoot();
+            block.getTransforms().add(new Translate(-0.6, 0));
+            if (space.getHeight().getValue()==10)
+                block.getTransforms().add(new Translate(0, 0.3,0));
+            block.getTransforms().add(new Translate(translation[1],height,translation[0]));
+            board.getChildren().add(block);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private double[] getTranslationNeeded
+            ( int toXCoordinate, int toZCoordinate)
+    {
+        double xTranslation;
+        if ((toXCoordinate-2)>0)
+            xTranslation = (toXCoordinate-2)*POSITIVE_Z_TRANSLATION;
+        else
+            xTranslation = (toXCoordinate-2)*NEGATIVE_Z_TRANSLATION;
+        double zTranslation = (toZCoordinate - 2)*X_TRANSLATION;
+
+
+        double[] result = new double[2];
+        result[0] = xTranslation;
+        result[1] = zTranslation;
+        return result;
+    }
+
+    /**
+     * Removes the opponent workers from the screen and remove opponent from various Lists/Maps
+     * @param opponent The opponent to remove
+     */
+    private void eliminateOpponent (String opponent ){
+        Group[] toRemove = opponentsWorkers.get(opponent);
+        toRemove[0].setDisable(true);
+        toRemove[0].setVisible(false);
+        toRemove[1].setDisable(true);
+        toRemove[1].setVisible(false);
+        opponentsWorkers.remove(opponent);
+        opponents.remove(opponent);
+        opponentsColor.remove(opponent);
+        opponentsGods.remove(opponent);
+    }
+
+    /**
+     * Update the opponents list in case someone has lost before the end.
+     * @param newGameCopy The new game update
+     */
+    private void updateOpponents(Game newGameCopy){
+        ArrayList<String> activePlayers = new ArrayList<>();
+        for (Player active : newGameCopy.getAllPlayers() )
+            activePlayers.add(active.getName());
+        // if the opponent is not in the active players List, eliminate the opponent
+        for (String player : opponents) {
+            if (!activePlayers.contains(player))
+                eliminateOpponent(player);
+        }
     }
 }

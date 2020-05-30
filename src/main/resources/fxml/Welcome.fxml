@@ -13,9 +13,14 @@
             <Image url="@../itl.cat_santorini-wallpaper_428032.png" />
          </image>
       </ImageView>
-      <Label fx:id="textLabel" layoutX="222.0" layoutY="166.0" prefHeight="459.0" prefWidth="698.0" style="-fx-background-color: black;" textFill="WHITE" wrapText="true">
+      <ImageView fitHeight="460.0" fitWidth="698.0" layoutX="337.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Sprite/cl_bg.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="textLabel" layoutX="368.0" layoutY="218.0" prefHeight="316.0" prefWidth="384.0" textFill="WHITE" wrapText="true">
          <font>
-            <Font name="Trebuchet MS" size="15.0" />
+            <Font name="Trebuchet MS" size="18.0" />
          </font>
       </Label>
    </children>

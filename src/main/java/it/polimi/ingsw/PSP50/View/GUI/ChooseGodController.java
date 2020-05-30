@@ -63,6 +63,7 @@ public class ChooseGodController {
         System.out.println("\n" + answer);
         gui.setGod(selection);
         gui.sendGodChoice(answer);
+        gui.loadingGameBoard();
     }
 
 

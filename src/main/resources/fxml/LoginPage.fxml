@@ -35,7 +35,7 @@
                   <Font name="Trebuchet MS Italic" size="16.0" />
                </font>
             </RadioButton>
-            <Button fx:id="loginButton" layoutX="109.0" layoutY="254.0" mnemonicParsing="false" onAction="#login" prefHeight="52.0" prefWidth="153.0" style="-fx-background-color: DAA520 DAA520;" textFill="#8c2b09">
+            <Button fx:id="loginButton" layoutX="109.0" layoutY="254.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="52.0" prefWidth="153.0" style="-fx-background-color: DAA520 DAA520;" textFill="#8c2b09">
                <font>
                   <Font size="34.0" />
                </font>
