@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP50.Controller.GameManager;
 import it.polimi.ingsw.PSP50.Model.GameType;
 import it.polimi.ingsw.PSP50.View.VirtualView;
 import it.polimi.ingsw.PSP50.network.messages.ToClient.NameChanged;
+import it.polimi.ingsw.PSP50.network.server.ServerManager;
 
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,10 +16,12 @@ public class Lobby implements Runnable{
     private boolean isFull;
     private GameType type;
     private boolean isOver;
+    private boolean inGame;
 
     public Lobby(GameType type){
         this.type = type;
         this.isFull = false;
+        this.inGame = false;
         isOver = false;
         players = new ConcurrentHashMap<>();
         nicknames = new ConcurrentHashMap<>();
@@ -77,12 +80,21 @@ public class Lobby implements Runnable{
     public boolean isOver(){
         return isOver;
     }
+    public void setInGame() {
+        this.inGame = true;
+    }
+    public boolean isInGame() {
+        return  this.inGame;
+    }
+    public ConcurrentHashMap<Integer, VirtualView> getPlayers() {
+        return players;
+    }
 
     public void removeClient(String name, int id, VirtualView client) {
-        if (this.players.containsKey(id) && this.players.containsValue(client))
             this.players.remove(id, client);
-        if (this.players.containsKey(name) && this.players.containsValue(client))
             this.nicknames.remove(name, client);
+            if(players.size() == 0)
+                freeLobby();
     }
 
     @Override
@@ -90,4 +102,5 @@ public class Lobby implements Runnable{
         startGame();
         freeLobby();
     }
+
 }

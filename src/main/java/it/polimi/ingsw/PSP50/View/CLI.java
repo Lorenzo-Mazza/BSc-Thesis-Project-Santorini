@@ -70,10 +70,6 @@ public class CLI extends ClientView {
         return type;
     }
 
-
-
-
-
     /**
      * Updates the CLI whenever the Model changes
      */
@@ -418,7 +414,13 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
-
+    @Override
+    public void disconnectCLI(String userDisconnect) {
+        drawSection("Player ->"+ userDisconnect +"<- has been disconnect so the game ended.");
+        printBuffer();
+        Thread.yield();
+        System.exit(0);
+    }
 
 }
 

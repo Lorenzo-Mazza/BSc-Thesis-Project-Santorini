@@ -18,14 +18,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Server extends Thread{
 
     public final static int SOCKET_PORT = 7777;
-    private static  Map<Integer, ClientHandler> connections = new HashMap<>();
-    private static Map<Integer, VirtualView> views = new HashMap<>();
+    private Map<Integer, ClientHandler> connections = new HashMap<>();
+    private Map<Integer, VirtualView> views = new HashMap<>();
     private final Map<Integer, String> nicknames = new HashMap<>();
-    private static ConcurrentHashMap<Integer, Lobby> lobbies= new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, Lobby> lobbies = new ConcurrentHashMap<>();
     //integer that identifies how many lobbies are active on the server
-    private int numberOfLobbies =0;
+    private int numberOfLobbies = 0;
     //integer that identifies every single player on the server
     private int playerId=-1;
+
 
     public Map<Integer, String> getNicknames() {
         return nicknames;
@@ -35,17 +36,12 @@ public class Server extends Thread{
         return connections;
     }
 
-
     public Map<Integer, VirtualView> getViews() {
         return views;
     }
 
-    public int getNumberOfLobbies() {
-        return numberOfLobbies;
-    }
-
-    public static ConcurrentHashMap<Integer, Lobby> getLobbies() {
-        return lobbies;
+    public ConcurrentHashMap<Integer, Lobby> getLobbies() {
+        return this.lobbies;
     }
 
     /**
@@ -142,7 +138,7 @@ public class Server extends Thread{
 
     public void messageClient(ToClientMessage msg, int playerId) {
         try {
-            ClientHandler client=connections.get(playerId);
+            ClientHandler client = connections.get(playerId);
             ObjectOutputStream outStream = client.getOutput();
             outStream.writeObject(msg);
             outStream.flush();
@@ -154,5 +150,9 @@ public class Server extends Thread{
 
     public void print(String str){
         System.out.print(str);
+    }
+
+    public void removeLobby() {
+        numberOfLobbies--;
     }
 }
