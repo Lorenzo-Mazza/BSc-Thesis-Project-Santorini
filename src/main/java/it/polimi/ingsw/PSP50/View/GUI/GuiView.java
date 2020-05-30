@@ -147,7 +147,7 @@ public class GuiView extends ClientView {
                         String firstOpponent = opponents.get(0);
                         boardController.setOpponent1(firstOpponent,findGodImage(opponentsGods.get(firstOpponent)));
                         if (opponents.size()>1){
-                            String secondOpponent = opponents.get(0);
+                            String secondOpponent = opponents.get(1);
                             boardController.setOpponent2(secondOpponent, findGodImage(opponentsGods.get(secondOpponent)));
                         }
 

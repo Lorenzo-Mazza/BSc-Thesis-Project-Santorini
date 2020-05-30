@@ -143,7 +143,10 @@ public class BoardController {
         commandAction.setDisable(true);
         commandLabel.setVisible(false);
         commandLabel.setDisable(true);
-        gui.placeWorker(convertStringToChoice(spaceChoice.getValue()));
+        if (spaceChoice.getValue() == null || spaceChoice.getValue().isEmpty())
+            gui.placeWorker(possibleChoices.get(0));
+        else
+            gui.placeWorker(convertStringToChoice(spaceChoice.getValue()));
     }
 
     @FXML
@@ -156,7 +159,10 @@ public class BoardController {
         commandLabel.setDisable(true);
         skipButton.setVisible(false);
         skipButton.setDisable(true);
-        gui.notifySocket(new SpaceChoice(convertStringToChoice(spaceChoice.getValue()),gui.getPlayerId()));
+        if (spaceChoice.getValue() == null || spaceChoice.getValue().isEmpty() )
+            gui.notifySocket(new SpaceChoice(possibleChoices.get(0),gui.getPlayerId()));
+        else
+            gui.notifySocket(new SpaceChoice(convertStringToChoice(spaceChoice.getValue()),gui.getPlayerId()));
     }
 
     @FXML
@@ -180,7 +186,11 @@ public class BoardController {
         blockButton.setDisable(true);
         commandLabel.setVisible(false);
         commandLabel.setDisable(true);
-        String result = spaceChoice.getValue();
+        String result;
+        if (spaceChoice.getValue() != null)
+            result = spaceChoice.getValue();
+        else
+            result = "";
         Block answer;
         switch (result){
             case "EMPTY":

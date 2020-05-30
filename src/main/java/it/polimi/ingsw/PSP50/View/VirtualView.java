@@ -15,11 +15,13 @@ public class VirtualView extends Observable implements Observer {
     private GameManager gameController;
     private String playerName;
     private int playerId;
+    private boolean hasLost;
 
 
     public VirtualView(int playerId,String playerName){
-        this.playerId=playerId;
-        this.playerName= playerName;
+        this.playerId = playerId;
+        this.playerName = playerName;
+        this.hasLost = false;
     }
 
     public int getPlayerId(){
@@ -40,6 +42,14 @@ public class VirtualView extends Observable implements Observer {
 
     public void setGameManager(GameManager gameController){
         this.gameController= gameController;
+    }
+
+    public boolean hasLost() {
+        return hasLost;
+    }
+
+    public void setHasLost(boolean hasLost) {
+        this.hasLost = hasLost;
     }
 
     /* Virtual View is an observer of the Model*/

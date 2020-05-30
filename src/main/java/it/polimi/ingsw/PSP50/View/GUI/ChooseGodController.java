@@ -52,15 +52,16 @@ public class ChooseGodController {
     @FXML
     private void selectGod(){
         RadioButton button= (RadioButton) toggleGroup.getSelectedToggle();
+        if (button==null)
+            button = selectFirstGod;
         String selection = button.getText();
-        int answer=0;
+        int answer;
         if (selection.equals(selectFirstGod.getText()))
             answer=0;
         else if (selection.equals(selectSecondGod.getText()))
             answer=1;
         else
-            answer=3;
-        System.out.println("\n" + answer);
+            answer=2;
         gui.setGod(selection);
         gui.sendGodChoice(answer);
         gui.loadingGameBoard();

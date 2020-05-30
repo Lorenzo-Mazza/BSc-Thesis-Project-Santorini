@@ -48,6 +48,7 @@ public class GameManager implements Runnable, Observer {
         return game;
     }
 
+
     @Override
     public void run(){
         startGame();
@@ -193,11 +194,16 @@ public class GameManager implements Runnable, Observer {
                     game.getAllPlayers().remove(player);
                     // tell the client he lost
                     this.virtualViews.get(player.getName()).sendToClient(new YouLostMessage(null));
+                    this.virtualViews.get(player.getName()).setHasLost(true);
                     for (Player otherPlayer: game.getAllPlayers())
                         otherPlayer.getOpponents().remove(player);
 
                     turnList.remove(currentPlayer);
-
+                    // adjust the list
+                    if (currentPlayer==0)
+                        currentPlayer=-1;
+                    else if (currentPlayer==1)
+                        currentPlayer=0;
                     //if only a player is left, he wins automatically
                     if (turnList.size()==1)
                     {
@@ -210,7 +216,7 @@ public class GameManager implements Runnable, Observer {
             }
 
             currentPlayer++;
-            if (currentPlayer==game.getAllPlayers().size())
+            if (currentPlayer>=game.getAllPlayers().size())
             {
                 currentPlayer=0;
             }
