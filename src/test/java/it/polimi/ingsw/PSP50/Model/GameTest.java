@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class GameTest {
-    private Game game = null;
+    private Game game;
 
 
     @Before
     public void setUp() {
-        game= new Game();
+        game = new Game();
 
     }
     @After
     public void tearDown(){
-        game=null;
+        game = null;
     }
 
     @Test

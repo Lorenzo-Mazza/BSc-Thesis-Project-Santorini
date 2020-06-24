@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 
 public class PlayerTest {
-    Player player= null;
+    private Player player;
 
     @Before
     public void setUp() {
@@ -106,7 +106,7 @@ public class PlayerTest {
 
     @Test
     public void colorTest() {
-        assertEquals(null, player.getColor());
+        assertNull(player.getColor());
         player.setColor(Color.BLUE);
         assertSame(Color.BLUE, player.getColor());
     }
