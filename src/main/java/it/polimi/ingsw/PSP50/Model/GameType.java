@@ -21,7 +21,7 @@ public enum GameType implements Serializable {
      * Constructor
      * @param size an integer to determine the number of players in the game
      */
-    private GameType(int size){
+    GameType(int size){
         this.size = size;
     }
 

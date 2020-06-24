@@ -40,7 +40,7 @@ public class Deck implements Serializable {
      * @param card an index that selects one card from deck
      * @return the selected God picked from the deck
      */
-    public God getChosenCard(int card){
+    public God getCard(int card){
         return deck.get(card);
     }
 

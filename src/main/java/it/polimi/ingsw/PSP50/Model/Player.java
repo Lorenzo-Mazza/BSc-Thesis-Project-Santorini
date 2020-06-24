@@ -64,7 +64,6 @@ public class Player implements Cloneable, Serializable {
     private Color color;
 
 
-
     /**
      * Player Constructor
      * @param name Player's name
@@ -98,7 +97,6 @@ public class Player implements Cloneable, Serializable {
      */
     public Worker[] getWorkers() { return workers; }
 
-    // public void setName(String name) {this.name = name;} Constructor + final
 
     /**
      * Selects a worker

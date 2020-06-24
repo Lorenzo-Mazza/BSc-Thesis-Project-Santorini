@@ -15,13 +15,13 @@ public class SpaceTest {
     private Board board;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         board = new Board();
         space = new Space(0,0, board);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         space = null;
         board = null;
     }

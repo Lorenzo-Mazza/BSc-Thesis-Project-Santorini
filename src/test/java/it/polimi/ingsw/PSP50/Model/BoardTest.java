@@ -11,12 +11,12 @@ public class BoardTest {
     private Board board;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         board = new Board();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         board = null;
     }
 

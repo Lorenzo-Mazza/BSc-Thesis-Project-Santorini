@@ -6,11 +6,14 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 
 public class PlayerTest {
-    Player player= null;
+    private Player player= null;
 
     @Before
     public void setUp() {
@@ -90,5 +93,36 @@ public class PlayerTest {
         assertSame(true,player.getHasMovedUp());
     }
 
+    @Test
+    public void hasLostTest() {
+        assertFalse(player.getHasLost());
+        player.setHasLost(true);
+        assertTrue(player.getHasLost());
+    }
 
-}
+    @Test
+    public void blockedTest() {
+        assertFalse(player.isPlayerBlocked());
+        player.setPlayerBlocked(true);
+        assertTrue(player.isPlayerBlocked());
+    }
+    @Test
+    public void opponentsTest() {
+        assertTrue(player.getOpponents().isEmpty());
+        Player opp1 = new Player("opp1");
+        ArrayList<Player> opponents = new ArrayList<>();
+        opponents.add(opp1);
+        player.addOpponent(opp1);
+        assertFalse(player.getOpponents().isEmpty());
+        assertThat(player.getOpponents(),is(opponents));
+    }
+
+    @Test
+    public void colorTest(){
+        assertNull(player.getColor());
+        player.setColor(Color.ORANGE);
+        assertEquals(Color.ORANGE, player.getColor());
+    }
+
+
+    }

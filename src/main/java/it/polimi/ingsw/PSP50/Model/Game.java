@@ -27,7 +27,6 @@ public class Game extends Observable implements Serializable{
      * Reference to the game board
      */
     private Board board;
-  //  private Turn turn;
 
     /**
      * Type of game played (2 or 3 players)
@@ -130,13 +129,7 @@ public class Game extends Observable implements Serializable{
         return players.get(position);
     }
 
-    public Player getPlayerByName (String name){
-        for (Player player: getAllPlayers()) {
-            if (player.getName().equals(name))
-                    return player;
-        }
-        return null;
-    }
+
     public void setOpponents(){
         ArrayList <Player> playersList= this.getAllPlayers();
         int index=0;
@@ -166,6 +159,9 @@ public class Game extends Observable implements Serializable{
         notifyObservers(new ModelUpdate(modelCopy));
     }
 
+    /**
+     ** Method sets in every client an initial copy of the model. It implements the Observer/Observable pattern
+     */
     public void setModelCopy(){
         Game modelCopy= copyModel();
         notifyObservers(new SetModelCopy(modelCopy));
