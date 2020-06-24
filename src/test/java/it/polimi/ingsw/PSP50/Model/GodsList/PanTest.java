@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class DemeterTest {
+public class PanTest {
     private God god;
     private Player owner;
     private Board board;
 
     @Before
     public void setUp() {
-        god = new Demeter();
+        god = new Pan();
         owner = new Player("testing");
         board = new Board();
     }
@@ -28,26 +28,24 @@ public class DemeterTest {
         owner = null;
         board = null;
     }
-
-
     @Test
     public void stepsTest() {
         assertEquals(Phase.MOVE, god.getAvailableSteps().get(0));
         assertEquals(Phase.BUILD, god.getAvailableSteps().get(1));
-        assertEquals(Phase.OPTIONALBUILD, god.getAvailableSteps().get(2));
     }
 
     @Test
     public void nameTest() {
-        assertEquals(GodsNames.DEMETER, god.getName());
+        assertEquals(GodsNames.PAN, god.getName());
     }
 
     @Test
     public void testNormalAvailableMove() {
         owner.selectWorker(owner.getWorkers()[0]);
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
-        board.getSpace(0,1).setHeight(Block.DOME);
+        board.getSpace(0,1).setHeight(Block.LEVEL1);
         ArrayList<Space> availableMoves = new ArrayList<>();
+        availableMoves.add(board.getSpace(0, 1));
         availableMoves.add(board.getSpace(1, 0));
         availableMoves.add(board.getSpace(1, 1));
         assertThat(god.getAvailableMove(owner), is(availableMoves));
@@ -67,6 +65,7 @@ public class DemeterTest {
     public void testNormalAvailableBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
+        board.getSpace(1, 1).setHeight(Block.LEVEL1);
         ArrayList<Space> availableBuilds = new ArrayList<>();
         availableBuilds.add(board.getSpace(0, 1));
         availableBuilds.add(board.getSpace(1, 0));
@@ -78,9 +77,9 @@ public class DemeterTest {
     public void testNormalBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
-        board.getSpace(1, 1).setHeight(Block.LEVEL3);
-        god.build(owner, board.getSpace(1, 1), Block.DOME);
-        assertEquals(Block.DOME, board.getSpace(1, 1).getHeight());
+        board.getSpace(1, 1).setHeight(Block.LEVEL1);
+        god.build(owner, board.getSpace(1, 1), Block.LEVEL2);
+        assertEquals(Block.LEVEL2, board.getSpace(1, 1).getHeight());
     }
 
     @Test
@@ -89,14 +88,8 @@ public class DemeterTest {
     }
 
     @Test
-    public void testDemeterOptionalBuild(){
-        owner.selectWorker(owner.getWorkers()[0]);
-        owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
-        god.build(owner,board.getSpace(1,1),Block.LEVEL1);
-        ArrayList<Space> availableBuilds = new ArrayList<>();
-        availableBuilds.add(board.getSpace(0, 1));
-        availableBuilds.add(board.getSpace(1, 0));
-        assertThat(god.getOptionalBuild(owner), is(availableBuilds));
+    public void testNormalOptionalBuild(){
+        assertTrue(god.getOptionalBuild(owner).isEmpty());
     }
 
     @Test
@@ -121,10 +114,20 @@ public class DemeterTest {
     public void testNormalWin_false() {
         owner.selectWorker(owner.getWorkers()[0]);
         board.getSpace(0,0).setHeight(Block.LEVEL3);
-        board.getSpace(1,1).setHeight(Block.LEVEL1);
+        board.getSpace(1,1).setHeight(Block.LEVEL3);
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
         god.move(owner,board.getSpace(1,1));
         assertFalse(god.getWinCondition(owner));
+    }
+
+    @Test
+    public void testPanWin_true() {
+        owner.selectWorker(owner.getWorkers()[0]);
+        board.getSpace(0,0).setHeight(Block.LEVEL3);
+        board.getSpace(1,1).setHeight(Block.LEVEL1);
+        owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
+        god.move(owner,board.getSpace(1,1));
+        assertTrue(god.getWinCondition(owner));
     }
 
 }

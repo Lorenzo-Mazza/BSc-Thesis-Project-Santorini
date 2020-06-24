@@ -83,6 +83,11 @@ public class HephaestusTest {
     }
 
     @Test
+    public void testNormalOptionalMove(){
+        assertTrue(god.getOptionalMove(owner).isEmpty());
+    }
+
+    @Test
     public void testHephaestusOptionalBuild(){
         owner.selectWorker(owner.getWorkers()[0]);
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));

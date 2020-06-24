@@ -84,6 +84,11 @@ public class AthenaTest {
     }
 
     @Test
+    public void testNormalOptionalMove(){
+        assertTrue(god.getOptionalMove(owner).isEmpty());
+    }
+
+    @Test
     public void testNormalOptionalBuild(){
         assertTrue(god.getOptionalBuild(owner).isEmpty());
     }
