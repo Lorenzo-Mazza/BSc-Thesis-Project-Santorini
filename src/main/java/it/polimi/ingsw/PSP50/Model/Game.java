@@ -16,12 +16,12 @@ public class Game extends Observable implements Serializable{
     /**
      * List of players in the game
      */
-    private ArrayList<Player> players= new ArrayList<>();
+    private ArrayList<Player> players;
 
     /**
      * Player that won the game
      */
-    private Player winner=null;
+    private Player winner;
 
     /**
      * Reference to the game board
@@ -38,6 +38,13 @@ public class Game extends Observable implements Serializable{
      */
     private Deck deck;
 
+    public Game() {
+        this.players = new ArrayList<>();
+        this.winner = null;
+        this.board = null;
+        this.type = null;
+        this.deck = null;
+    }
 
     /**
      * gets the winner of the game
@@ -131,9 +138,9 @@ public class Game extends Observable implements Serializable{
 
 
     public void setOpponents(){
-        ArrayList <Player> playersList= this.getAllPlayers();
+        ArrayList<Player> playersList = this.getAllPlayers();
         int index=0;
-        for (this.getPlayer(index);index<playersList.size();index++)
+        for (this.getPlayer(index); index<playersList.size();index++)
         {
             Player thisPlayer= this.getPlayer(index);
             for (int secondIndex=0;secondIndex<playersList.size();secondIndex++)
@@ -147,15 +154,11 @@ public class Game extends Observable implements Serializable{
         }
     }
 
-
-
-
-
     /**
      ** Method sends to every virtual view an updated copy of the model. It implements the Observer/Observable pattern
      */
     public void notifyChange(){
-        Game modelCopy= copyModel();
+        Game modelCopy = copyModel();
         notifyObservers(new ModelUpdate(modelCopy));
     }
 
@@ -163,7 +166,7 @@ public class Game extends Observable implements Serializable{
      ** Method sets in every client an initial copy of the model. It implements the Observer/Observable pattern
      */
     public void setModelCopy(){
-        Game modelCopy= copyModel();
+        Game modelCopy = copyModel();
         notifyObservers(new SetModelCopy(modelCopy));
     }
 
@@ -171,7 +174,7 @@ public class Game extends Observable implements Serializable{
      * Method creates a deep copy of the model using the commons.lang library
      */
     public Game copyModel() {
-        Game copy= SerializationUtils.clone(this);
+        Game copy = SerializationUtils.clone(this);
         return copy;
     }
 
