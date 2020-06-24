@@ -6,14 +6,11 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 
 public class PlayerTest {
-    private Player player= null;
+    Player player= null;
 
     @Before
     public void setUp() {
@@ -30,7 +27,7 @@ public class PlayerTest {
     @Test
     public void getWorkers() {
         Worker[] workers = player.getWorkers();
-        assertNotNull(workers);
+        assertEquals(2, workers.length);
     }
 
     @Test
@@ -95,34 +92,31 @@ public class PlayerTest {
 
     @Test
     public void hasLostTest() {
-        assertFalse(player.getHasLost());
+        assertSame(false,player.getHasLost());
         player.setHasLost(true);
-        assertTrue(player.getHasLost());
+        assertSame(true,player.getHasLost());
     }
 
     @Test
-    public void blockedTest() {
-        assertFalse(player.isPlayerBlocked());
+    public void isBlockedTest() {
+        assertSame(false,player.isPlayerBlocked());
         player.setPlayerBlocked(true);
-        assertTrue(player.isPlayerBlocked());
+        assertSame(true,player.isPlayerBlocked());
     }
+
+    @Test
+    public void colorTest() {
+        assertEquals(null, player.getColor());
+        player.setColor(Color.BLUE);
+        assertSame(Color.BLUE, player.getColor());
+    }
+
     @Test
     public void opponentsTest() {
-        assertTrue(player.getOpponents().isEmpty());
-        Player opp1 = new Player("opp1");
-        ArrayList<Player> opponents = new ArrayList<>();
-        opponents.add(opp1);
-        player.addOpponent(opp1);
-        assertFalse(player.getOpponents().isEmpty());
-        assertThat(player.getOpponents(),is(opponents));
+        assertEquals(0, player.getOpponents().size());
+        Player opponent1 = new Player("player2");
+        player.addOpponent(opponent1);
+        assertSame(opponent1, (player.getOpponents()).get(0));
     }
 
-    @Test
-    public void colorTest(){
-        assertNull(player.getColor());
-        player.setColor(Color.ORANGE);
-        assertEquals(Color.ORANGE, player.getColor());
-    }
-
-
-    }
+}
