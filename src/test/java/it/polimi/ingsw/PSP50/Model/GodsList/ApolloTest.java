@@ -69,6 +69,8 @@ public class ApolloTest {
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
         god.move(owner, board.getSpace(1, 1));
         assertEquals(board.getSpace(1, 1), owner.getSelectedWorker().getPosition());
+        assertEquals(board.getSpace(1, 1).getWorker(), owner.getSelectedWorker());
+        assertNull(board.getSpace(0,0).getWorker());
     }
 
     @Test
@@ -79,6 +81,8 @@ public class ApolloTest {
         board.getSpace(0, 1).setWorker(opponent);
         god.move(owner, board.getSpace(0, 1));
         assertEquals(board.getSpace(0, 1), owner.getSelectedWorker().getPosition());
+        assertEquals(board.getSpace(0, 1).getWorker(), owner.getSelectedWorker());
+        assertEquals(board.getSpace(0, 0), opponent.getPosition());
         assertEquals(board.getSpace(0, 0).getWorker(), opponent);
     }
 

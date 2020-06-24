@@ -59,6 +59,8 @@ public class DemeterTest {
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
         god.move(owner, board.getSpace(1, 1));
         assertEquals(board.getSpace(1, 1), owner.getSelectedWorker().getPosition());
+        assertEquals(board.getSpace(1, 1).getWorker(), owner.getSelectedWorker());
+        assertNull(board.getSpace(0,0).getWorker());
     }
 
     @Test
