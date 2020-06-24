@@ -212,19 +212,31 @@ public class Player implements Cloneable, Serializable {
         this.hasLost = hasLost;
     }
 
-
+    /**
+     *
+     * @return a boolean that indicates whether the player is blocked in the current turn
+     */
     public boolean isPlayerBlocked() {
         return playerBlocked;
     }
-
+    /**
+     *
+     * @param playerBlocked Indicates whether the player is blocked in the current turn
+     */
     public void setPlayerBlocked(boolean playerBlocked) {
         this.playerBlocked = playerBlocked;
     }
-
+    /**
+     *
+     * @return a list containing all the player's opponents
+     */
     public ArrayList<Player> getOpponents() {
         return opponents;
     }
-
+    /**
+     *
+     * @param opponent add an opponent to the player's opponents list
+     */
     public void addOpponent(Player opponent) {
         opponents.add(opponent);
     }

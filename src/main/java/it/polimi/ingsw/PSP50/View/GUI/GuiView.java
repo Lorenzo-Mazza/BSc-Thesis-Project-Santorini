@@ -210,10 +210,10 @@ public class GuiView extends ClientView {
                             "Space (4,4) is the bottom one on the right. ";
                     if (optional)
                     {
-                        text += "The MOVE IS OPTIONAL, CLICK SKIP IF YOU DON'T WANNA MOVE.";
+                        text += "(The MOVE IS OPTIONAL, you can skip it).";
                         boardController.enableSkipButton();
                     }
-                            boardController.setCommandText(text);
+                    boardController.setCommandText(text);
                 });
     }
 
@@ -228,7 +228,7 @@ public class GuiView extends ClientView {
                             "Space (4,4) is the bottom one on the right. ";
                     if (optional)
                     {
-                        text += "The MOVE IS OPTIONAL, CLICK SKIP IF YOU DON'T WANNA MOVE.";
+                        text += "(The MOVE IS OPTIONAL, you can skip it).";
                         boardController.enableSkipButton();
                     }
                     boardController.setCommandText(text);
@@ -279,8 +279,8 @@ public class GuiView extends ClientView {
         boardController.setSpaceChoice(possibleChoices);
         boardController.enableFirstButton();
         boardController.setCommandText("Choose where to place your second worker." +
-                " Reminder: Space (0,0) is the first one on the left, " +
-                "Space (4,4) is the last one on the right");
+                " Reminder: Space (0,0) is the top one on the left, " +
+                "Space (4,4) is the bottom one on the right");
                 });
     }
 

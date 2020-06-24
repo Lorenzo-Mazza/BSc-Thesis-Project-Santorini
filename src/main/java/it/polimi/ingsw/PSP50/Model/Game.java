@@ -130,7 +130,13 @@ public class Game extends Observable implements Serializable{
         return players.get(position);
     }
 
-
+    public Player getPlayerByName (String name){
+        for (Player player: getAllPlayers()) {
+            if (player.getName().equals(name))
+                    return player;
+        }
+        return null;
+    }
     public void setOpponents(){
         ArrayList <Player> playersList= this.getAllPlayers();
         int index=0;
