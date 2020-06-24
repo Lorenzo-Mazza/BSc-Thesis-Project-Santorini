@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Atlas</title>
+  <style type="text/css">
+    @import "../../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP50.Model.GodsList</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Atlas (it.polimi.ingsw.PSP50.Model.GodsList)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Atlas</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (13/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP50.Model.GodsList;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP50.Model.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * Atlas Card
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;public class Atlas extends God {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * *Constructor*
+<i>14</i>&nbsp;     */
+<i>15</i>&nbsp;    public Atlas(){
+<b class="fc"><i>16</i>&nbsp;        super(GodsNames.ATLAS);</b>
+<b class="fc"><i>17</i>&nbsp;        availableSteps.add(Phase.MOVE);</b>
+<b class="fc"><i>18</i>&nbsp;        availableSteps.add(Phase.BUILD);</b>
+<b class="fc"><i>19</i>&nbsp;    }</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Overrides the default getAvailableBlock method to implement Atlas&#39;power.
+<i>23</i>&nbsp;     * @param player The owner of the God card
+<i>24</i>&nbsp;     * @return an ArrayList that contains the default available block plus a Dome
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;    @Override
+<i>27</i>&nbsp;    public ArrayList&lt;Block&gt; getAvailableBlock(Player player) {
+<b class="fc"><i>28</i>&nbsp;        ArrayList&lt;Block&gt; list = super.getAvailableBlock(player);</b>
+<b class="fc"><i>29</i>&nbsp;        if (!list.contains(Block.DOME))</b>
+<b class="fc"><i>30</i>&nbsp;            {list.add(Block.DOME);}</b>
+<b class="fc"><i>31</i>&nbsp;        return list;</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * Overrides the default Build method to implement Atlas&#39;s power.
+<i>36</i>&nbsp;     * @param player The owner of the God card
+<i>37</i>&nbsp;     * @param space a Space variable that indicate where to build
+<i>38</i>&nbsp;     * @param piece a Block variable that indicate what to build
+<i>39</i>&nbsp;     * @return a boolean variable to report the outcome of the action
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    public boolean build(Player player, Space space, Block piece)
+<i>43</i>&nbsp;    {
+<b class="fc"><i>44</i>&nbsp;        space.setHeight(piece);</b>
+<i>45</i>&nbsp;        // if the outcome is correct
+<b class="fc"><i>46</i>&nbsp;        if (space.getHeight() == piece) {</b>
+<b class="fc"><i>47</i>&nbsp;            player.setHasBuilt(true);</b>
+<b class="fc"><i>48</i>&nbsp;            player.setLastBuild(space);</b>
+<b class="fc"><i>49</i>&nbsp;            return true;</b>
+<i>50</i>&nbsp;        }
+<i>51</i>&nbsp;        // if the outcome is wrong
+<i>52</i>&nbsp;        else
+<b class="nc"><i>53</i>&nbsp;            return false;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-25 00:27</div>
+</div>
+</body>
+</html>

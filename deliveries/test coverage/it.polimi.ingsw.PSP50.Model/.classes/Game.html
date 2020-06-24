@@ -1,0 +1,264 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Game</title>
+  <style type="text/css">
+    @import "../../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP50.Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Game (it.polimi.ingsw.PSP50.Model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82,4%
+  </span>
+  <span class="absValue">
+    (14/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (32/ 40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP50.Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP50.Utils.Observable;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP50.network.messages.ToClient.ModelUpdate;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP50.network.messages.ToClient.SetModelCopy;
+<i>6</i>&nbsp;import org.apache.commons.lang3.SerializationUtils;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.Serializable;
+<i>9</i>&nbsp;import java.util.ArrayList;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Game contains all of the parameters needed to play a game
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class Game extends Observable implements Serializable{
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * List of players in the game
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    private ArrayList&lt;Player&gt; players;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Player that won the game
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    private Player winner;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Reference to the game board
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    private Board board;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Type of game played (2 or 3 players)
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    private GameType type;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Deck used for the game
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    private Deck deck;
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;    public Game() {</b>
+<b class="fc"><i>42</i>&nbsp;        this.players = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>43</i>&nbsp;        this.winner = null;</b>
+<b class="fc"><i>44</i>&nbsp;        this.board = null;</b>
+<b class="fc"><i>45</i>&nbsp;        this.type = null;</b>
+<b class="fc"><i>46</i>&nbsp;        this.deck = null;</b>
+<b class="fc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * gets the winner of the game
+<i>51</i>&nbsp;     * @return the Player that won the game
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public Player getWinner() {
+<b class="fc"><i>54</i>&nbsp;        return winner;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * assigns a winner to the game
+<i>59</i>&nbsp;     * @param winner Player that won the game
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public void setWinner(Player winner) {
+<b class="fc"><i>62</i>&nbsp;        this.winner = winner;</b>
+<b class="fc"><i>63</i>&nbsp;    }</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * assigns a deck to the game
+<i>67</i>&nbsp;     * @param deck Deck of God cards
+<i>68</i>&nbsp;     */
+<b class="fc"><i>69</i>&nbsp;    public void setDeck(Deck deck) { this.deck = deck; }</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    /**
+<i>72</i>&nbsp;     *
+<i>73</i>&nbsp;     * @return the game deck
+<i>74</i>&nbsp;     */
+<i>75</i>&nbsp;    public Deck getDeck() {
+<b class="fc"><i>76</i>&nbsp;        return deck;</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Sets the game type
+<i>81</i>&nbsp;     * @param type a GameType variable that indicates how many players are playing
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    public void setType(GameType type) {
+<b class="fc"><i>84</i>&nbsp;        this.type = type;</b>
+<b class="fc"><i>85</i>&nbsp;    }</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    /**
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @return the game type
+<i>90</i>&nbsp;     */
+<b class="fc"><i>91</i>&nbsp;    public GameType getType() { return type; }</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * *Description of method*
+<i>95</i>&nbsp;     * @param board a Board variable
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public void setBoard(Board board) {
+<b class="fc"><i>98</i>&nbsp;        this.board = board;</b>
+<b class="fc"><i>99</i>&nbsp;    }</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     *
+<i>103</i>&nbsp;     * @return the game board
+<i>104</i>&nbsp;     */
+<b class="fc"><i>105</i>&nbsp;    public Board getBoard() { return board; }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * Assigns a list of players to the game
+<i>110</i>&nbsp;     * @param players ArrayList of the Players in the game
+<i>111</i>&nbsp;     */
+<i>112</i>&nbsp;    public void setPlayers(ArrayList&lt;Player&gt; players) {
+<b class="fc"><i>113</i>&nbsp;        this.players = players;</b>
+<b class="fc"><i>114</i>&nbsp;    }</b>
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     *
+<i>118</i>&nbsp;     * @return the ArrayList of players
+<i>119</i>&nbsp;     */
+<i>120</i>&nbsp;    public ArrayList&lt;Player&gt; getAllPlayers() {
+<b class="fc"><i>121</i>&nbsp;        return players;</b>
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * Add a player to the ArrayList of the players
+<i>126</i>&nbsp;     * @param player Player that is being added
+<i>127</i>&nbsp;     */
+<b class="fc"><i>128</i>&nbsp;    public void setPlayer(Player player) { players.add(player);}</b>
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * Get a player from the ArrayList of the players
+<i>132</i>&nbsp;     * @param position an index used to identify the player
+<i>133</i>&nbsp;     * @return a Player from the ArrayList of players
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    public Player getPlayer(int position) {
+<b class="fc"><i>136</i>&nbsp;        return players.get(position);</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    public void setOpponents(){
+<b class="fc"><i>141</i>&nbsp;        ArrayList&lt;Player&gt; playersList = this.getAllPlayers();</b>
+<b class="fc"><i>142</i>&nbsp;        int index=0;</b>
+<b class="fc"><i>143</i>&nbsp;        for (this.getPlayer(index); index&lt;playersList.size();index++)</b>
+<i>144</i>&nbsp;        {
+<b class="fc"><i>145</i>&nbsp;            Player thisPlayer= this.getPlayer(index);</b>
+<b class="fc"><i>146</i>&nbsp;            for (int secondIndex=0;secondIndex&lt;playersList.size();secondIndex++)</b>
+<i>147</i>&nbsp;            {
+<b class="fc"><i>148</i>&nbsp;                Player opponent= this.getPlayer(secondIndex);</b>
+<b class="fc"><i>149</i>&nbsp;                if (thisPlayer!= opponent)</b>
+<i>150</i>&nbsp;                {
+<b class="fc"><i>151</i>&nbsp;                    thisPlayer.addOpponent(opponent);</b>
+<i>152</i>&nbsp;                }
+<i>153</i>&nbsp;            }
+<i>154</i>&nbsp;        }
+<b class="fc"><i>155</i>&nbsp;    }</b>
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     ** Method sends to every virtual view an updated copy of the model. It implements the Observer/Observable pattern
+<i>159</i>&nbsp;     */
+<i>160</i>&nbsp;    public void notifyChange(){
+<b class="nc"><i>161</i>&nbsp;        Game modelCopy = copyModel();</b>
+<b class="nc"><i>162</i>&nbsp;        notifyObservers(new ModelUpdate(modelCopy));</b>
+<b class="nc"><i>163</i>&nbsp;    }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     ** Method sets in every client an initial copy of the model. It implements the Observer/Observable pattern
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    public void setModelCopy(){
+<b class="nc"><i>169</i>&nbsp;        Game modelCopy = copyModel();</b>
+<b class="nc"><i>170</i>&nbsp;        notifyObservers(new SetModelCopy(modelCopy));</b>
+<b class="nc"><i>171</i>&nbsp;    }</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /**
+<i>174</i>&nbsp;     * Method creates a deep copy of the model using the commons.lang library
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public Game copyModel() {
+<b class="nc"><i>177</i>&nbsp;        Game copy = SerializationUtils.clone(this);</b>
+<b class="nc"><i>178</i>&nbsp;        return copy;</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-25 00:27</div>
+</div>
+</body>
+</html>

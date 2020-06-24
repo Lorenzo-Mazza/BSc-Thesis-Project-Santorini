@@ -1,0 +1,127 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Color</title>
+  <style type="text/css">
+    @import "../../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP50.Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Color (it.polimi.ingsw.PSP50.Model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Color</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP50.Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * Colors of the workers on the board
+<i>5</i>&nbsp; */
+<b class="fc"><i>6</i>&nbsp;public enum Color {</b>
+<b class="fc"><i>7</i>&nbsp;    ORANGE(&quot;Orange&quot;, &quot;\u001b[32m&quot;),</b>
+<b class="fc"><i>8</i>&nbsp;    PINK(&quot;Pink&quot;, &quot;\u001b[35m&quot;),</b>
+<b class="fc"><i>9</i>&nbsp;    BLUE(&quot;Blue&quot;, &quot;\u001b[34m&quot;);</b>
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    /**
+<i>12</i>&nbsp;     * Color name
+<i>13</i>&nbsp;     */
+<i>14</i>&nbsp;    private String name;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * Terminal escape sequence
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    private String sequence;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Constructor
+<i>23</i>&nbsp;     * @param name Color name
+<i>24</i>&nbsp;     * @param sequence Terminal escape sequence
+<i>25</i>&nbsp;     */
+<b class="fc"><i>26</i>&nbsp;    Color(String name, String sequence) {</b>
+<b class="fc"><i>27</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>28</i>&nbsp;        this.sequence = sequence;</b>
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * @return Color name
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public String getName() {
+<b class="fc"><i>35</i>&nbsp;        return name;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * @return Terminal escape sequence
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public String getSequence() {
+<b class="fc"><i>42</i>&nbsp;        return sequence;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-25 00:27</div>
+</div>
+</body>
+</html>

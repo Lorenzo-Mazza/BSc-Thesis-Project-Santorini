@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class PanTest {
+public class PrometheusTest {
     private God god;
     private Player owner;
     private Board board;
 
     @Before
     public void setUp() {
-        god = new Pan();
+        god = new Prometheus();
         owner = new Player("testing");
         board = new Board();
     }
@@ -31,19 +31,33 @@ public class PanTest {
 
     @Test
     public void stepsTest() {
-        assertEquals(Phase.MOVE, god.getAvailableSteps().get(0));
-        assertEquals(Phase.BUILD, god.getAvailableSteps().get(1));
+        assertEquals(Phase.OPTIONALBUILD, god.getAvailableSteps().get(0));
+        assertEquals(Phase.MOVE, god.getAvailableSteps().get(1));
+        assertEquals(Phase.BUILD, god.getAvailableSteps().get(2));
     }
 
     @Test
     public void nameTest() {
-        assertEquals(GodsNames.PAN, god.getName());
+        assertEquals(GodsNames.PROMETHEUS, god.getName());
     }
 
     @Test
-    public void testNormalAvailableMove() {
+    public void testPrometheusAvailableMove_hasBuilt() {
         owner.selectWorker(owner.getWorkers()[0]);
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
+        owner.setHasBuilt(true);
+        board.getSpace(0,1).setHeight(Block.LEVEL1);
+        ArrayList<Space> availableMoves = new ArrayList<>();
+        availableMoves.add(board.getSpace(1, 0));
+        availableMoves.add(board.getSpace(1, 1));
+        assertThat(god.getAvailableMove(owner), is(availableMoves));
+    }
+
+    @Test
+    public void testPrometheusAvailableMove_hasNotBuilt() {
+        owner.selectWorker(owner.getWorkers()[0]);
+        owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
+        owner.setHasBuilt(false);
         board.getSpace(0,1).setHeight(Block.LEVEL1);
         ArrayList<Space> availableMoves = new ArrayList<>();
         availableMoves.add(board.getSpace(0, 1));
@@ -89,8 +103,14 @@ public class PanTest {
     }
 
     @Test
-    public void testNormalOptionalBuild(){
-        assertTrue(god.getOptionalBuild(owner).isEmpty());
+    public void testPrometheusOptionalBuild(){
+        owner.selectWorker(owner.getWorkers()[0]);
+        owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
+        ArrayList<Space> availableBuilds = new ArrayList<>();
+        availableBuilds.add(board.getSpace(0, 1));
+        availableBuilds.add(board.getSpace(1, 0));
+        availableBuilds.add(board.getSpace(1, 1));
+        assertThat(god.getOptionalBuild(owner), is(availableBuilds));
     }
 
     @Test
@@ -119,16 +139,6 @@ public class PanTest {
         owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
         god.move(owner,board.getSpace(1,1));
         assertFalse(god.getWinCondition(owner));
-    }
-
-    @Test
-    public void testPanWin_true() {
-        owner.selectWorker(owner.getWorkers()[0]);
-        board.getSpace(0,0).setHeight(Block.LEVEL3);
-        board.getSpace(1,1).setHeight(Block.LEVEL1);
-        owner.getSelectedWorker().setPosition(board.getSpace(0, 0));
-        god.move(owner,board.getSpace(1,1));
-        assertTrue(god.getWinCondition(owner));
     }
 
 }
