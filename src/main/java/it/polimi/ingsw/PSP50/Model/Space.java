@@ -180,7 +180,8 @@ public class Space implements Serializable {
 
     /**
      * Checks if there's a neighboring space in the direction (X,Y) from the actual space.
-     * Direction (1,0) is East, (1,1) North-East, (0,1) North, (-1,1) North-West, (-1,0) West, (0,-1) South, (-1,-1) South-West
+     * Direction (1,0) is East, (1,-1) North-East, (0,-1) North, (-1,-1) North-West,
+     *  (-1,0) West, (0,1) South, (-1,1) South-West, (1,1) South-East
      * @param movementOnX X-coordinate of the movement
      * @param movementOnY Y-coordinate of the movement
      * @return a boolean: true if a space exists and it's not blocked permanently by a DOME, false otherwise

@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Board represents the game board, made by an array of 5*5 spaces
  */
 public class Board implements Serializable {
+
     private Space[][] spaces = new Space[5][5];
 
     /**
