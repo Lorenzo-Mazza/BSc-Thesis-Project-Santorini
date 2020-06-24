@@ -26,11 +26,11 @@ public class Hephaestus extends God {
      */
     @Override
     public ArrayList<Space> getOptionalBuild(Player player) {
-        ArrayList <Space> optionalBuild= super.getOptionalBuild(player); // it should be an empty list, check if it's empty in Tests
+        ArrayList <Space> optionalBuild= super.getOptionalBuild(player);
         Space lastBuild = player.getLastBuild();
         //If you cannot build a Dome, the Space is available for Hephaestus's Power.
         if ((lastBuild.getHeight() != Block.DOME) && (lastBuild.getHeight() != Block.LEVEL3))
-        optionalBuild.add(lastBuild);
+            optionalBuild.add(lastBuild);
         return optionalBuild; //Check if it's empty or not in the Controller!
     }
 }
