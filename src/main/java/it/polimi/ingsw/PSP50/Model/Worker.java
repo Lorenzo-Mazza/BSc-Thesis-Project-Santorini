@@ -11,7 +11,9 @@ public class Worker implements Serializable {
      *  Reference to his owner
      */
     final private Player owner;
-
+    /**
+     *  An ID used to reference each of the two workers a player has
+     */
     final private int workerId;
     /**
      *  Reference to the position where the worker is on the board

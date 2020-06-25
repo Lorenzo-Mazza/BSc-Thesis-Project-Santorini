@@ -136,7 +136,9 @@ public class Game extends Observable implements Serializable{
         return players.get(position);
     }
 
-
+    /**
+     * Set the respective opponents for each player
+     */
     public void setOpponents(){
         ArrayList<Player> playersList = this.getAllPlayers();
         int index=0;

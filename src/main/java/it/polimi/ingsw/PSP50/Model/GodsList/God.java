@@ -160,6 +160,11 @@ public abstract class God implements Serializable {
             return false;
     }
 
+    /**
+     *  Check if a player has won using the "win condition" of the player's god.
+     * @param player the owner of the God card
+     * @return a boolean variable that is true if the player won, false otherwise
+     */
     public boolean getWinCondition(Player player){
         Block lastHeight= player.getLastMove().getHeight();
         Block thisHeight= player.getSelectedWorker().getPosition().getHeight();
@@ -169,7 +174,4 @@ public abstract class God implements Serializable {
         }
         else return false;
     }
-
-    //call from worker  public void block();
-
 }

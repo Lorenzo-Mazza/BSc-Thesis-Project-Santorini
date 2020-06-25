@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class Client  {
 
-
     public static void main( String[] args ) {
         Scanner scanner = new Scanner(System.in);
         String ui;
@@ -28,30 +27,4 @@ public class Client  {
             }
         }
     }
-
-
-
-   /* private GameType chooseGame(Scanner scanner){
-      int numberOfPlayers;
-      GameType type;
-      System.out.println("\nHow many players do you wanna play against? (write an integer, options are: 1,2");
-      while(true) {
-          numberOfPlayers=scanner.nextInt();
-          if (numberOfPlayers==1) {
-              type=GameType.TWOPLAYERS;
-              System.out.println("\nStart looking for a two-players lobby!");
-              break;
-          }
-          if (numberOfPlayers==2) {
-              type=GameType.THREEPLAYERS;
-              System.out.println("\nStart looking for a three-players lobby!");
-              break;
-          }
-          else {
-              System.out.println("Wrong param. Valid are <1>,<2>.");
-          }
-      }
-      return type;
-  }*/
-
 }

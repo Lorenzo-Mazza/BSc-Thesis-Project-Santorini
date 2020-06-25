@@ -12,17 +12,42 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Turn Manager represent the game turn logic of each player, depending on the Player's God card
+ */
 public class TurnManager implements Observer{
-
+    /**
+     * Virtual view referenced by the turn manager
+     */
     private final VirtualView virtualView;
+    /**
+     * Game referenced by the turn manager
+     */
     private final Game game;
+    /**
+     * Player controlled by the turn manager
+     */
     private final Player player;
+    /**
+     * Player's god
+     */
     private final God god;
+    /**
+     * List of the steps that the player will go through in his turn
+     */
     private ArrayList<Phase> steps;
+    /**
+     * List of the workers that the player cannot move in his turn because they are blocked
+     */
     private ArrayList <Worker> blockedWorkers;
+    /**
+     * Object used to receive View-side messages
+     */
     private Object receiver=null;
 
-
+    /**
+     * Constructor
+     */
     TurnManager(Game game,Player player, VirtualView virtualView){
         this.game = game;
         this.player = player;
@@ -33,11 +58,17 @@ public class TurnManager implements Observer{
         setObservable(this.virtualView);
     }
 
+    /**
+     * @return the player controlled by the turn manager
+     */
     public Player getPlayer() {
         return player;
     }
 
-
+    /**
+     * Main function of the class: it plays a complete turn start to finish
+     * @return a boolean that is true if the player has won during the turn, false otherwise
+     */
     public boolean playTurn () {
         ArrayList <Space> spaceChoice=null;
 
@@ -225,6 +256,9 @@ public class TurnManager implements Observer{
         return false;
     }
 
+    /**
+     * Worker selection process- from the controller to the view
+     */
     public void selectWorker(){
         Worker selectedWorker=null;
         ArrayList<Space> workersPosition = new ArrayList<>();
@@ -249,7 +283,7 @@ public class TurnManager implements Observer{
         receiver=null;
     }
 
-    /*
+    /**
      ** Update the class whenever the Virtual View notifies a new message
      */
     @Override
@@ -257,7 +291,7 @@ public class TurnManager implements Observer{
         receiver= ((ToServerMessage)message).castChoice();
     }
 
-    /*
+    /**
     ** Set the Virtual View as an Observable for this class
      */
     @Override

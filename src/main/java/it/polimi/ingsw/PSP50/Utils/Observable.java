@@ -26,7 +26,5 @@ public abstract class Observable {
         }
     }
 
-  //  public abstract Observer getUpdate(Observer obj);
-
 }
 

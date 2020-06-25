@@ -1,4 +1,13 @@
+module:it.polimi.ingsw.PSP50
 it.polimi.ingsw.PSP50
 it.polimi.ingsw.PSP50.Controller
 it.polimi.ingsw.PSP50.Model
 it.polimi.ingsw.PSP50.Model.GodsList
+it.polimi.ingsw.PSP50.network.client
+it.polimi.ingsw.PSP50.network.messages
+it.polimi.ingsw.PSP50.network.messages.ToClient
+it.polimi.ingsw.PSP50.network.messages.ToServer
+it.polimi.ingsw.PSP50.network.server
+it.polimi.ingsw.PSP50.Utils
+it.polimi.ingsw.PSP50.View
+it.polimi.ingsw.PSP50.View.GUI

@@ -13,11 +13,23 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * Command Line Interface
+ */
 public class CLI extends ClientView {
 
+    /**
+     * Buffer used to print messages
+     */
     private StringBuilder buffer = new StringBuilder();
+    /**
+     * Buffered reader used to read messages
+     */
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+    /**
+     * Constructor
+     */
     public CLI() {
         Socket server = connect();
         this.buffer.append("Insert Username");
@@ -30,7 +42,10 @@ public class CLI extends ClientView {
         Thread socketThread = new Thread(socket);
         socketThread.start();
     }
-
+    /**
+     * Connect to a server
+     * @return the server
+     */
     private Socket connect(){
         Socket server = null;
         try{
@@ -46,6 +61,11 @@ public class CLI extends ClientView {
         return server;
     }
 
+    /**
+     * User chooses the type of game he wants to play
+     * @param scanner
+     * @return choice
+     */
     private GameType chooseGame(Scanner scanner){
         int numberOfPlayers;
         GameType type;
@@ -80,7 +100,9 @@ public class CLI extends ClientView {
     }
 
 
-
+    /**
+     * Print the buffer
+     */
     private void printBuffer() {
         System.out.print(this.buffer.toString());
         System.out.print("\n");
@@ -89,7 +111,11 @@ public class CLI extends ClientView {
         System.out.flush();
     }
 
-    public void drawSection(String line) {
+    /**
+     * Draw a frame around the message, to make it graphically more readable
+     * @param line the message
+     */
+    private void drawSection(String line) {
         for (int i = 0; i < (line.length()); i++) {
             this.buffer.append("_");
         }
@@ -107,24 +133,40 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
+    /**
+     * Print a starting game message
+     */
     @Override
     public void startingGame() {
         drawSection("Game is starting! GET READY \uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25");
         notifySocket(new GameStarted(true,this.getPlayerId()));
     }
-
+    /**
+     * Tell the user to select a worker
+     * @param possibleChoices possible workers that he can select
+     */
     @Override
     public void selectWorker(ArrayList<int[]> possibleChoices) {
         drawSection("Choose the worker to use for this turn");
         chooseSpace(possibleChoices,false);
     }
 
+    /**
+     * Tell the user to select a space to perform a move action
+     * @param possibleChoices spaces available for the action
+     * @param optional if the action is optional it's set to true
+     */
     @Override
     public void moveAction(ArrayList<int[]> possibleChoices, boolean optional) {
         drawSection("Choose where you want to move your worker!");
         chooseSpace(possibleChoices,optional);
     }
 
+    /**
+     * Tell the user to select a space to perform a build action
+     * @param possibleChoices spaces available for the action
+     * @param optional if the action is optional it's set to true
+     */
     @Override
     public void buildAction(ArrayList<int[]> possibleChoices, boolean optional) {
         drawSection("Choose where to build");
@@ -132,17 +174,33 @@ public class CLI extends ClientView {
 
     }
 
+    /**
+     * Append a string to the buffer
+     * @param line the string
+     */
     private void writeLine(String line) {
         this.buffer.append(line);
     }
 
+    /**
+     * Read a string from Command Line
+     * @return the input
+     */
     private String readLine() {
         Scanner scanner = new Scanner(System.in);
         return (scanner.nextLine());
     }
 
 
-
+    /**
+     * Gets a choice from the User using a timeout: if the user input is wrong, it keeps asking
+     * for a right answer until the timeout ends. When the timeout ends and no correct answer
+     * is been written, a default choice will be made
+     * @param range represents the choices list's size
+     * @param timeout represents the timeout for the selection
+     * @param optional tells if the selection is optional
+     * @return an int representing the user's choice
+     */
     private int getChoiceWithTimeout(int range, int timeout, boolean optional) {
         //Callable<Integer> callable = () -> new Scanner(System.in).nextInt();
         ConsoleInput callable= new ConsoleInput(reader);
@@ -179,7 +237,11 @@ public class CLI extends ClientView {
             choice=0;
         return choice;
     }
-
+    /**
+     * Print a welcome message
+     * @param opponentsMap the opponents of the client (Color+Name)
+     * @param playerColor the client's color
+     */
     @Override
     public void welcomeMessage(HashMap<String,Color> opponentsMap, Color playerColor) {
         //ArrayList<String> opponents = new ArrayList<>(opponentsMap.keySet());
@@ -194,7 +256,9 @@ public class CLI extends ClientView {
         drawSection(message);
         drawSection(secondMessage);
     }
-
+    /**
+     * Tell the user he won the game
+     */
     @Override
     public void winAlert(String winnerName) {
         if (winnerName.equals(this.getName()))
@@ -203,18 +267,27 @@ public class CLI extends ClientView {
         else drawSection(winnerName+ " has won the game! Unfortunately You LOST. \uD83D\uDE2D \uD83D\uDE2D \uD83D\uDE2D"
                 + "\nTry again next time!");
     }
-
+    /**
+     * Tell the user he lost the game
+     */
     @Override
     public void loseAlert() {
         drawSection("You LOST! \uD83D\uDE2D \uD83D\uDE2D \uD83D\uDE2D");
         drawSection("Keep the connection active to see how the game plays out!");
     }
 
+    /**
+     * Tell the user that his name is been changed
+     */
     @Override
     public void nameChanged() {
         drawSection("There is a player with your same name on the lobby. Your new name is " + this.getName());
     }
 
+    /**
+     * Perform the initialization of the workers on the game board
+     * @param possibleChoices available spaces where to put the workers
+     */
     @Override
     public void initializeWorkers(ArrayList<int[]> possibleChoices) {
         drawSection("Choose where to place the workers");
@@ -254,7 +327,11 @@ public class CLI extends ClientView {
         notifySocket(new WorkersInitialChoice(answer, this.getPlayerId()));
     }
 
-
+    /**
+     * Perform a space selection
+     * @param possibleChoices available spaces for the selection
+     * @param optional if the selection is optional
+     */
     public void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional) {
         printAvailableSpaces(possibleChoices);
         if (optional) {
@@ -280,6 +357,10 @@ public class CLI extends ClientView {
         notifySocket(new SpaceChoice(possibleChoices.get(choice), this.getPlayerId()));
     }
 
+    /**
+     * Perform a god card selection
+     * @param possibleChoices god cards still available for the selection
+     */
     @Override
     public void chooseGod(ArrayList<String> possibleChoices) {
         drawSection("Choose the God you want to use (Write an integer between 1 - "+ (possibleChoices.size()));
@@ -304,6 +385,9 @@ public class CLI extends ClientView {
         notifySocket(messageChoice);
     }
 
+    /**
+     * Tell the user that his selected worker is blocked
+     */
     @Override
     public void workerIsBlocked (int x, int y) {
         drawSection("The Worker you selected in position (" + x + ", " + y +
@@ -311,8 +395,11 @@ public class CLI extends ClientView {
     }
 
 
-
-        @Override
+    /**
+     * Perform a block selection
+     * @param possibleBlock the possible block the user can select apart from the default option
+     */
+    @Override
     public void chooseBlock(Block possibleBlock) {
             drawSection("Choose which block you want to build");
             writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
@@ -333,6 +420,7 @@ public class CLI extends ClientView {
 
 
     /**
+     * Print a space on the terminal
      * @param space
      * @return space height highlighted the color of the worker occupying it
      */
@@ -356,7 +444,7 @@ public class CLI extends ClientView {
     }
 
     /**
-     * Prints the game board to terminal
+     * Prints the game board on the terminal
      */
     private void printBoard() {
         writeLine("\nThis is the board.\n Reminder: Space (0,0) is the first one on the left, " +
@@ -374,7 +462,10 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
-
+    /**
+     * Print a list of the available spaces for the action
+     * @param coordinates the availbale spaces
+     */
     private void printAvailableSpaces(ArrayList<int[]> coordinates) {
         writeLine("\nSelect one of these pairs:");
         printBuffer();
@@ -387,6 +478,10 @@ public class CLI extends ClientView {
         printBuffer();
     }
 
+    /**
+     * Print a message that ends the game after a user disconnected
+     * @param userDisconnect name of the user that disconnected
+     */
     @Override
     public void disconnectUI(String userDisconnect) {
         drawSection("Player ->"+ userDisconnect +"<- is been disconnected so the game ended.");

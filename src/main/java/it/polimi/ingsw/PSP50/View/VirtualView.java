@@ -11,43 +11,76 @@ import it.polimi.ingsw.PSP50.network.server.ServerManager;
  *  Server-side View
  */
 public class VirtualView extends Observable implements Observer {
-
+    /**
+     * Game manager referenced by the virtual view
+     */
     private GameManager gameController;
+    /**
+     * Name of the virtual view's owner
+     */
     private String playerName;
+    /**
+     * Id of the virtual view's owner
+     */
     private int playerId;
+    /**
+     * Boolean that indicates whether a player has lost or not
+     */
     private boolean hasLost;
 
-
+    /**
+     * Constructor
+     */
     public VirtualView(int playerId,String playerName){
         this.playerId = playerId;
         this.playerName = playerName;
         this.hasLost = false;
     }
-
+    /**
+     * @return the Id of the virtual view's owner
+     */
     public int getPlayerId(){
         return this.playerId;
     }
 
+    /**
+     * @return the name of the virtual view's owner
+     */
     public String getPlayerName() {
         return this.playerName;
     }
 
+    /**
+     * @param playerName the name that is being set as the owner's name
+     */
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
 
+    /**
+     * @return the game manager referenced by the virtual view
+     */
     public GameManager getGameManager() {
         return gameController;
     }
 
+    /**
+     * @param gameController the game manager that is being set
+     */
     public void setGameManager(GameManager gameController){
         this.gameController= gameController;
     }
 
+    /**
+     * @return true if the player lost
+     */
     public boolean hasLost() {
         return hasLost;
     }
 
+    /**
+     * @param hasLost set hasLost condition to true if player lost
+     */
     public void setHasLost(boolean hasLost) {
         this.hasLost = hasLost;
     }

@@ -32,30 +32,91 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Graphical User Interface made in 3D using the support of the library FXYZ 3D
+ */
 public class GuiView extends ClientView {
 
+    /**
+     * The primary stage
+     */
     private Stage primaryStage;
-
+    /**
+     * Welcome screen
+     */
     private Scene welcome;
+    /**
+     * God Selection screen
+     */
     private Scene chooseGod;
+    /**
+     * GameBoard screen
+     */
     private Scene gameBoard;
+    /**
+     * End-game screen
+     */
     private Scene endGame;
+    /**
+     * 3d subscene that contains all the 3d elements
+     */
     private SubScene subScene3D;
-
+    /**
+     * Welcome screen controller
+     */
     private WelcomeController welcomeController;
+    /**
+     * God selection screen controller
+     */
     private ChooseGodController chooseGodController;
+    /**
+     * GameBoard screen controller
+     */
     private BoardController boardController;
-
+    /**
+     * List of the user's opponents
+     */
     private ArrayList<String> opponents = new ArrayList<>();
+    /**
+     * Map of the user's opponents that contains (Opponent name, Opponent Color)
+     */
     private HashMap<String, Color> opponentsColor;
+    /**
+     * User color
+     */
     private Color playerColor;
+    /**
+     * User god
+     */
     private String god;
+    /**
+     * List of the opponents's gods
+     */
     private HashMap<String, String> opponentsGods;
+    /**
+     * Map of the opponents workers that contains (Opponent name, Array of his two 3D workers)
+     */
     private HashMap<String, Group[]> opponentsWorkers = new HashMap<>();
+    /**
+     * List of the user's 3D workers
+     */
     private ArrayList<Group>myWorkers = new ArrayList<>();
+    /**
+     * List of the user's 3D workers coordinates
+     */
     private ArrayList<int[]> myWorkersPosition = new ArrayList<>();
+    /**
+     * 3D object that represents the board
+     */
     private Group board = new Group();
+    /**
+     * List of the possible choices for the user
+     */
     private ArrayList<int[]> possibleChoices = new ArrayList<>();
+
+    /**
+     * values used for 3D translation of the objects
+     */
     private static final double EMPTY = 0;
     private static final double LEVEL_1 = 1.4;
     private static final double LEVEL_2 = 2.4;
@@ -64,10 +125,9 @@ public class GuiView extends ClientView {
     private final double NEGATIVE_Z_TRANSLATION=2.5;
     private final double X_TRANSLATION=2.3;
 
-
-
-
-
+    /**
+     * Constructor
+     */
     GuiView(GameType gameType, Socket server, String name, Stage primaryStage){
         this.setName(name);
         ClientSocket socket = new ClientSocket(this, gameType, server);
@@ -76,7 +136,9 @@ public class GuiView extends ClientView {
         Thread socketThread = new Thread(socket);
         socketThread.start();
     }
-
+    /**
+     * Start a game
+     */
     void startGame(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Lobby.fxml"));
         try {
@@ -91,6 +153,9 @@ public class GuiView extends ClientView {
         }
     }
 
+    /**
+     * Load the 3D Gameboard
+     */
     void loadingGameBoard(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingBoard.fxml"));
         try {
@@ -105,6 +170,10 @@ public class GuiView extends ClientView {
         }
     }
 
+    /**
+     * Update the local copy of the game
+     * @param modelCopy the copy
+     */
     @Override
     public void update(Object modelCopy) {
         Platform.runLater(
@@ -116,6 +185,9 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Create the 3D Screen of the board and start the game
+     */
     @Override
     public void startingGame() {
         Platform.runLater(
@@ -167,6 +239,10 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Select a worker
+     * @param possibleChoices available workers for the selection
+     */
     @Override
     public void selectWorker(ArrayList<int[]> possibleChoices) {
         Platform.runLater(
@@ -180,12 +256,20 @@ public class GuiView extends ClientView {
                 });
     }
 
-
+    /**
+     * Choose a space
+     * @param possibleChoices available spaces for the selection
+     * @param optional true if the selection is optional
+     */
     @Override
     public void chooseSpace(ArrayList<int[]> possibleChoices, boolean optional) {
 
     }
 
+    /**
+     * Initialize workers on the game board
+     * @param possibleChoices available spaces where to set the workers
+     */
     @Override
     public void initializeWorkers(ArrayList<int[]> possibleChoices) {
         Platform.runLater(
@@ -199,6 +283,11 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Choose a space where to move
+     * @param possibleChoices available spaces for the move action
+     * @param optional is true if the action is optional
+     */
     @Override
     public void moveAction(ArrayList<int[]> possibleChoices, boolean optional) {
         Platform.runLater(
@@ -217,6 +306,11 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Choose a space where to build
+     * @param possibleChoices available spaces for the build action
+     * @param optional is true if the action is optional
+     */
     @Override
     public void buildAction(ArrayList<int[]> possibleChoices, boolean optional) {
         Platform.runLater(
@@ -236,7 +330,10 @@ public class GuiView extends ClientView {
     }
 
 
-
+    /**
+     * Animation for the worker initialization on the board
+     * @param coordinates where to place the worker
+     */
     void placeWorker(int[] coordinates){
         Platform.runLater(
                 () -> {
@@ -273,6 +370,9 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Initialize second worker on the game board
+     */
     private void initializeSecondWorker(){
         Platform.runLater(
                 () -> {
@@ -284,7 +384,10 @@ public class GuiView extends ClientView {
                 });
     }
 
-
+    /**
+     * Choose god card
+     * @param possibleChoices available god cards left to choose
+     */
     @Override
     public void chooseGod(ArrayList<String> possibleChoices) {
         Platform.runLater(
@@ -359,10 +462,18 @@ public class GuiView extends ClientView {
 
     }
 
+    /**
+     * Send god card selection to the server
+     * @param choice the card selection
+     */
     void sendGodChoice(int choice){
         this.notifySocket(new GodChoice(choice,this.getPlayerId()));
     }
 
+    /**
+     * Choose a block to build
+     * @param possibleBlock possible block to choose apart from the default option
+     */
     @Override
     public void chooseBlock(Block possibleBlock) {
         Platform.runLater(
@@ -376,7 +487,11 @@ public class GuiView extends ClientView {
                 });
     }
 
-
+    /**
+     * Warning saying that the selected worker is blocked
+     * @param x x-coordinate of the worker
+     * @param y y-coordinate of the worker
+     */
     @Override
     public void workerIsBlocked (int x, int y) {
         Platform.runLater(
@@ -389,6 +504,11 @@ public class GuiView extends ClientView {
                 });
                 }
 
+    /**
+     * Welcome message to the game
+     * @param opponentsColor map of the opponents containing (Opponent name, Opponent color)
+     * @param playerColor user color
+     */
     @Override
     public void welcomeMessage(HashMap<String, Color> opponentsColor, Color playerColor) {
         Platform.runLater(
@@ -412,6 +532,10 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Winner message
+     * @param winner the name of the player that won
+     */
     @Override
     public void winAlert(String winner) {
         Platform.runLater(
@@ -435,6 +559,9 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Loser message
+     */
     @Override
     public void loseAlert() {
         Platform.runLater(
@@ -446,6 +573,9 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * Tell the user his name changed
+     */
     @Override
     public void nameChanged() {
         Platform.runLater(
@@ -457,6 +587,10 @@ public class GuiView extends ClientView {
                 });
     }
 
+    /**
+     * End the game after a user disconnected
+     * @param userDisconnect name of the user that disconnected
+     */
     @Override
     public void disconnectUI(String userDisconnect) {
         Platform.runLater(
@@ -468,15 +602,25 @@ public class GuiView extends ClientView {
                     System.exit(0);
                 });
     }
-
+    /**
+     * Set user's god card
+     * @param god the god
+     */
     public void setGod(String god) {
         this.god = god;
     }
 
+    /**
+     * Get user's god card
+     * @return god
+     */
     public String getGod() {
         return god;
     }
 
+    /**
+     * Set the opponents god cards
+     */
     private void setOpponentsGods() {
         HashMap<String,String> opponentsGods = new HashMap<>();
         for (Player player : this.getGameCopy().getAllPlayers()){
@@ -488,18 +632,37 @@ public class GuiView extends ClientView {
         this.opponentsGods = opponentsGods;
     }
 
+    /**
+     * Get all the opponents god cards
+     * @return an hash map containing (Opponent Name, Opponent God Name)
+     */
     HashMap<String, String> getOpponentsGods() {
         return opponentsGods;
     }
 
+    /**
+     * Get all the opponents colors
+     * @return an hash map containing (Opponent Name, Opponent color)
+     */
     HashMap<String, Color> getOpponentsColor() {
         return opponentsColor;
     }
 
+    /**
+     * Get the user color
+     * @return a Color
+     */
     Color getPlayerColor() {
         return playerColor;
     }
 
+    /**
+     * Load the 3D Model of a worker: it distinguish what color and what gender the model should have
+     * @param male the model gender
+     * @param color the model color
+     * @return the model
+     * @throws IOException if the 3D model cannot load properly
+     */
     private Model3D loadCorrectWorker (boolean male, String color) throws IOException {
         Model3D builder;
         if (male)
@@ -522,6 +685,11 @@ public class GuiView extends ClientView {
         return builder;
     }
 
+    /**
+     * Find the correct God image in the resources
+     * @param god the God name
+     * @return the correct path to the image
+     */
     private String findGodImage(String god){
         if (god.equals("APOLLO"))
             return("Sprite/Cards/Small/podium-characters-Apolo.png");
@@ -577,6 +745,10 @@ public class GuiView extends ClientView {
         }
     }
 
+    /**
+     * Animation that set an opponent worker in the GameBoard
+     * @param worker the opponent worker
+     */
     private void newWorkerAnimation(Worker worker){
         // check if worker is already in the gui. If not proceed with the animation
         String opponentName = worker.getOwner().getName();
@@ -605,12 +777,22 @@ public class GuiView extends ClientView {
         }
     }
 
+    /**
+     * Helper method that check a God's "gender"
+     * @param God the god
+     * @return true if the god is a male, false otherwise
+     */
     private boolean checkIfMaleWorker(String God) {
         return God.equals("APOLLO") || God.equals("ATLAS") || God.equals("HEPHAESTUS") ||
                 God.equals("MINOTAUR") || God.equals("PAN") || God.equals("PROMETHEUS");
     }
 
-
+    /**
+     * Helper method to perform the animation of the Worker initialization on the board
+     * @param worker the worker
+     * @param x x coordinate
+     * @param z z coordinate
+     */
     private void setInitialWorker(Group worker, int x, int z){
         double[] translation = getTranslationNeeded(x,z);
         worker.getTransforms().add(new Translate(-0.8,1,0));
@@ -627,7 +809,10 @@ public class GuiView extends ClientView {
         primaryStage.show();
     }
 
-
+    /**
+     * Move animation : rotation plus translation
+     * @param worker the worker that is being animated
+     */
     private void moveAnimation(Worker worker){
         int x = worker.getPosition().getXPosition();
         int y = worker.getPosition().getYPosition();
@@ -658,6 +843,13 @@ public class GuiView extends ClientView {
         animateMove(workerObject,translation[1],z,translation[0]);
     }
 
+    /**
+     * Helper method that performs the move animation
+     * @param workerObject the 3D Object representing the worker
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z x-coordinate
+     */
     private void animateMove(Group workerObject, double x, double y, double z) {
         TranslateTransition preventCollisions = new TranslateTransition(Duration.seconds(0.2),workerObject);
         preventCollisions.setToY(6);
@@ -677,7 +869,11 @@ public class GuiView extends ClientView {
     }
 
 
-
+    /**
+     * Build animation of a new block
+     * @param oldHeight old height of the space
+     * @param space space where the building animation is happening
+     */
     private void buildAnimation(Block oldHeight, Space space){
         try {
             int x = space.getXPosition();
@@ -724,6 +920,12 @@ public class GuiView extends ClientView {
         }
     }
 
+    /**
+     * Get the translation needed from the center of the screen to move correctly the objects
+     * @param toXCoordinate x-coordinate of the point where the object should move
+     * @param toZCoordinate z-coordinate of the point where the object should move
+     * @return array containing the translation coordinates needed
+     */
     private double[] getTranslationNeeded
             ( int toXCoordinate, int toZCoordinate)
     {

@@ -15,22 +15,34 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The class manages a single full game, start to finish
+ */
 public class GameManager implements Runnable, Observer {
-
+    /**
+     * Game object that the Game Manager is running
+     */
     private final Game game;
+    /**
+     * Map containing for every player the couples (Player Name, Virtual View of the player)
+     */
     private  ConcurrentHashMap<String,VirtualView> virtualViews;
+    /**
+     * Object used to get the answers from the Views
+     */
     private Object receiver=null;
 
 
 
-
+    /**
+     * Constructor
+     */
     public GameManager(ConcurrentHashMap<String, VirtualView> lobby){
         virtualViews = lobby;
         game = new Game();
         List<String> nicknames = new ArrayList<>(lobby.keySet());
         ArrayList<Color> colors = new ArrayList<>(Arrays.asList(Color.values()));
-        for (int i = 0; i < nicknames.size(); i++) {
-            String nickname = nicknames.get(i);
+        for (String nickname : nicknames) {
             Player player = new Player(nickname);
             int randomIndex = new Random().nextInt(colors.size());
             player.setColor(colors.get(randomIndex));
@@ -43,12 +55,16 @@ public class GameManager implements Runnable, Observer {
         }
     }
 
-
+    /**
+     * @return the game that the Game Manager is running
+     */
     public Game getGame() {
         return game;
     }
 
-
+    /**
+     * starts the game thread
+     */
     @Override
     public void run(){
         startGame();
@@ -61,7 +77,7 @@ public class GameManager implements Runnable, Observer {
     /**
      * Start a new game
      */
-    public void startGame()
+    private void startGame()
     {
         game.setOpponents();
         Board gameBoard = new Board();
@@ -121,7 +137,7 @@ public class GameManager implements Runnable, Observer {
      * Complete set-up of the game.
      * Players choose the initial position of their Workers.
      */
-    public void setUpGame()
+    private void setUpGame()
     {
         // Game is starting!
         for (Player player: game.getAllPlayers()) {
@@ -158,7 +174,7 @@ public class GameManager implements Runnable, Observer {
     /**
      * Run a full game
      */
-    public void runGame()
+    private void runGame()
     {
         ArrayList<TurnManager> turnList= new ArrayList<>();
         //create Turn Managers
@@ -246,14 +262,18 @@ public class GameManager implements Runnable, Observer {
      * Notify every player (method used in pre-game phases, ex lobby)
      * @param msg Message sent
      */
-    void notifyAll(ToClientMessage msg) {
+    private void notifyAll(ToClientMessage msg) {
         for (String user : virtualViews.keySet()) {
             VirtualView view =virtualViews.get(user);
             view.sendToClient(msg);
         }
     }
 
-
+    /**
+     * A message is sent to every Client for the God choice
+     * @param player the Player that is choosing
+     * @param cardsLeft the cards left in the Deck
+     */
     private int chooseGod(Player player, ArrayList<God> cardsLeft){
         int choice=0;
         VirtualView view= virtualViews.get(player.getName());
@@ -272,16 +292,27 @@ public class GameManager implements Runnable, Observer {
         return choice;
     }
 
+    /**
+     * update the receiver with the message coming from the View, casted correctly
+     * part of the Observer/Observable Pattern
+     */
     @Override
     public synchronized void update(Message message) {
         receiver = ((ToServerMessage)message).castChoice();
     }
 
+    /**
+     * set the Game manager as an observer
+     * part of the Observer/Observable Pattern
+     */
     @Override
     public void setObservable(Observable observable) {
         observable.register(this);
     }
 
+    /**
+     * stops the current thread
+     */
     public void stopThread(){
         Thread.currentThread().interrupt();
     }

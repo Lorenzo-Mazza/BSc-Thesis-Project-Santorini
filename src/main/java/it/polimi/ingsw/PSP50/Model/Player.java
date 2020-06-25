@@ -53,11 +53,14 @@ public class Player implements Cloneable, Serializable {
      * Boolean that checks if the player has lost in the current turn
      */
     private boolean hasLost;
-
+    /**
+     * Boolean that checks if the player is blocked in the current turn and cannot move up
+     */
     private boolean playerBlocked;
-
+    /**
+     * The list of the player's opponents for the game
+     */
     private ArrayList<Player> opponents ;
-
     /**
      * Color of the player workers on the board
      */
