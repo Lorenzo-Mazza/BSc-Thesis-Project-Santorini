@@ -3,13 +3,15 @@ package it.polimi.ingsw.PSP50.network.messages.ToClient;
 import it.polimi.ingsw.PSP50.Model.Game;
 import it.polimi.ingsw.PSP50.View.ClientView;
 import it.polimi.ingsw.PSP50.network.messages.ToClientMessage;
-/*
-** Class has a clone of the Model inside, so that original Representation is not exposed to Client
+/**
+** Message that sends a new deep copy of the Model to the Client every time there is a change
+ * Original reference of the model is not exposed (defensive programming)
  */
 
 public class ModelUpdate extends ToClientMessage {
     /**
-     * The constructor assigns to data a deep copy of the model
+     * Constructor
+     * @param game Deep copy of the game object
      */
     public ModelUpdate(Game game) {
         super(game);

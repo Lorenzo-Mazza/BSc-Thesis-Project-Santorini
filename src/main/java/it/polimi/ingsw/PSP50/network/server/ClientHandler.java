@@ -12,19 +12,51 @@ import it.polimi.ingsw.PSP50.network.messages.ToServerMessage;
 import java.io.*;
 import java.net.Socket;
 
-
+/**
+ * Client Handler is used by Server to handle at the same time multiple client connections
+ */
 public class ClientHandler implements Runnable
 {
+    /**
+     * Socket used to communicate with the client
+     */
     private Socket client;
+    /**
+     * Reference to the server
+     */
     private Server server;
+    /**
+     * Client's name
+     */
     private String user;
+    /**
+     * Client's ID
+     */
     private int playerId;
+    /**
+     * Stream to send messages to the client
+     */
     private ObjectOutputStream out;
+    /**
+     * Stream to receive messages from the client
+     */
     private ObjectInputStream in;
+    /**
+     * Virtual view associated with the client
+     */
     private VirtualView view;
+    /**
+     * Type of game that the client chose to play
+     */
     private GameType gameType;
+    /**
+     * Lobby where the client is in
+     */
     private Lobby playerLobby;
 
+    /**
+     * Constructor
+     */
     ClientHandler(Socket client, Server server, ObjectOutputStream out, ObjectInputStream in, VirtualView view, GameType gameType)
     {
         this.client = client;
@@ -37,7 +69,9 @@ public class ClientHandler implements Runnable
         this.gameType = gameType;
     }
 
-
+    /**
+     * Run the Client Handler for the entire course of the game
+     */
     @Override
     public void run() {
         try {
@@ -52,7 +86,10 @@ public class ClientHandler implements Runnable
         }
     }
 
-
+    /**
+     * Handle the connection: be ready to receive messages from the client in any moment
+     * @throws IOException Invalid input/output
+     */
   private void handleClientConnection() throws IOException
   {
     registry(client);
@@ -75,6 +112,9 @@ public class ClientHandler implements Runnable
     client.close();
   }
 
+    /**
+     * Add client to a compatible lobby
+     */
   private void addToLobby() {
       playerLobby = this.server.getFirstAvailableLobby(gameType);
       if (!playerLobby.isFull()){
@@ -86,7 +126,10 @@ public class ClientHandler implements Runnable
       }
     }
 
-
+    /**
+     * Register the client in the Server data
+     * @param client the client that is being registered
+     */
     private void registry(Socket client)  {
         server.getConnections().put(playerId,this);
         server.getNicknames().put(playerId,user);
@@ -97,6 +140,9 @@ public class ClientHandler implements Runnable
         System.out.println("User" + playerId+ "accepted on SocketServer");
     }
 
+    /**
+     * Manage the disconnection of a client
+     */
     private synchronized void manageDisconnection() {
         for (int playerId : playerLobby.getPlayers().keySet()){
             if (playerLobby.getGameManager()!=null) {
@@ -117,10 +163,18 @@ public class ClientHandler implements Runnable
         playerLobby.removeClient(this.user, this.playerId, this.view);
     }
 
-
+    /**
+     * Get the output stream
+     * @return the stream
+     */
   public ObjectOutputStream getOutput() {
     return out;
   }
+
+    /**
+     * Get the input stream
+     * @return the stream
+     */
   public ObjectInputStream getInput() {
     return in;
   }

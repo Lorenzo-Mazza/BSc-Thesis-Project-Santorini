@@ -13,22 +13,47 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Client Socket is the socket that the client uses to communicate with the server
+ */
 public class ClientSocket implements Runnable, Observer {
-
+    /**
+     * reference to the type of game that the client is playing
+     */
     private final GameType gameType;
+    /**
+     * reference to client's UI
+     */
     private ClientView userInterface;
+    /**
+     * reference to the socket used to send/receive messages
+     */
     private Socket serverSocket;
+    /**
+     * stream used to send messages to server
+     */
     private ObjectOutputStream toServer;
+    /**
+     * stream used to receive messages from server
+     */
     private ObjectInputStream fromServer;
 
-
+    /**
+     * Constructor
+     * @param userInterface  client's UI
+     * @param gameType type of game the client is playing
+     * @param serverSocket socket used to communicate
+     */
     public ClientSocket(ClientView userInterface, GameType gameType, Socket serverSocket) {
         this.userInterface = userInterface;
         this.serverSocket = serverSocket;
         this.gameType= gameType;
     }
 
-
+    /**
+     * Run method: first send the client's username and type of game to the server;
+     * then call receiveFromServer method.
+     */
     @Override
     public void run() {
         try {
@@ -50,7 +75,11 @@ public class ClientSocket implements Runnable, Observer {
         stop();
     }
 
-
+    /**
+     * Always listening to incoming messages from the server
+     * @throws IOException invalid input
+     * @throws ClassNotFoundException invalid class
+     */
     private void receiveFromServer() throws IOException, ClassNotFoundException {
 
         // always listening
@@ -62,6 +91,10 @@ public class ClientSocket implements Runnable, Observer {
             }
     }
 
+    /**
+     * Execute the command specified in the message
+     * @param msg Message received from server
+     */
     public void interpretMessage(ToClientMessage msg) {
         msg.doAction(userInterface);
     }
@@ -100,7 +133,9 @@ public class ClientSocket implements Runnable, Observer {
         this.userInterface.register(this);
     }
 
-
+    /**
+     * Close the streams and the socket
+     */
     public void stop() {
         try {
             toServer.close();

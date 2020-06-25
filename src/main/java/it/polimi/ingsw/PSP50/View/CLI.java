@@ -297,7 +297,7 @@ public class CLI extends ClientView {
         writeLine("\nChoose the space where to put your first worker.");
         printBuffer();
         printAvailableSpaces(possibleChoices);
-        choice= getChoiceWithTimeout(possibleChoices.size(),45,false);
+        choice= getChoiceWithTimeout(possibleChoices.size(),60,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -311,7 +311,7 @@ public class CLI extends ClientView {
         writeLine("\nChoose the space where to put your second worker.");
         printBuffer();
         printAvailableSpaces(possibleChoices);
-        choice= getChoiceWithTimeout(possibleChoices.size(),45,false);
+        choice= getChoiceWithTimeout(possibleChoices.size(),60,false);
         /*
          **If a timer timeout happens, default option is the first choice
          */
@@ -405,7 +405,7 @@ public class CLI extends ClientView {
             writeLine("\n --> Select 1 to choose: "+ possibleBlock.toString() );
         writeLine("\n --> Select 2 to choose: DOME");
         printBuffer();
-        int choice= getChoiceWithTimeout(2,45, false);
+        int choice= getChoiceWithTimeout(2,30, false);
         if (choice==2) {
             drawSection("You have selected: DOME");
             notifySocket(new BlockChoice(Block.DOME,this.getPlayerId()));
@@ -421,7 +421,7 @@ public class CLI extends ClientView {
 
     /**
      * Print a space on the terminal
-     * @param space
+     * @param space Space to be printed
      * @return space height highlighted the color of the worker occupying it
      */
     private String printSpace(Space space) {
@@ -450,14 +450,16 @@ public class CLI extends ClientView {
         writeLine("\nThis is the board.\n Reminder: Space (0,0) is the first one on the left, " +
                 "Space (4,4) is the last one on the right; Domes are marked with an 'X'.");
         printBuffer();
+        writeLine("\n        |COL 0|COL 1|COL 2|COL 3|COL 4| ");
         for (int i = 0; i < 5; i++) {
-            writeLine("\n+-----+-----+-----+-----+-----+ \n");
-            String line = "| ";
+            writeLine("\n        +-----+-----+-----+-----+-----+ \n");
+            String line = "RIGA " + i +"  ";
+            line += "|  ";
             for (int j = 0; j < 5; j++) {
-                line += printSpace(gameCopy.getBoard().getSpace(i, j)) + "   | ";
+                line += printSpace(gameCopy.getBoard().getSpace(i, j)) + "  |  ";
             }
             writeLine(line);
-            writeLine("\n+-----+-----+-----+-----+-----+");
+            writeLine("\n        +-----+-----+-----+-----+-----+");
         }
         printBuffer();
     }

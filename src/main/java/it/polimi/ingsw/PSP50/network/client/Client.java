@@ -7,7 +7,10 @@ import java.util.Scanner;
 
 
 public class Client  {
-
+    /**
+     *Main method: launches the CLI or the GUI depending on the user choice
+     * @param args main args
+     */
     public static void main( String[] args ) {
         Scanner scanner = new Scanner(System.in);
         String ui;
