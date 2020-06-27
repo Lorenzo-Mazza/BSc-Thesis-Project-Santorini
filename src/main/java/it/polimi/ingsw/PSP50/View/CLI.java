@@ -48,14 +48,17 @@ public class CLI extends ClientView {
      */
     private Socket connect(){
         Socket server = null;
-        try{
-            System.out.println("IP address of server?");
-            String ip = reader.readLine();
+        while (true) {
+            try {
+                System.out.println("IP address of server?");
+                String ip = reader.readLine();
 
-            /* open a connection to the server */
-            server = new Socket(ip, Server.SOCKET_PORT);
-        } catch (IOException e) {
-            System.out.println("server unreachable");
+                /* open a connection to the server */
+                server = new Socket(ip, Server.SOCKET_PORT);
+                break;
+            } catch (IOException e) {
+                System.out.println("server unreachable");
+            }
         }
         System.out.println("Connected");
         return server;
@@ -69,21 +72,22 @@ public class CLI extends ClientView {
     private GameType chooseGame(Scanner scanner){
         int numberOfPlayers;
         GameType type;
-        System.out.println("\nHow many players do you wanna play against? (write an integer, options are: 1,2");
+        System.out.println("\nChoose the type of the game you wanna play:" +
+                " write 2 for a 2-players game, 3 for a 3-players game");
         while(true) {
             numberOfPlayers=scanner.nextInt();
-            if (numberOfPlayers==1) {
+            if (numberOfPlayers==2) {
                 type=GameType.TWOPLAYERS;
                 System.out.println("\nStart looking for a two-players lobby!");
                 break;
             }
-            if (numberOfPlayers==2) {
+            if (numberOfPlayers==3) {
                 type=GameType.THREEPLAYERS;
                 System.out.println("\nStart looking for a three-players lobby!");
                 break;
             }
             else {
-                System.out.println("Wrong param. Valid are <1>,<2>.");
+                System.out.println("Wrong param. Valid are <2>,<3>.");
             }
         }
         return type;
