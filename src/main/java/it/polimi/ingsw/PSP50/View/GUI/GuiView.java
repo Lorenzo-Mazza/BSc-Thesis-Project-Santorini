@@ -24,7 +24,7 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import org.fxyz3d.importers.Importer3D;
+import it.polimi.ingsw.PSP50.Utils.Importer3D;
 import org.fxyz3d.importers.Model3D;
 
 import java.io.IOException;
