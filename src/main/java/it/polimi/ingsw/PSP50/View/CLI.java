@@ -294,7 +294,14 @@ public class CLI extends ClientView {
      */
     @Override
     public void initializeWorkers(ArrayList<int[]> possibleChoices) {
-        drawSection("Choose where to place the workers");
+        String secondMessage = ("your opponents have the following God Cards:");
+        for (Player opponent : gameCopy.getAllPlayers())
+        {
+            if (!opponent.getName().equals(this.name))
+                secondMessage+= "---> "+
+                        opponent.getName()+" with the god  "+ opponent.getGod().getName()+ ".  ";
+        }
+        drawSection(secondMessage);
         ArrayList<int[]> answer = new ArrayList<>();
         int choice;
         printBoard();

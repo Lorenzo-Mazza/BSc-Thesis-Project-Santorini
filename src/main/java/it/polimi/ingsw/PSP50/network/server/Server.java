@@ -19,7 +19,7 @@ public class Server extends Thread{
     /**
      * Socket port
      */
-    public final static int SOCKET_PORT = 7777;
+    public final static int SOCKET_PORT = 8080;
     /**
      * Map (Client ID (integer), reference to each Client Handler)
      */
@@ -158,8 +158,11 @@ public class Server extends Thread{
                 Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
                 thread.start();
 
-            } catch (IOException | ClassNotFoundException | InterruptedException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 System.out.println("connection dropped!");
+            }
+            catch ( InterruptedException e) {
+                System.out.println("waiting to re-establish the connection...");
             }
         }
 
