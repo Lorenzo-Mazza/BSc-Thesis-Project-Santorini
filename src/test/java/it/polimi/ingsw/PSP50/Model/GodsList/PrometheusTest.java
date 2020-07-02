@@ -29,6 +29,7 @@ public class PrometheusTest {
         board = null;
     }
 
+    // Testing that the Steps array is correct and it represents the game turn of the god card
     @Test
     public void stepsTest() {
         assertEquals(Phase.OPTIONALBUILD, god.getAvailableSteps().get(0));
@@ -41,6 +42,7 @@ public class PrometheusTest {
         assertEquals(GodsNames.PROMETHEUS, god.getName());
     }
 
+    // Testing Prometheus's power: if he already used the power, the worker cannot move up
     @Test
     public void testPrometheusAvailableMove_hasBuilt() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -53,6 +55,7 @@ public class PrometheusTest {
         assertThat(god.getAvailableMove(owner), is(availableMoves));
     }
 
+    // Testing Prometheus's power: if he didn't use the power, the worker can move up
     @Test
     public void testPrometheusAvailableMove_hasNotBuilt() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -66,6 +69,7 @@ public class PrometheusTest {
         assertThat(god.getAvailableMove(owner), is(availableMoves));
     }
 
+    // Testing the normal Move action
     @Test
     public void testNormalMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -76,6 +80,7 @@ public class PrometheusTest {
         assertNull(board.getSpace(0,0).getWorker());
     }
 
+    // Testing the normal getAvailableBuild function
     @Test
     public void testNormalAvailableBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -88,6 +93,7 @@ public class PrometheusTest {
         assertThat(god.getAvailableBuild(owner), is(availableBuilds));
     }
 
+    // Testing the normal Build action
     @Test
     public void testNormalBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -97,11 +103,13 @@ public class PrometheusTest {
         assertEquals(Block.LEVEL2, board.getSpace(1, 1).getHeight());
     }
 
+    // Testing the normal getOptionalMove function
     @Test
     public void testNormalOptionalMove(){
         assertTrue(god.getOptionalMove(owner).isEmpty());
     }
 
+    // Testing Prometheus's power: check that he can perform an Optional Build action
     @Test
     public void testPrometheusOptionalBuild(){
         owner.selectWorker(owner.getWorkers()[0]);
@@ -112,7 +120,7 @@ public class PrometheusTest {
         availableBuilds.add(board.getSpace(1, 1));
         assertThat(god.getOptionalBuild(owner), is(availableBuilds));
     }
-
+    // Testing the normal getAvailableBlock function
     @Test
     public void testNormalAvailableBlock(){
         owner.selectWorker(owner.getWorkers()[0]);
@@ -121,6 +129,7 @@ public class PrometheusTest {
         assertEquals(1, god.getAvailableBlock(owner).size());
     }
 
+    // Testing the normal getWinCondition function when it's true
     @Test
     public void testNormalWin_true() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -131,6 +140,7 @@ public class PrometheusTest {
         assertTrue(god.getWinCondition(owner));
     }
 
+    // Testing the normal getWinCondition function when it's false
     @Test
     public void testNormalWin_false() {
         owner.selectWorker(owner.getWorkers()[0]);

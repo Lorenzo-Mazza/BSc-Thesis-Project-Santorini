@@ -31,6 +31,7 @@ public class AtlasTest {
     }
 
 
+    // Testing that the Steps array is correct and it represents the game turn of the god card
     @Test
     public void stepsTest() {
         assertEquals(Phase.MOVE, god.getAvailableSteps().get(0));
@@ -42,6 +43,7 @@ public class AtlasTest {
         assertEquals(GodsNames.ATLAS, god.getName());
     }
 
+    // Testing the normal getAvailableMove function
     @Test
     public void testNormalAvailableMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -54,6 +56,7 @@ public class AtlasTest {
         assertThat(god.getAvailableMove(owner), is(availableMoves));
     }
 
+    // Testing the normal Move action
     @Test
     public void testNormalMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -64,6 +67,7 @@ public class AtlasTest {
         assertNull(board.getSpace(0,0).getWorker());
     }
 
+    // Testing the normal getAvailableBuild function
     @Test
     public void testNormalAvailableBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -76,6 +80,7 @@ public class AtlasTest {
         assertThat(god.getAvailableBuild(owner), is(availableBuilds));
     }
 
+    // Testing the normal Build action
     @Test
     public void testNormalBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -85,16 +90,20 @@ public class AtlasTest {
         assertEquals(Block.LEVEL2, board.getSpace(1, 1).getHeight());
     }
 
+    // Testing the normal getOptionalMove function
     @Test
     public void testNormalOptionalMove(){
         assertTrue(god.getOptionalMove(owner).isEmpty());
     }
 
+    // Testing the normal getOptionalBuild function
     @Test
     public void testNormalOptionalBuild(){
         assertTrue(god.getOptionalBuild(owner).isEmpty());
     }
 
+    // Testing Atlas's power: check that if the space is inferior to a LEVEL 3, Atlas's worker can choose to build
+    // either the regular block or the Dome
     @Test
     public void testAtlasAvailableBlock(){
         owner.selectWorker(owner.getWorkers()[0]);
@@ -104,6 +113,7 @@ public class AtlasTest {
         assertTrue(god.getAvailableBlock(owner).contains(Block.DOME));
     }
 
+    // Testing the normal getWinCondition function when it's true
     @Test
     public void testNormalWin_true() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -114,6 +124,7 @@ public class AtlasTest {
         assertTrue(god.getWinCondition(owner));
     }
 
+    // Testing the normal getWinCondition function when it's false
     @Test
     public void testNormalWin_false() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -124,6 +135,7 @@ public class AtlasTest {
         assertFalse(god.getWinCondition(owner));
     }
 
+    // Testing Atlas's power: check that the worker can build a DOME at any level
     @Test
     public void testAtlasBuild (){
         god.build(owner,board.getSpace(2,2),Block.DOME);

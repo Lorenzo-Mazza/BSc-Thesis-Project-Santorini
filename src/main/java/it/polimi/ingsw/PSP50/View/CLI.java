@@ -464,7 +464,7 @@ public class CLI extends ClientView {
         writeLine("\n        |COL 0|COL 1|COL 2|COL 3|COL 4| ");
         for (int i = 0; i < 5; i++) {
             writeLine("\n        +-----+-----+-----+-----+-----+ \n");
-            String line = "RIGA " + i +"  ";
+            String line = " ROW " + i +"  ";
             line += "|  ";
             for (int j = 0; j < 5; j++) {
                 line += printSpace(gameCopy.getBoard().getSpace(i, j)) + "  |  ";
