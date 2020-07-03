@@ -49,5 +49,5 @@ To launch the Application as a Client run from Terminal:
 java -jar JARNAME.jar 
 ```
 ### JAR
-The JAR is too heavy to load on GitHub (128 MB) because of the 3D GUI, so it is not provided inside the repository. 
+The JAR is too heavy to load on GitHub (128 MB) because of the 3D GUI, so it is not provided inside the repository. You can download it from https://polimi365-my.sharepoint.com/:f:/g/personal/10615502_polimi_it/EiHdLyZq9qhHrK323bn59twBbuCcp11-ZbOGOIb5SPMTmg?e=EowLiJ
 
