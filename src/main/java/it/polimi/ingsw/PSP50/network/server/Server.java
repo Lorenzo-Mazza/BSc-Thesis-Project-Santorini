@@ -89,6 +89,7 @@ public class Server extends Thread{
     /**
      *  Return the first available Lobby for a specific type of game.
      * @param type Type of game that the client is looking for
+     * @return the first available lobby
      */
     public Lobby getFirstAvailableLobby(GameType type){
         Lobby firstAvailableLobby=null;

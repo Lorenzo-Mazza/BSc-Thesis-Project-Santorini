@@ -36,6 +36,7 @@ public class GameManager implements Runnable, Observer {
 
     /**
      * Constructor
+     * @param lobby the lobby where the current game is running
      */
     public GameManager(ConcurrentHashMap<String, VirtualView> lobby){
         virtualViews = lobby;

@@ -29,6 +29,7 @@ public class ApolloTest {
         board = null;
     }
 
+    // Testing that the Steps array is correct and it represents the game turn of the god card
     @Test
     public void stepsTest() {
         assertEquals(Phase.MOVE, god.getAvailableSteps().get(0));
@@ -40,6 +41,7 @@ public class ApolloTest {
         assertEquals(GodsNames.APOLLO, god.getName());
     }
 
+    // Testing the normal getAvailableMove function
     @Test
     public void testNormalAvailableMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -51,6 +53,7 @@ public class ApolloTest {
         assertThat(god.getAvailableMove(owner), is(availableMoves));
     }
 
+    // Testing Apollo's power: check that the worker can move in an occupied space
     @Test
     public void testApolloAvailableMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -63,6 +66,7 @@ public class ApolloTest {
         assertThat(god.getAvailableMove(owner), is(availableMoves));
     }
 
+    // Testing the normal Move action
     @Test
     public void testNormalMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -73,6 +77,7 @@ public class ApolloTest {
         assertNull(board.getSpace(0,0).getWorker());
     }
 
+    // Testing Apollo's power: check that there is a swap between Apollo's worker and the opponent's one
     @Test
     public void testApolloMove() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -86,6 +91,7 @@ public class ApolloTest {
         assertEquals(board.getSpace(0, 0).getWorker(), opponent);
     }
 
+    // Testing the normal getAvailableBuild function
     @Test
     public void testNormalAvailableBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -97,6 +103,7 @@ public class ApolloTest {
         assertThat(god.getAvailableBuild(owner), is(availableBuilds));
     }
 
+    // Testing the normal Build action
     @Test
     public void testNormalBuild() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -106,16 +113,19 @@ public class ApolloTest {
         assertEquals(Block.LEVEL2, board.getSpace(1, 1).getHeight());
     }
 
+    // Testing the normal getOptionalMove function
     @Test
     public void testNormalOptionalMove(){
         assertTrue(god.getOptionalMove(owner).isEmpty());
     }
 
+    // Testing the normal getOptionalBuild function
     @Test
     public void testNormalOptionalBuild(){
         assertTrue(god.getOptionalBuild(owner).isEmpty());
     }
 
+    // Testing the normal getAvailableBlock function
     @Test
     public void testNormalAvailableBlock(){
         owner.selectWorker(owner.getWorkers()[0]);
@@ -124,6 +134,7 @@ public class ApolloTest {
         assertEquals(1, god.getAvailableBlock(owner).size());
     }
 
+    // Testing the normal getWinCondition function when it's true
     @Test
     public void testNormalWin_true() {
         owner.selectWorker(owner.getWorkers()[0]);
@@ -133,6 +144,8 @@ public class ApolloTest {
         god.move(owner,board.getSpace(1,1));
         assertTrue(god.getWinCondition(owner));
     }
+
+    // Testing the normal getWinCondition function when it's false
     @Test
     public void testNormalWin_false() {
         owner.selectWorker(owner.getWorkers()[0]);

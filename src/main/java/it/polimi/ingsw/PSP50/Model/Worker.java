@@ -25,6 +25,7 @@ public class Worker implements Serializable {
     /**
      * Constructor
      * @param owner Player owning this worker
+     * @param workerId Id of the worker
      */
     public Worker(Player owner, int workerId) {
         this.owner = owner;

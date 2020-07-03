@@ -30,6 +30,8 @@ public class VirtualView extends Observable implements Observer {
 
     /**
      * Constructor
+     * @param playerId player's ID
+     * @param playerName player's name
      */
     public VirtualView(int playerId,String playerName){
         this.playerId = playerId;
