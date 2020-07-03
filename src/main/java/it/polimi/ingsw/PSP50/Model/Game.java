@@ -174,6 +174,7 @@ public class Game extends Observable implements Serializable{
 
     /**
      * Method creates a deep copy of the model using the commons.lang library
+     * @return the deep copy
      */
     public Game copyModel() {
         Game copy = SerializationUtils.clone(this);

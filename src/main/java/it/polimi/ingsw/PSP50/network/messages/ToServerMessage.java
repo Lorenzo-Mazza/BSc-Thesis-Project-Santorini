@@ -40,6 +40,7 @@ public abstract class ToServerMessage extends Message  {
     /**
      * Cast Data correctly
      * Used to hide implementation in the UI and cast it correctly only inside the Server
+     * @return casted data
      */
     public abstract Object castChoice();
 }

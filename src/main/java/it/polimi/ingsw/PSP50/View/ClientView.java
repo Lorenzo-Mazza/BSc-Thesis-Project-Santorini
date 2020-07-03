@@ -54,7 +54,7 @@ public abstract class ClientView extends Observable {
 
     /**
      * set client's Id
-     * @param playerId
+     * @param playerId player's ID
      */
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -69,7 +69,7 @@ public abstract class ClientView extends Observable {
 
     /**
      * set client's name
-     * @param name
+     * @param name client's name
      */
     public void setName(String name){
         this.name=name;
@@ -84,7 +84,7 @@ public abstract class ClientView extends Observable {
 
     /**
      * set the socket that the client will use
-     * @param socket
+     * @param socket client socket
      */
     public void setSocket(ClientSocket socket) {
         this.socket = socket;
@@ -92,7 +92,7 @@ public abstract class ClientView extends Observable {
 
     /**
      * update the local game copy
-     * @param modelCopy
+     * @param modelCopy local model copy
      */
     public abstract void update(Object modelCopy);
 
@@ -125,7 +125,7 @@ public abstract class ClientView extends Observable {
 
     /**
      * Notify the server of a new message
-     * @param messageChoice
+     * @param messageChoice client message
      */
     public void notifySocket(ToServerMessage messageChoice) {
         this.getSocket().update(messageChoice);
