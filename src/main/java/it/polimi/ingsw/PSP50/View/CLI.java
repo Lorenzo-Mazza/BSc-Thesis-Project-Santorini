@@ -502,7 +502,6 @@ public class CLI extends ClientView {
         Thread.yield();
         System.exit(0);
     }
-
 }
 
 
