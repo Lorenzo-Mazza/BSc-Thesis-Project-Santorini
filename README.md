@@ -1,4 +1,4 @@
-# Prova finale di Ingegneria del Software 2020
+# Final Project of the course Software Engineering 2020, Politecnico di Milano. 
 ![Santorini : game cover](https://cf.geekdo-images.com/opengraph/img/aL3ylg4WfWekpXaOq9fij-eRgHg=/fit-in/1200x630/pic3283110.png)
 
 
